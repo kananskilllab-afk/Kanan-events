@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Calendar | Kanan.co — Study Abroad Education Consultants</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --k-ink: #0B1223; --k-ink-soft: #3D4A63; --k-ink-muted: #7B8599;
+            --k-blue: #0052CC; --k-blue-deep: #003399; --k-blue-glow: #4D94FF; --k-blue-pale: #E8F1FF;
+            --k-orange: #FF6B00; --k-orange-soft: #FFF0E0;
+            --k-green: #00B368; --k-green-soft: #E0FFF0;
+            --k-purple: #7B2FF7; --k-purple-soft: #F0E6FF;
+            --k-red: #E53935; --k-gold: #F5A623;
+            --k-surface: #FFFFFF; --k-canvas: #F4F6FA; --k-border: #E2E8F0;
+            --k-shadow-sm: 0 1px 4px rgba(11,18,35,0.06);
+            --k-shadow-md: 0 6px 24px rgba(11,18,35,0.08);
+            --k-shadow-lg: 0 16px 48px rgba(11,18,35,0.1);
+            --radius: 14px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--k-canvas); color:var(--k-ink); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+        .container { max-width:1260px; margin:0 auto; padding:0 28px; }
+
+        /* ====== TOPBAR ====== */
+        .topbar { background:var(--k-ink); color:rgba(255,255,255,.7); font-size:13px; padding:8px 0; }
+        .topbar .container { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; }
+        .topbar a { color:#fff; text-decoration:none; }
+
+        /* ====== NAVBAR ====== */
+        .navbar { background:#fff; border-bottom:1px solid var(--k-border); position:sticky; top:0; z-index:900; box-shadow:var(--k-shadow-sm); }
+        .nav-inner { display:flex; align-items:center; justify-content:space-between; height:68px; }
+        .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+        .logo-icon { width:40px; height:40px; background:var(--k-ink); border-radius:10px; display:grid; place-items:center; color:#fff; font-family:'Sora',sans-serif; font-weight:800; font-size:20px; }
+        .logo-icon span { color:var(--k-orange); }
+        .logo-text { font-family:'Sora',sans-serif; font-weight:700; font-size:22px; color:var(--k-ink); }
+        .logo-text span { color:var(--k-orange); }
+        .nav-actions { display:flex; gap:10px; }
+        .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:10px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:13.5px; cursor:pointer; border:none; transition:all .25s cubic-bezier(.4,0,.2,1); text-decoration:none; }
+        .btn-outline { background:transparent; border:2px solid var(--k-blue); color:var(--k-blue); }
+        .btn-outline:hover { background:var(--k-blue-pale); }
+        .btn-primary { background:var(--k-blue); color:#fff; border:2px solid var(--k-blue); }
+        .btn-primary:hover { background:var(--k-blue-deep); border-color:var(--k-blue-deep); transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,82,204,.25); }
+        .btn-orange { background:var(--k-orange); color:#fff; border:2px solid var(--k-orange); }
+        .btn-orange:hover { background:#E55D00; border-color:#E55D00; transform:translateY(-1px); }
+        .btn-lg { padding:13px 28px; font-size:15px; border-radius:12px; }
+        .btn-helpline { background:linear-gradient(135deg,#00B368,#008F55); color:#fff; border:2px solid #00B368; animation:helpPulse 2s infinite; text-decoration:none; }
+        .btn-helpline:hover { background:#008F55; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,179,104,.3); }
+        @keyframes helpPulse { 0%,100%{box-shadow:0 0 0 0 rgba(0,179,104,.3);} 50%{box-shadow:0 0 0 6px rgba(0,179,104,0);} }
+
+        /* ====== HERO ====== */
+        .hero { background:linear-gradient(135deg,#001233 0%,#002D6B 50%,#0052CC 100%); color:#fff; padding:56px 0 48px; position:relative; overflow:hidden; }
+        .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 80% 20%,rgba(255,107,0,.1),transparent 60%), radial-gradient(circle at 20% 80%,rgba(77,148,255,.08),transparent 50%); }
+        .hero-inner { position:relative; z-index:2; display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; }
+        .hero h1 { font-family:'Sora',sans-serif; font-size:42px; font-weight:800; line-height:1.15; margin-bottom:14px; }
+        .hero-sub { font-size:17px; color:rgba(255,255,255,.75); max-width:620px; margin-bottom:28px; }
+        .hero-stats { display:flex; gap:36px; }
+        .h-stat-val { font-family:'Sora',sans-serif; font-size:32px; font-weight:800; }
+        .h-stat-lbl { font-size:12.5px; color:rgba(255,255,255,.55); font-weight:600; }
+        .hero-featured { background:rgba(255,255,255,.07); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.12); border-radius:20px; padding:28px; max-width:340px; }
+        .hero-featured h3 { font-family:'Sora',sans-serif; font-size:18px; margin-bottom:12px; }
+
+        /* ====== MONTH NAV ====== */
+        .month-nav { background:#fff; border-bottom:1px solid var(--k-border); position:sticky; top:68px; z-index:800; padding:14px 0; }
+        .month-nav .container { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+        .month-tabs { display:flex; gap:6px; }
+        .month-tab { padding:9px 22px; border-radius:10px; border:2px solid var(--k-border); background:#fff; font-family:'Plus Jakarta Sans',sans-serif; font-size:13.5px; font-weight:700; color:var(--k-ink-soft); cursor:pointer; transition:all .2s; }
+        .month-tab:hover { border-color:var(--k-blue); color:var(--k-blue); }
+        .month-tab.active { background:var(--k-blue); color:#fff; border-color:var(--k-blue); }
+        .filter-group { display:flex; gap:10px; align-items:center; }
+        .search-wrap { position:relative; }
+        .search-wrap input { padding:9px 14px 9px 36px; border:2px solid var(--k-border); border-radius:10px; font-size:13.5px; font-family:'Plus Jakarta Sans',sans-serif; width:220px; transition:border-color .2s; }
+        .search-wrap input:focus { outline:none; border-color:var(--k-blue); }
+        .search-wrap svg { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--k-ink-muted); }
+        .type-select { padding:9px 14px; border:2px solid var(--k-border); border-radius:10px; font-size:13.5px; font-family:'Plus Jakarta Sans',sans-serif; cursor:pointer; }
+
+        /* ====== EVENTS SECTION ====== */
+        .events-section { padding:40px 0 60px; }
+        .section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
+        .section-head h2 { font-family:'Sora',sans-serif; font-size:26px; font-weight:700; }
+        .event-count { background:var(--k-blue-pale); color:var(--k-blue); font-size:13px; font-weight:700; padding:5px 14px; border-radius:20px; }
+        .events-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+
+        /* ====== EVENT CARD ====== */
+        .ev-card { background:#fff; border-radius:var(--radius); box-shadow:var(--k-shadow-sm); overflow:hidden; transition:all .3s cubic-bezier(.4,0,.2,1); border:1px solid var(--k-border); display:flex; flex-direction:column; }
+        .ev-card:hover { transform:translateY(-4px); box-shadow:var(--k-shadow-md); }
+        .ev-ribbon { height:4px; }
+        .ev-ribbon.visa-fair { background:linear-gradient(90deg,#FF6B00,#FFB347); }
+        .ev-ribbon.education-expo { background:linear-gradient(90deg,#7B2FF7,#B388FF); }
+        .ev-ribbon.ptm { background:linear-gradient(90deg,#00B368,#7BFFC4); }
+        .ev-ribbon.mock-test { background:linear-gradient(90deg,#F5A623,#FFD54F); }
+        .ev-ribbon.seminar { background:linear-gradient(90deg,#0052CC,#4D94FF); }
+        .ev-ribbon.workshop { background:linear-gradient(90deg,#E53935,#FF8A80); }
+        .ev-ribbon.loan { background:linear-gradient(90deg,#00897B,#4DB6AC); }
+        .ev-ribbon.career { background:linear-gradient(90deg,#5C6BC0,#9FA8DA); }
+        .ev-body { padding:18px; flex:1; display:flex; flex-direction:column; }
+        .ev-top { display:flex; gap:12px; margin-bottom:12px; }
+        .ev-date-badge { min-width:54px; text-align:center; background:var(--k-canvas); border-radius:10px; padding:8px 6px; border:1px solid var(--k-border); }
+        .ev-date-num { font-family:'Sora',sans-serif; font-weight:800; font-size:20px; color:var(--k-blue-deep); line-height:1; }
+        .ev-date-mon { font-size:10px; font-weight:700; color:var(--k-ink-muted); text-transform:uppercase; }
+        .ev-date-day { font-size:9px; color:var(--k-ink-muted); font-weight:600; }
+        .ev-info h3 { font-family:'Sora',sans-serif; font-size:14.5px; font-weight:700; line-height:1.3; margin-bottom:4px; }
+        .ev-main-event { font-size:11px; font-weight:700; color:var(--k-purple); background:var(--k-purple-soft); padding:2px 8px; border-radius:6px; display:inline-block; margin-bottom:6px; }
+        .ev-meta { display:flex; flex-direction:column; gap:4px; font-size:12px; color:var(--k-ink-soft); margin-bottom:10px; }
+        .ev-meta span { display:flex; align-items:center; gap:5px; }
+        .ev-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:12px; }
+        .ev-tag { font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:6px; }
+        .ev-tag.country { background:var(--k-blue-pale); color:var(--k-blue); }
+        .ev-tag.mode { background:var(--k-green-soft); color:var(--k-green); }
+        .ev-tag.dept { background:var(--k-orange-soft); color:var(--k-orange); }
+        .ev-foot { display:flex; gap:8px; flex-wrap:wrap; margin-top:auto; }
+        .ev-foot .btn-primary { flex:1.4; font-size:12.5px; padding:9px 14px; justify-content:center; }
+        .btn-invite { display:inline-flex; align-items:center; gap:5px; padding:9px 14px; border-radius:10px; border:2px solid var(--k-border); background:#fff; color:var(--k-ink-soft); font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; font-weight:600; cursor:pointer; transition:all .2s; flex:1; justify-content:center; }
+        .btn-invite:hover { border-color:var(--k-purple); color:var(--k-purple); background:var(--k-purple-soft); }
+        .btn-disabled { background:#CBD5E0!important; color:#7B8599!important; cursor:not-allowed!important; pointer-events:none; box-shadow:none!important; border-color:#CBD5E0!important; }
+
+        /* ====== MODAL ====== */
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(11,18,35,.55); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+        .modal-overlay.active { display:flex; }
+        .modal { background:#fff; border-radius:20px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; animation:modalIn .3s cubic-bezier(.4,0,.2,1); }
+        @keyframes modalIn { from { opacity:0; transform:translateY(24px) scale(.97); } to { opacity:1; transform:none; } }
+        .modal-head { display:flex; align-items:center; justify-content:space-between; padding:20px 26px; border-bottom:1px solid var(--k-border); }
+        .modal-head h3 { font-family:'Sora',sans-serif; font-size:20px; font-weight:700; }
+        .modal-x { width:36px; height:36px; border-radius:10px; border:none; background:var(--k-canvas); cursor:pointer; display:grid; place-items:center; transition:all .2s; }
+        .modal-x:hover { background:#FEE2E2; color:var(--k-red); }
+        .modal-body { padding:26px; }
+        .modal-event-box { background:var(--k-canvas); border-radius:12px; padding:14px 16px; margin-bottom:20px; border-left:4px solid var(--k-blue); }
+        .modal-event-box h4 { font-family:'Sora',sans-serif; font-weight:700; color:var(--k-blue); margin-bottom:5px; font-size:15px; }
+        .modal-event-box p { font-size:13px; color:var(--k-ink-soft); }
+        .form-group { margin-bottom:16px; }
+        .form-group label { display:block; font-size:12.5px; font-weight:700; color:var(--k-ink-soft); margin-bottom:5px; }
+        .form-group input, .form-group select { width:100%; padding:11px 14px; border:2px solid var(--k-border); border-radius:8px; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; transition:all .2s; }
+        .form-group input:focus, .form-group select:focus { outline:none; border-color:var(--k-blue); box-shadow:0 0 0 3px rgba(0,82,204,.08); }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .form-submit { margin-top:22px; }
+        .form-submit .btn { width:100%; justify-content:center; padding:13px; font-size:15px; }
+        .form-note { text-align:center; font-size:12px; color:var(--k-ink-muted); margin-top:10px; }
+
+        /* Student Type */
+        .student-type-wrap { margin-bottom:22px; }
+        .student-type-label { font-size:12.5px; font-weight:700; color:var(--k-ink-soft); margin-bottom:10px; display:block; }
+        .student-type-toggle { display:grid; grid-template-columns:1fr 1fr; gap:0; background:var(--k-canvas); border-radius:12px; padding:4px; border:2px solid var(--k-border); }
+        .stt-btn { display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 12px; border-radius:10px; cursor:pointer; border:2px solid transparent; transition:all .25s; background:transparent; text-align:center; font-family:'Plus Jakarta Sans',sans-serif; }
+        .stt-btn:hover { background:rgba(0,82,204,.04); }
+        .stt-btn.active { background:#fff; border-color:var(--k-blue); box-shadow:0 2px 12px rgba(0,82,204,.12); }
+        .stt-icon { width:42px; height:42px; border-radius:50%; display:grid; place-items:center; transition:all .25s; }
+        .stt-btn:first-child .stt-icon { background:var(--k-blue-pale); color:var(--k-blue); }
+        .stt-btn:last-child .stt-icon { background:var(--k-orange-soft); color:var(--k-orange); }
+        .stt-btn.active:first-child .stt-icon { background:var(--k-blue); color:#fff; }
+        .stt-btn.active:last-child .stt-icon { background:var(--k-orange); color:#fff; }
+        .stt-title { font-weight:700; font-size:13px; color:var(--k-ink); }
+        .stt-desc { font-size:11px; color:var(--k-ink-muted); line-height:1.3; }
+        .stt-btn.active .stt-title { color:var(--k-blue-deep); }
+        .stt-btn:last-child.active .stt-title { color:#CC5500; }
+        .kanan-id-field { max-height:0; overflow:hidden; transition:max-height .35s ease, opacity .25s; opacity:0; }
+        .kanan-id-field.show { max-height:90px; opacity:1; }
+
+        /* Success */
+        .success-body { text-align:center; padding:40px 26px; }
+        .success-icon { width:68px; height:68px; background:var(--k-green-soft); border-radius:50%; display:grid; place-items:center; margin:0 auto 18px; }
+        .success-body h3 { font-family:'Sora',sans-serif; font-size:22px; font-weight:700; margin-bottom:8px; }
+        .success-body p { color:var(--k-ink-soft); font-size:14.5px; margin-bottom:22px; }
+        .success-actions { display:flex; flex-direction:column; gap:10px; }
+        .success-actions .btn { width:100%; justify-content:center; }
+        .btn-invite-success { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 20px; border-radius:12px; background:linear-gradient(135deg,#7B2FF7,#5500CC); color:#fff; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; border:none; cursor:pointer; transition:all .25s; }
+        .btn-invite-success:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(123,47,247,.3); }
+
+        /* Invite Modal */
+        .invite-modal-inner { max-width:580px; }
+        .invite-preview-wrap { position:relative; border-radius:14px; overflow:hidden; box-shadow:0 8px 32px rgba(11,18,35,.15); margin-bottom:20px; }
+        .invite-canvas { width:100%; display:block; border-radius:14px; }
+        .invite-actions { display:flex; gap:10px; }
+        .invite-actions .btn { flex:1; justify-content:center; font-size:14px; padding:12px; }
+        .invite-note { text-align:center; font-size:12px; color:var(--k-ink-muted); margin-top:14px; }
+
+        /* Eye / View Leader Button */
+        .btn-eye {
+            width:36px; height:36px; min-width:36px; border-radius:10px; border:2px solid var(--k-border);
+            background:#fff; color:var(--k-ink-muted); cursor:pointer; display:grid; place-items:center;
+            transition:all .2s; padding:0; flex-shrink:0;
+        }
+        .btn-eye:hover { border-color:var(--k-blue); color:var(--k-blue); background:var(--k-blue-pale); transform:translateY(-1px); box-shadow:0 3px 10px rgba(0,82,204,.15); }
+        .btn-eye svg { width:16px; height:16px; }
+
+        /* Visiting Card Modal */
+        .vcard-modal-inner { max-width:440px; }
+        .vcard-preview-wrap { position:relative; border-radius:18px; overflow:hidden; box-shadow:0 12px 40px rgba(11,18,35,.18); margin-bottom:18px; }
+        .vcard-canvas { width:100%; display:block; border-radius:18px; }
+        .vcard-actions { display:flex; gap:10px; }
+        .vcard-actions .btn { flex:1; justify-content:center; font-size:13px; padding:11px; }
+        .vcard-quick-contact { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+        .vcard-qc-btn {
+            display:flex; align-items:center; justify-content:center; gap:6px;
+            padding:10px 14px; border-radius:10px; border:2px solid var(--k-border);
+            background:#fff; font-family:'Plus Jakarta Sans',sans-serif; font-size:12.5px;
+            font-weight:700; cursor:pointer; transition:all .2s; text-decoration:none; color:var(--k-ink-soft);
+        }
+        .vcard-qc-btn:hover { border-color:var(--k-blue); color:var(--k-blue); background:var(--k-blue-pale); }
+        .vcard-qc-btn.wa { border-color:#25D366; color:#25D366; }
+        .vcard-qc-btn.wa:hover { background:#E8FFF0; }
+        .vcard-qc-btn.call { border-color:var(--k-blue); color:var(--k-blue); }
+        .vcard-qc-btn.call:hover { background:var(--k-blue-pale); }
+        .vcard-qc-btn.email { border-color:var(--k-orange); color:var(--k-orange); }
+        .vcard-qc-btn.email:hover { background:var(--k-orange-soft); }
+        .vcard-qc-btn.web { border-color:var(--k-purple); color:var(--k-purple); }
+        .vcard-qc-btn.web:hover { background:var(--k-purple-soft); }
+
+        /* No results */
+        .no-results { text-align:center; padding:80px 20px; display:none; }
+        .no-results h3 { font-family:'Sora',sans-serif; font-size:20px; font-weight:700; margin-bottom:6px; }
+        .no-results p { color:var(--k-ink-muted); font-size:14px; }
+
+        /* CTA Banner */
+        .cta-banner { background:linear-gradient(135deg,#001233,#0052CC); padding:52px 0; text-align:center; color:#fff; }
+        .cta-banner h2 { font-family:'Sora',sans-serif; font-size:30px; font-weight:800; margin-bottom:10px; }
+        .cta-banner p { color:rgba(255,255,255,.7); margin-bottom:24px; max-width:520px; margin-left:auto; margin-right:auto; }
+        .cta-btns { display:flex; gap:14px; justify-content:center; }
+
+        /* Footer */
+        .footer { background:var(--k-ink); color:rgba(255,255,255,.7); padding:52px 0 0; font-size:14px; }
+        .footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:40px; margin-bottom:40px; }
+        .footer h4 { color:#fff; font-family:'Sora',sans-serif; font-weight:700; font-size:15px; margin-bottom:16px; }
+        .footer a { color:rgba(255,255,255,.6); text-decoration:none; transition:color .2s; }
+        .footer a:hover { color:var(--k-orange); }
+        .footer ul { list-style:none; }
+        .footer li { margin-bottom:8px; }
+        .footer-bottom { border-top:1px solid rgba(255,255,255,.1); padding:20px 0; display:flex; justify-content:space-between; align-items:center; font-size:13px; }
+
+        /* Floating */
+        .floating { position:fixed; bottom:24px; right:24px; display:flex; flex-direction:column; gap:10px; z-index:800; }
+        .fab { width:52px; height:52px; border-radius:50%; border:none; cursor:pointer; display:grid; place-items:center; box-shadow:var(--k-shadow-lg); transition:all .25s; }
+        .fab:hover { transform:scale(1.1); }
+        .fab-wa { background:#25D366; color:#fff; }
+        .fab-call { background:var(--k-blue); color:#fff; }
+        .fab-up { background:#fff; color:var(--k-ink); opacity:0; pointer-events:none; }
+        .fab-up.visible { opacity:1; pointer-events:all; }
+
+        /* ====== BOOKING CALENDAR ====== */
+        .book-modal-inner { max-width:580px; }
+        .book-steps { display:flex; gap:0; margin-bottom:24px; position:relative; }
+        .book-steps::after { content:''; position:absolute; top:14px; left:40px; right:40px; height:2px; background:var(--k-border); z-index:0; }
+        .book-step { flex:1; text-align:center; position:relative; z-index:1; }
+        .book-step-dot { width:30px; height:30px; border-radius:50%; background:var(--k-canvas); border:2px solid var(--k-border); display:inline-grid; place-items:center; font-size:12px; font-weight:800; color:var(--k-ink-muted); transition:all .3s; margin-bottom:4px; }
+        .book-step.active .book-step-dot { background:var(--k-blue); border-color:var(--k-blue); color:#fff; }
+        .book-step.done .book-step-dot { background:var(--k-green); border-color:var(--k-green); color:#fff; }
+        .book-step-label { font-size:10px; font-weight:700; color:var(--k-ink-muted); }
+        .book-step.active .book-step-label { color:var(--k-blue); }
+        .book-step.done .book-step-label { color:var(--k-green); }
+
+        .book-panel { display:none; animation:fadeSlide .3s ease; }
+        .book-panel.active { display:block; }
+        @keyframes fadeSlide { from { opacity:0; transform:translateX(12px); } to { opacity:1; transform:none; } }
+
+        /* Calendar grid */
+        .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+        .cal-header h4 { font-family:'Sora',sans-serif; font-size:16px; font-weight:700; }
+        .cal-nav { width:32px; height:32px; border-radius:8px; border:2px solid var(--k-border); background:#fff; cursor:pointer; display:grid; place-items:center; transition:all .2s; font-size:14px; }
+        .cal-nav:hover { border-color:var(--k-blue); color:var(--k-blue); }
+        .cal-nav:disabled { opacity:.3; cursor:not-allowed; }
+        .cal-weekdays { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:6px; }
+        .cal-weekdays span { text-align:center; font-size:10px; font-weight:700; color:var(--k-ink-muted); padding:6px 0; }
+        .cal-days { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+        .cal-day { aspect-ratio:1; border-radius:10px; border:none; background:transparent; font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:600; color:var(--k-ink); cursor:pointer; transition:all .2s; display:grid; place-items:center; }
+        .cal-day:hover:not(.disabled):not(.empty) { background:var(--k-blue-pale); color:var(--k-blue); }
+        .cal-day.selected { background:var(--k-blue); color:#fff; box-shadow:0 3px 10px rgba(0,82,204,.25); }
+        .cal-day.today { border:2px solid var(--k-orange); }
+        .cal-day.disabled { color:#CBD5E0; cursor:not-allowed; }
+        .cal-day.empty { cursor:default; }
+        .cal-day.past { color:#CBD5E0; text-decoration:line-through; cursor:not-allowed; }
+
+        /* Time slots */
+        .time-slots { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+        .time-slot { padding:12px 8px; border-radius:10px; border:2px solid var(--k-border); background:#fff; font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; text-align:center; }
+        .time-slot:hover { border-color:var(--k-blue); color:var(--k-blue); background:var(--k-blue-pale); }
+        .time-slot.selected { background:var(--k-blue); color:#fff; border-color:var(--k-blue); box-shadow:0 3px 10px rgba(0,82,204,.2); }
+        .time-slot.unavail { opacity:.4; cursor:not-allowed; pointer-events:none; text-decoration:line-through; }
+        .time-period { font-size:11px; font-weight:700; color:var(--k-ink-muted); margin:14px 0 8px; }
+
+        /* Counsellor cards */
+        .counsellor-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .counsellor-card { padding:14px; border-radius:12px; border:2px solid var(--k-border); background:#fff; cursor:pointer; transition:all .2s; text-align:center; }
+        .counsellor-card:hover { border-color:var(--k-blue); background:var(--k-blue-pale); }
+        .counsellor-card.selected { border-color:var(--k-blue); background:var(--k-blue-pale); box-shadow:0 3px 12px rgba(0,82,204,.15); }
+        .counsellor-avatar { width:44px; height:44px; border-radius:50%; display:inline-grid; place-items:center; font-weight:800; font-size:16px; color:#fff; margin-bottom:8px; }
+        .counsellor-card h5 { font-family:'Sora',sans-serif; font-size:12.5px; font-weight:700; margin-bottom:2px; }
+        .counsellor-card p { font-size:10.5px; color:var(--k-ink-muted); }
+
+        /* Session type */
+        .session-types { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+        .session-type { padding:18px 14px; border-radius:12px; border:2px solid var(--k-border); background:#fff; cursor:pointer; transition:all .2s; text-align:center; }
+        .session-type:hover { border-color:var(--k-blue); }
+        .session-type.selected { border-color:var(--k-blue); background:var(--k-blue-pale); }
+        .session-type .st-icon { font-size:28px; margin-bottom:6px; }
+        .session-type h5 { font-family:'Sora',sans-serif; font-size:13px; font-weight:700; margin-bottom:2px; }
+        .session-type p { font-size:11px; color:var(--k-ink-muted); }
+
+        /* Booking summary */
+        .book-summary { background:var(--k-canvas); border-radius:12px; padding:16px; margin-bottom:18px; border-left:4px solid var(--k-blue); }
+        .book-summary-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; font-size:13px; }
+        .book-summary-row .label { color:var(--k-ink-muted); font-weight:600; }
+        .book-summary-row .value { font-weight:700; color:var(--k-ink); }
+
+        /* Book nav buttons */
+        .book-nav { display:flex; gap:10px; margin-top:22px; }
+        .book-nav .btn { flex:1; justify-content:center; }
+        .book-selected-info { background:var(--k-blue-pale); border-radius:10px; padding:10px 14px; margin-top:14px; font-size:13px; color:var(--k-blue); font-weight:600; text-align:center; display:none; }
+        .book-selected-info.show { display:block; }
+
+        /* Booking Confirmation Modal */
+        .confirm-modal-inner { max-width:560px; }
+        .confirm-summary-card { background:linear-gradient(135deg,#001233,#002D6B); border-radius:16px; padding:24px; color:#fff; margin-bottom:20px; position:relative; overflow:hidden; }
+        .confirm-summary-card::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 90% 10%,rgba(255,107,0,.12),transparent 50%); }
+        .confirm-summary-card h3 { font-family:'Sora',sans-serif; font-size:20px; margin-bottom:14px; position:relative; }
+        .confirm-row { display:flex; align-items:center; gap:10px; padding:6px 0; font-size:14px; position:relative; }
+        .confirm-row .cr-icon { width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,.1); display:grid; place-items:center; font-size:14px; flex-shrink:0; }
+        .confirm-row .cr-label { color:rgba(255,255,255,.5); font-size:11px; font-weight:700; text-transform:uppercase; }
+        .confirm-row .cr-value { font-weight:700; }
+        .confirm-badge { display:inline-flex; align-items:center; gap:5px; background:rgba(0,179,104,.15); border:1px solid rgba(0,179,104,.3); color:#7BFFC4; font-size:12px; font-weight:700; padding:5px 14px; border-radius:20px; position:relative; margin-top:8px; }
+
+        /* Email preview tabs */
+        .email-tabs { display:flex; gap:0; margin-bottom:0; background:var(--k-canvas); border-radius:12px 12px 0 0; overflow:hidden; border:2px solid var(--k-border); border-bottom:none; }
+        .email-tab { flex:1; padding:12px 16px; font-family:'Plus Jakarta Sans',sans-serif; font-size:12.5px; font-weight:700; cursor:pointer; border:none; background:transparent; color:var(--k-ink-muted); transition:all .2s; display:flex; align-items:center; justify-content:center; gap:6px; }
+        .email-tab:hover { background:rgba(0,82,204,.04); }
+        .email-tab.active { background:#fff; color:var(--k-blue); box-shadow:inset 0 -2px 0 var(--k-blue); }
+        .email-preview { border:2px solid var(--k-border); border-top:none; border-radius:0 0 12px 12px; overflow:hidden; margin-bottom:16px; }
+        .email-preview-pane { display:none; }
+        .email-preview-pane.active { display:block; }
+        .ep-header { background:var(--k-canvas); padding:12px 16px; border-bottom:1px solid var(--k-border); }
+        .ep-header-row { display:flex; gap:8px; font-size:12px; color:var(--k-ink-soft); padding:2px 0; }
+        .ep-header-row strong { color:var(--k-ink); min-width:40px; }
+        .ep-body { padding:16px; font-size:13px; line-height:1.7; color:var(--k-ink-soft); }
+        .ep-body strong { color:var(--k-ink); }
+        .ep-body .ep-details-box { background:var(--k-canvas); border-radius:10px; padding:12px 14px; margin:10px 0; border-left:3px solid var(--k-blue); }
+        .ep-body .ep-details-box div { padding:2px 0; display:flex; gap:8px; }
+        .ep-body .ep-btn { display:inline-flex; align-items:center; gap:6px; background:var(--k-blue); color:#fff; font-size:12px; font-weight:700; padding:8px 16px; border-radius:8px; text-decoration:none; margin-top:8px; }
+        .ep-body .ep-footer { margin-top:14px; padding-top:12px; border-top:1px solid var(--k-border); font-size:11px; color:var(--k-ink-muted); }
+
+        /* Action buttons grid */
+        .confirm-actions-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+        .confirm-action-btn { display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 10px; border-radius:12px; border:2px solid var(--k-border); background:#fff; cursor:pointer; transition:all .2s; text-decoration:none; font-family:'Plus Jakarta Sans',sans-serif; color:var(--k-ink); }
+        .confirm-action-btn:hover { border-color:var(--k-blue); transform:translateY(-2px); box-shadow:0 4px 14px rgba(0,82,204,.12); }
+        .confirm-action-btn .ca-icon { width:40px; height:40px; border-radius:10px; display:grid; place-items:center; font-size:18px; }
+        .confirm-action-btn .ca-title { font-size:12px; font-weight:700; }
+        .confirm-action-btn .ca-desc { font-size:10px; color:var(--k-ink-muted); }
+
+        .status-sent { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; color:var(--k-green); padding:3px 10px; border-radius:12px; background:var(--k-green-soft); }
+        .status-anim { animation:statusPop .4s cubic-bezier(.4,0,.2,1); }
+        @keyframes statusPop { 0%{transform:scale(0);opacity:0} 60%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+
+        /* Animations */
+        .ev-card { opacity:0; transform:translateY(20px); animation:cardIn .5s ease forwards; }
+        @keyframes cardIn { to { opacity:1; transform:none; } }
+
+        /* Responsive */
+        @media (max-width:1024px) {
+            .events-grid { grid-template-columns:repeat(2,1fr); }
+            .hero-inner { grid-template-columns:1fr; gap:30px; }
+            .footer-grid { grid-template-columns:1fr 1fr; }
+        }
+        @media (max-width:768px) {
+            .topbar { display:none; }
+            .hero { padding:36px 0 30px; }
+            .hero h1 { font-size:28px; }
+            .hero-stats { gap:20px; }
+            .h-stat-val { font-size:24px; }
+            .events-grid { grid-template-columns:1fr; }
+            .month-nav .container { flex-direction:column; align-items:stretch; }
+            .month-tabs { overflow-x:auto; }
+            .filter-group { flex-direction:column; }
+            .search-wrap input { width:100%; }
+            .footer-grid { grid-template-columns:1fr; }
+            .footer-bottom { flex-direction:column; gap:14px; text-align:center; }
+            .cta-btns { flex-direction:column; align-items:center; }
+            .form-row { grid-template-columns:1fr; }
+            .modal { margin:16px; }
+            .hero-featured { display:none; }
+            .confirm-actions-grid { grid-template-columns:1fr; }
+            .counsellor-grid { grid-template-columns:1fr; }
+            .session-types { grid-template-columns:1fr; }
+            .time-slots { grid-template-columns:repeat(2,1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="container">
+        <span>📞 +91 265 235 4400 &nbsp;|&nbsp; 📱 24×7 Helpline: <a href="tel:+916356568111" style="color:#FFB347;font-weight:700;">+91 6356 568111</a> &nbsp;|&nbsp; ✉️ info@kanan.co</span>
+        <span>🏆 25+ Years &nbsp;•&nbsp; 2,40,000+ Students &nbsp;•&nbsp; 98% Visa Success Rate</span>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="container nav-inner">
+        <a href="#" class="logo">
+            <div class="logo-icon">K</div>
+            <div class="logo-text">Kanan<span>.co</span></div>
+        </a>
+        <div class="nav-actions">
+            <a href="tel:+916356568111" class="btn btn-helpline">📱 24×7: 6356 568111</a>
+            <button class="btn btn-primary" onclick="openBooking()">Free Counselling</button>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container hero-inner">
+        <div>
+            <h1>Kanan Event Calendar<br><span style="color:var(--k-orange)">March 2026</span></h1>
+            <p class="hero-sub">Explore our upcoming events for March 2026. Attend visa fairs, education expos, seminars, workshops, mock tests, and parent-teacher meets — in person or online.</p>
+            <p style="margin-bottom:22px;"><a href="tel:+916356568111" style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,179,104,.15);border:1px solid rgba(0,179,104,.3);color:#7BFFC4;font-size:14px;font-weight:700;padding:8px 18px;border-radius:10px;text-decoration:none;animation:helpPulse 2s infinite;">📱 24×7 Helpline: +91 6356 568111 — Call Anytime!</a></p>
+            <div class="hero-stats">
+                <div><div class="h-stat-val">2,40,000+</div><div class="h-stat-lbl">Students Counselled</div></div>
+                <div><div class="h-stat-val" id="totalCount">37</div><div class="h-stat-lbl">Events in March</div></div>
+                <div><div class="h-stat-val">25+</div><div class="h-stat-lbl">Years of Excellence</div></div>
+            </div>
+        </div>
+        <div class="hero-featured">
+            <div style="font-size:11px;font-weight:700;color:var(--k-orange);margin-bottom:6px;">⭐ FEATURED EVENT</div>
+            <h3>Kanan Student Visa Fair</h3>
+            <p style="font-size:14px;color:rgba(255,255,255,.7);margin-bottom:14px;">📍 Bhyli Branch &nbsp;|&nbsp; 📅 5th Mar, Thursday<br>10:00 AM – 7:00 PM &nbsp;•&nbsp; Free Entry<br><span style="color:#7BFFC4;font-weight:700;font-size:12px;">📱 24×7: +91 6356 568111</span></p>
+            <button class="btn btn-orange btn-lg" onclick="openRegisterFor(0)">Register Now — Free Entry</button>
+        </div>
+    </div>
+</section>
+
+<!-- MONTH NAV -->
+<div class="month-nav">
+    <div class="container">
+        <div class="month-tabs">
+            <button class="month-tab active" data-filter="all">All Events</button>
+            <button class="month-tab" data-filter="visa-fair">Visa Fairs</button>
+            <button class="month-tab" data-filter="seminar">Seminars</button>
+            <button class="month-tab" data-filter="workshop">Workshops</button>
+            <button class="month-tab" data-filter="ptm">PTMs</button>
+            <button class="month-tab" data-filter="education-expo">Expo</button>
+            <button class="month-tab" data-filter="mock-test">Mock Test</button>
+        </div>
+        <div class="filter-group">
+            <div class="search-wrap">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="searchInput" placeholder="Search events...">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EVENTS -->
+<section class="events-section">
+    <div class="container">
+        <div class="section-head">
+            <h2>March 2026 Events</h2>
+            <span class="event-count"><span id="eventCount">37</span> events</span>
+        </div>
+        <div class="events-grid" id="eventsGrid"></div>
+        <div class="no-results" id="noResults">
+            <h3>No events found</h3>
+            <p>Try a different search term or filter.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+    <div class="container">
+        <h2>Need Expert Guidance?</h2>
+        <p>Our counsellors have helped 2,40,000+ students achieve their study abroad dreams. Get your free consultation today.</p>
+        <p style="color:#7BFFC4;font-weight:700;font-size:16px;margin-bottom:20px;">📱 24×7 Helpline: <a href="tel:+916356568111" style="color:#fff;text-decoration:underline;">+91 6356 568111</a></p>
+        <div class="cta-btns">
+            <a href="tel:+916356568111" class="btn btn-orange btn-lg">📱 Call 24×7 Helpline</a>
+            <button class="btn btn-orange btn-lg" style="background:#25D366;border-color:#25D366;" onclick="window.open('https://wa.me/916356568111','_blank')">💬 WhatsApp 24×7</button>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+                    <div class="logo-icon">K</div>
+                    <div class="logo-text" style="color:#fff;">Kanan<span>.co</span></div>
+                </div>
+                <p>Kanan International — your trusted partner for study abroad, test preparation, and immigration services since 2001.</p>
+            </div>
+            <div>
+                <h4>Services</h4>
+                <ul><li><a href="#">Study Abroad</a></li><li><a href="#">IELTS Coaching</a></li><li><a href="#">PTE Preparation</a></li><li><a href="#">Education Loans</a></li><li><a href="#">Immigration</a></li></ul>
+            </div>
+            <div>
+                <h4>Destinations</h4>
+                <ul><li><a href="#">Canada</a></li><li><a href="#">UK</a></li><li><a href="#">USA</a></li><li><a href="#">Australia</a></li><li><a href="#">Germany</a></li><li><a href="#">Europe</a></li></ul>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <ul><li>📞 +91 265 235 4400</li><li style="color:#7BFFC4;font-weight:700;">📱 24×7: +91 6356 568111</li><li>✉️ info@kanan.co</li><li>🌐 www.kanan.co</li><li>📍 Vadodara • Chennai • Toronto</li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Kanan International. All rights reserved.</span>
+            <span>Est. 2001 &nbsp;•&nbsp; 26+ Branches Across India</span>
+        </div>
+    </div>
+</footer>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="registerModal">
+    <div class="modal">
+        <div class="modal-head">
+            <h3>Register for Event</h3>
+            <button class="modal-x" onclick="closeModal('registerModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-event-box">
+                <h4 id="modalTitle">Event Name</h4>
+                <p id="modalDetails">Details</p>
+            </div>
+
+            <div class="student-type-wrap">
+                <span class="student-type-label">Are you a Kanan.co student? *</span>
+                <div class="student-type-toggle">
+                    <div class="stt-btn active" onclick="setStudentType('kanan',this)">
+                        <div class="stt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg></div>
+                        <span class="stt-title">Kanan Student</span>
+                        <span class="stt-desc">Already enrolled with Kanan.co</span>
+                    </div>
+                    <div class="stt-btn" onclick="setStudentType('outside',this)">
+                        <div class="stt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+                        <span class="stt-title">Outside Student</span>
+                        <span class="stt-desc">New to Kanan.co? Welcome!</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kanan-id-field show" id="kananIdField">
+                <div class="form-group">
+                    <label>Kanan Student ID / File No.</label>
+                    <input type="text" id="regKananId" placeholder="e.g. KN-2025-00412">
+                </div>
+            </div>
+
+            <form id="regForm" onsubmit="event.preventDefault(); submitReg();">
+                <div class="form-row">
+                    <div class="form-group"><label>Full Name *</label><input type="text" id="regName" placeholder="Your full name" required></div>
+                    <div class="form-group"><label>Mobile *</label><input type="tel" id="regMobile" placeholder="+91 XXXXX XXXXX" required></div>
+                </div>
+                <div class="form-group"><label>Email *</label><input type="email" id="regEmail" placeholder="your.email@example.com" required></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Current City</label>
+                        <input type="text" id="regCity" placeholder="e.g. Vadodara">
+                    </div>
+                    <div class="form-group">
+                        <label>Interested In</label>
+                        <select id="regDest">
+                            <option value="">Select destination</option>
+                            <option>Canada</option><option>UK</option><option>USA</option><option>Australia</option><option>Germany</option><option>Dubai</option><option>Ireland / Europe</option><option>Not sure yet</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- EVENT SELECTOR (replaces education level) -->
+                <div class="form-group">
+                    <label>Select Event *</label>
+                    <select id="regEvent" required></select>
+                </div>
+
+                <div id="referralField" class="form-group" style="display:none;">
+                    <label>How did you hear about us?</label>
+                    <select id="regReferral">
+                        <option value="">Select source</option>
+                        <option>Social Media (Instagram / Facebook)</option><option>Google Search</option><option>Friend or Family</option><option>Newspaper / Advertisement</option><option>Walk-in / Passing by</option><option>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-submit"><button type="submit" class="btn btn-orange btn-lg">Confirm Registration</button></div>
+                <p class="form-note">Free entry. Our team will send confirmation within 24 hours.<br>📱 <strong>24×7 Helpline: <a href="tel:+916356568111" style="color:var(--k-green);text-decoration:none;">+91 6356 568111</a></strong></p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- INVITE MODAL -->
+<div class="modal-overlay" id="inviteModal">
+    <div class="modal invite-modal-inner">
+        <div class="modal-head">
+            <h3>🎟️ Your Event Invitation</h3>
+            <button class="modal-x" onclick="closeModal('inviteModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="invite-preview-wrap"><canvas id="inviteCanvas" class="invite-canvas" width="1080" height="1350"></canvas></div>
+            <div class="invite-actions">
+                <button class="btn btn-orange btn-lg" onclick="downloadInvite()">⬇ Download PNG</button>
+                <button class="btn btn-primary btn-lg" onclick="shareInviteWhatsApp()">💬 Share WhatsApp</button>
+            </div>
+            <p class="invite-note">📲 Download & share this invitation with friends & family!</p>
+        </div>
+    </div>
+</div>
+
+<!-- VISITING CARD MODAL -->
+<div class="modal-overlay" id="vcardModal">
+    <div class="modal vcard-modal-inner">
+        <div class="modal-head">
+            <h3>👤 Team Leader Card</h3>
+            <button class="modal-x" onclick="closeModal('vcardModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="vcard-preview-wrap"><canvas id="vcardCanvas" class="vcard-canvas" width="600" height="960"></canvas></div>
+            <div class="vcard-quick-contact" id="vcardQuickContact"></div>
+            <div class="vcard-actions" style="margin-top:12px;">
+                <button class="btn btn-primary btn-lg" onclick="downloadVcard()">⬇ Save Card</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BOOKING CALENDAR MODAL -->
+<div class="modal-overlay" id="bookingModal">
+    <div class="modal book-modal-inner">
+        <div class="modal-head">
+            <h3>📅 Book Free 1:1 Counselling</h3>
+            <button class="modal-x" onclick="closeModal('bookingModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <!-- Progress Steps -->
+            <div class="book-steps">
+                <div class="book-step active" id="bStep1"><div class="book-step-dot">1</div><div class="book-step-label">Date</div></div>
+                <div class="book-step" id="bStep2"><div class="book-step-dot">2</div><div class="book-step-label">Time</div></div>
+                <div class="book-step" id="bStep3"><div class="book-step-dot">3</div><div class="book-step-label">Counsellor</div></div>
+                <div class="book-step" id="bStep4"><div class="book-step-dot">4</div><div class="book-step-label">Details</div></div>
+            </div>
+
+            <!-- STEP 1: Date -->
+            <div class="book-panel active" id="bPanel1">
+                <p style="font-size:13px;color:var(--k-ink-soft);margin-bottom:14px;">Select your preferred date for a <strong>free 1:1 counselling session</strong></p>
+                <div class="session-types">
+                    <div class="session-type selected" onclick="setSessionMode('inperson',this)">
+                        <div class="st-icon">🏢</div>
+                        <h5>In-Person</h5>
+                        <p>Visit our Vadodara office</p>
+                    </div>
+                    <div class="session-type" onclick="setSessionMode('online',this)">
+                        <div class="st-icon">💻</div>
+                        <h5>Online (Zoom)</h5>
+                        <p>Video call from anywhere</p>
+                    </div>
+                </div>
+                <div class="cal-header">
+                    <button class="cal-nav" id="calPrev" onclick="changeMonth(-1)">‹</button>
+                    <h4 id="calMonthYear">March 2026</h4>
+                    <button class="cal-nav" id="calNext" onclick="changeMonth(1)">›</button>
+                </div>
+                <div class="cal-weekdays"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+                <div class="cal-days" id="calDays"></div>
+                <div class="book-selected-info" id="selectedDateInfo"></div>
+                <div class="book-nav"><button class="btn btn-primary btn-lg" id="btnToStep2" onclick="goToStep(2)" disabled>Next — Select Time →</button></div>
+            </div>
+
+            <!-- STEP 2: Time -->
+            <div class="book-panel" id="bPanel2">
+                <p style="font-size:13px;color:var(--k-ink-soft);margin-bottom:14px;">Pick a time slot on <strong id="step2DateLabel">—</strong></p>
+                <div class="time-period">🌅 MORNING</div>
+                <div class="time-slots" id="morningSlots"></div>
+                <div class="time-period">🌞 AFTERNOON</div>
+                <div class="time-slots" id="afternoonSlots"></div>
+                <div class="time-period">🌆 EVENING</div>
+                <div class="time-slots" id="eveningSlots"></div>
+                <div class="book-selected-info" id="selectedTimeInfo"></div>
+                <div class="book-nav">
+                    <button class="btn btn-outline" onclick="goToStep(1)">← Back</button>
+                    <button class="btn btn-primary btn-lg" id="btnToStep3" onclick="goToStep(3)" disabled>Next — Counsellor →</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Counsellor -->
+            <div class="book-panel" id="bPanel3">
+                <p style="font-size:13px;color:var(--k-ink-soft);margin-bottom:14px;">Choose your counsellor by destination interest</p>
+                <div class="counsellor-grid" id="counsellorGrid"></div>
+                <div class="book-selected-info" id="selectedCounsellorInfo"></div>
+                <div class="book-nav">
+                    <button class="btn btn-outline" onclick="goToStep(2)">← Back</button>
+                    <button class="btn btn-primary btn-lg" id="btnToStep4" onclick="goToStep(4)" disabled>Next — Your Details →</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Details & Confirm -->
+            <div class="book-panel" id="bPanel4">
+                <div class="book-summary" id="bookSummary"></div>
+                <form onsubmit="event.preventDefault(); confirmBooking();">
+                    <div class="form-row">
+                        <div class="form-group"><label>Full Name *</label><input type="text" id="bookName" placeholder="Your full name" required></div>
+                        <div class="form-group"><label>Mobile *</label><input type="tel" id="bookPhone" placeholder="+91 XXXXX XXXXX" required></div>
+                    </div>
+                    <div class="form-group"><label>Email *</label><input type="email" id="bookEmail" placeholder="your.email@example.com" required></div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Interested Destination</label>
+                            <select id="bookDest"><option value="">Select</option><option>Canada</option><option>UK</option><option>USA</option><option>Australia</option><option>Germany</option><option>Dubai</option><option>Europe</option><option>Not sure yet</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Education Level</label>
+                            <select id="bookEdu"><option value="">Select</option><option>12th / HSC</option><option>Bachelor's</option><option>Master's</option><option>Working Professional</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Any specific questions? (Optional)</label><input type="text" id="bookNotes" placeholder="e.g. Scholarship options for Canada Fall 2026"></div>
+                    <div class="book-nav">
+                        <button class="btn btn-outline" type="button" onclick="goToStep(3)">← Back</button>
+                        <button class="btn btn-orange btn-lg" type="submit">✅ Confirm Booking</button>
+                    </div>
+                    <p class="form-note">Free session · 30 min · No obligations<br>📱 <strong>24×7 Helpline: <a href="tel:+916356568111" style="color:var(--k-green);text-decoration:none;">+91 6356 568111</a></strong></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SUCCESS MODAL (for event registration) -->
+<div class="modal-overlay" id="successModal">
+    <div class="modal" style="max-width:420px;">
+        <div class="success-body">
+            <div class="success-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00B368" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <h3 id="successTitle">Registration Successful!</h3>
+            <p id="successMsg">Thank you!</p>
+            <div class="success-actions">
+                <button class="btn btn-primary btn-lg" onclick="closeModal('successModal')">Done</button>
+                <button class="btn-invite-success" id="successInviteBtn" onclick="closeModal('successModal');openInviteFor(currentRegIdx);" style="display:none;">⬇ Download Invitation Card</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BOOKING CONFIRMATION MODAL -->
+<div class="modal-overlay" id="bookConfirmModal">
+    <div class="modal confirm-modal-inner">
+        <div class="modal-head">
+            <h3>✅ Booking Confirmed!</h3>
+            <button class="modal-x" onclick="closeModal('bookConfirmModal')">✕</button>
+        </div>
+        <div class="modal-body" id="bookConfirmBody">
+            <!-- Dynamically filled -->
+        </div>
+    </div>
+</div>
+
+<!-- FLOATING BUTTONS -->
+<div class="floating">
+    <button class="fab fab-up" id="fabUp" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>
+    <a class="fab fab-wa" href="https://wa.me/916356568111" target="_blank" title="WhatsApp 24×7 Helpline"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+    <a class="fab fab-call" href="tel:+916356568111" title="24×7 Helpline: 6356 568111"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></a>
+</div>
+
+<script>
+// ==================== EVENT DATA — INDIVIDUAL ROWS ====================
+const events = [
+// -- KANAN STUDENT VISA FAIR — BHYLI (5 Mar) --
+{id:0,  mainEvent:'Kanan Student Visa Fair',activity:'Visa Fair',teamLead:'Rajeev Kumar',dept:'Event - VF',country:'Multi-Country',branch:'Bhyli',mode:'Offline',date:'05/03/2026',day:'Thursday',time:'10:00 AM – 7:00 PM',type:'visa-fair'},
+{id:1,  mainEvent:'Kanan Student Visa Fair',activity:'Kanan Canada Student Onshore Support (HO)',teamLead:'Anil Goel',dept:'Canada',country:'Canada',branch:'Head Office',mode:'Offline',date:'05/03/2026',day:'Thursday',time:'10:00 AM – 8:00 PM',type:'visa-fair'},
+{id:2,  mainEvent:'Kanan Student Visa Fair',activity:'Seminar 1 – Free Education in Germany',teamLead:'Bheru Singh',dept:'Germany',country:'Germany',branch:'Bhyli',mode:'Offline',date:'05/03/2026',day:'Thursday',time:'11:00 AM – 12:00 PM',type:'seminar'},
+{id:3,  mainEvent:'Kanan Student Visa Fair',activity:'Seminar 2 – Study in Canada',teamLead:'Anil Goel',dept:'Canada',country:'Canada',branch:'Bhyli',mode:'Offline',date:'07/03/2026',day:'Saturday',time:'2:00 – 3:00 PM',type:'seminar'},
+{id:4,  mainEvent:'Kanan Student Visa Fair',activity:'Seminar 2 – Study in Australia',teamLead:'Sagar Pokhrel',dept:'Australia',country:'Australia',branch:'Bhyli',mode:'Offline',date:'05/03/2026',day:'Thursday',time:'4:00 – 5:00 PM',type:'seminar'},
+{id:5,  mainEvent:'Kanan Student Visa Fair',activity:'Seminar 3 – Study in Dubai',teamLead:'Sneha Nair',dept:'Dubai',country:'Dubai',branch:'Bhyli',mode:'Offline',date:'05/03/2026',day:'Thursday',time:'5:00 – 6:00 PM',type:'seminar'},
+{id:6,  mainEvent:'Kanan Student Visa Fair',activity:'Workshop – IELTS & Spoken English',teamLead:'Kinnari V & Sanchita M',dept:'Coaching',country:'IELTS',branch:'Bhyli',mode:'Offline',date:'05/03/2026',day:'Thursday',time:'12:30 – 1:30 PM',type:'workshop'},
+{id:7,  mainEvent:'Kanan Student Visa Fair',activity:'Loan Mela',teamLead:'Ankit Singh',dept:'Value Added Services',country:'Finance',branch:'Bhyli',mode:'Offline',date:'05/03/2026',day:'Thursday',time:'10:00 AM – 7:00 PM',type:'loan'},
+
+// -- KANAN STUDENT VISA FAIR — HEAD OFFICE (23 Mar) --
+{id:8,  mainEvent:'Kanan Student Visa Fair',activity:'Visa Fair',teamLead:'Rajeev Kumar',dept:'Event',country:'Multi-Country',branch:'Head Office',mode:'Offline',date:'23/03/2026',day:'Monday',time:'10:00 AM – 7:00 PM',type:'visa-fair'},
+{id:9,  mainEvent:'Kanan Student Visa Fair',activity:'Kanan Canada Student Onshore Support (HO)',teamLead:'Anil Goel',dept:'Canada',country:'Canada',branch:'Head Office',mode:'Offline',date:'23/03/2026',day:'Monday',time:'10:00 AM – 8:00 PM',type:'visa-fair'},
+{id:10, mainEvent:'Kanan Student Visa Fair',activity:'Seminar 1 – Study in Europe',teamLead:'Rahul Rajput',dept:'Europe',country:'Europe',branch:'Head Office',mode:'Offline',date:'23/03/2026',day:'Monday',time:'5:00 – 6:00 PM',type:'seminar'},
+{id:11, mainEvent:'Kanan Student Visa Fair',activity:'Workshop – IELTS & Personalized Coaching',teamLead:'Kinnari V & Varsha G',dept:'Coaching',country:'IELTS',branch:'Head Office',mode:'Offline',date:'23/03/2026',day:'Monday',time:'12:30 – 1:30 PM',type:'workshop'},
+{id:12, mainEvent:'Kanan Student Visa Fair',activity:'Seminar 2 – Study Medicine',teamLead:'Kishori Modi',dept:'USA',country:'USA',branch:'Head Office',mode:'Offline',date:'23/03/2026',day:'Monday',time:'4:00 – 5:00 PM',type:'seminar'},
+{id:13, mainEvent:'Kanan Student Visa Fair',activity:'Seminar 3 – Study in Canada',teamLead:'Anil Goel',dept:'Canada',country:'Canada',branch:'Head Office',mode:'Offline',date:'21/03/2026',day:'Saturday',time:'11:00 AM – 12:00 PM',type:'seminar'},
+{id:14, mainEvent:'Kanan Student Visa Fair',activity:'Loan Mela',teamLead:'Ankit Singh',dept:'Value Added Services',country:'Finance',branch:'Head Office',mode:'Offline',date:'23/03/2026',day:'Monday',time:'10:00 AM – 7:00 PM',type:'loan'},
+
+// -- ABROAD EDUCATION EXPO — ONLINE (6 Mar) --
+{id:15, mainEvent:'Abroad Education Expo',activity:'AEE – Main Event',teamLead:'Hardik Vadgama & Varsha G',dept:'B2B & B2C',country:'Multi-Country',branch:'All Branches & B2B',mode:'Online',date:'06/03/2026',day:'Friday',time:'10:00 AM – 1:00 PM',type:'education-expo'},
+{id:16, mainEvent:'Abroad Education Expo',activity:'Study in UK',teamLead:'Priyannka Patel',dept:'UK',country:'UK',branch:'All Branches & B2B',mode:'Online',date:'06/03/2026',day:'Friday',time:'10:00 – 11:00 AM',type:'education-expo'},
+{id:17, mainEvent:'Abroad Education Expo',activity:'Study in Ireland',teamLead:'Rahul Rajput',dept:'Europe',country:'Ireland',branch:'All Branches & B2B',mode:'Online',date:'06/03/2026',day:'Friday',time:'11:30 AM – 12:30 PM',type:'education-expo'},
+{id:18, mainEvent:'Abroad Education Expo',activity:'My Career Mentor',teamLead:'Himanshu Panwar',dept:'My Career Mentor',country:'Career',branch:'All Branches',mode:'Online',date:'06/03/2026',day:'Friday',time:'During Expo',type:'career'},
+{id:19, mainEvent:'Abroad Education Expo',activity:'Loan Session (15-20 min.)',teamLead:'Ankit Singh',dept:'Value Added Services',country:'Finance',branch:'All Branches',mode:'Online',date:'06/03/2026',day:'Friday',time:'During Expo',type:'loan'},
+
+// -- KANAN MEGA MOCK TEST DRIVE (29 Mar) --
+{id:20, mainEvent:'Kanan Mega Mock Test Drive',activity:'Full-Day Mock Test Event',teamLead:'Varsha Godavale / Vikash Panchal / Akanksha Bagariya',dept:'Event',country:'IELTS / PTE',branch:'Manjalpur',mode:'Offline',date:'29/03/2026',day:'Sunday',time:'8:00 AM – 8:00 PM',type:'mock-test'},
+
+// -- PTM – STUDY IN UK & EU (14 Mar) --
+{id:21, mainEvent:'PTM – Study in UK & EU',activity:'PTM – UK',teamLead:'Priyannka Patel',dept:'UK',country:'UK',branch:'Head Office',mode:'Offline',date:'14/03/2026',day:'Saturday',time:'5:00 – 7:00 PM',type:'ptm'},
+{id:22, mainEvent:'PTM – Study in UK & EU',activity:'PTM – Europe',teamLead:'Rahul Rajput',dept:'Europe',country:'Europe',branch:'Head Office',mode:'Offline',date:'14/03/2026',day:'Saturday',time:'5:00 – 7:00 PM',type:'ptm'},
+{id:23, mainEvent:'PTM – Study in UK & EU',activity:'Loan Session',teamLead:'Ankit Singh',dept:'Value Added Services',country:'Finance',branch:'Head Office',mode:'Offline',date:'14/03/2026',day:'Saturday',time:'During PTM',type:'loan'},
+{id:24, mainEvent:'PTM – Study in UK & EU',activity:'My Career Mentor – Workshop',teamLead:'Himanshu Panwar',dept:'My Career Mentor',country:'Career',branch:'Head Office',mode:'Offline',date:'14/03/2026',day:'Saturday',time:'During PTM',type:'career'},
+
+// -- PTM – STUDY IN USA (14 Mar) --
+{id:25, mainEvent:'PTM – Study in USA',activity:'PTM – USA',teamLead:'Kishori Modi',dept:'USA',country:'USA',branch:'Head Office',mode:'Offline',date:'14/03/2026',day:'Saturday',time:'5:00 – 7:00 PM',type:'ptm'},
+{id:26, mainEvent:'PTM – Study in USA',activity:'Loan Session',teamLead:'Ankit Singh',dept:'Value Added Services',country:'Finance',branch:'Head Office',mode:'Offline',date:'14/03/2026',day:'Saturday',time:'During PTM',type:'loan'},
+{id:27, mainEvent:'PTM – Study in USA',activity:'My Career Mentor – Workshop',teamLead:'Himanshu Panwar',dept:'My Career Mentor',country:'Career',branch:'Head Office',mode:'Offline',date:'14/03/2026',day:'Saturday',time:'During PTM',type:'career'},
+
+// -- PTM – STUDY IN AUSTRALIA (15 Mar) --
+{id:28, mainEvent:'PTM – Study in Australia',activity:'PTM – Australia',teamLead:'Sagar Pokhrel',dept:'Australia',country:'Australia',branch:'Head Office',mode:'Offline',date:'15/03/2026',day:'Sunday',time:'11:00 AM – 1:00 PM',type:'ptm'},
+{id:29, mainEvent:'PTM – Study in Australia',activity:'Loan Session',teamLead:'Ankit Singh',dept:'Value Added Services',country:'Finance',branch:'Head Office',mode:'Offline',date:'15/03/2026',day:'Sunday',time:'During PTM',type:'loan'},
+{id:30, mainEvent:'PTM – Study in Australia',activity:'My Career Mentor – Workshop',teamLead:'Himanshu Panwar',dept:'My Career Mentor',country:'Career',branch:'Head Office',mode:'Offline',date:'15/03/2026',day:'Sunday',time:'During PTM',type:'career'},
+
+// -- PTM – STUDY IN CANADA (16 Mar) --
+{id:31, mainEvent:'PTM – Study in Canada',activity:'PTM – Canada',teamLead:'Anil Goel',dept:'Canada',country:'Canada',branch:'Head Office',mode:'Offline',date:'16/03/2026',day:'Monday',time:'5:00 – 7:00 PM',type:'ptm'},
+{id:32, mainEvent:'PTM – Study in Canada',activity:'Loan Session',teamLead:'Ankit Singh',dept:'Value Added Services',country:'Finance',branch:'Head Office',mode:'Offline',date:'16/03/2026',day:'Monday',time:'During PTM',type:'loan'},
+{id:33, mainEvent:'PTM – Study in Canada',activity:'My Career Mentor – Workshop',teamLead:'Himanshu Panwar',dept:'My Career Mentor',country:'Career',branch:'Head Office',mode:'Offline',date:'16/03/2026',day:'Monday',time:'During PTM',type:'career'},
+
+// -- PTM – STUDY IN GERMANY (16 Mar) --
+{id:34, mainEvent:'PTM – Study in Germany',activity:'PTM – Germany',teamLead:'Bheru Singh',dept:'Germany',country:'Germany',branch:'Head Office',mode:'Offline',date:'16/03/2026',day:'Monday',time:'5:00 – 7:00 PM',type:'ptm'},
+{id:35, mainEvent:'PTM – Study in Germany',activity:'Loan Session',teamLead:'Ankit Singh',dept:'Value Added Services',country:'Finance',branch:'Head Office',mode:'Offline',date:'16/03/2026',day:'Monday',time:'During PTM',type:'loan'},
+{id:36, mainEvent:'PTM – Study in Germany',activity:'My Career Mentor – Workshop',teamLead:'Himanshu Panwar',dept:'My Career Mentor',country:'Career',branch:'Head Office',mode:'Offline',date:'16/03/2026',day:'Monday',time:'During PTM',type:'career'},
+];
+
+// ==================== RENDER CARDS ====================
+const grid = document.getElementById('eventsGrid');
+const countEl = document.getElementById('eventCount');
+const noResults = document.getElementById('noResults');
+
+function renderCards(filtered) {
+    grid.innerHTML = '';
+    if (filtered.length === 0) {
+        grid.style.display = 'none';
+        noResults.style.display = 'block';
+    } else {
+        grid.style.display = '';
+        noResults.style.display = 'none';
+    }
+    countEl.textContent = filtered.length;
+
+    filtered.forEach((e, idx) => {
+        const dateParts = e.date.split('/');
+        const dateNum = dateParts[0];
+        const card = document.createElement('div');
+        card.className = 'ev-card';
+        card.style.animationDelay = (idx * 0.03) + 's';
+        card.dataset.type = e.type;
+        card.dataset.search = `${e.mainEvent} ${e.activity} ${e.teamLead} ${e.country} ${e.branch} ${e.dept} ${e.day}`.toLowerCase();
+
+        card.innerHTML = `
+            <div class="ev-ribbon ${e.type}"></div>
+            <div class="ev-body">
+                <div class="ev-top">
+                    <div class="ev-date-badge">
+                        <div class="ev-date-num">${dateNum}</div>
+                        <div class="ev-date-mon">MAR</div>
+                        <div class="ev-date-day">${e.day.substring(0,3)}</div>
+                    </div>
+                    <div class="ev-info">
+                        <div class="ev-main-event">${e.mainEvent}</div>
+                        <h3>${e.activity}</h3>
+                    </div>
+                </div>
+                <div class="ev-meta">
+                    <span>👤 ${e.teamLead} <button class="btn-eye" onclick="event.stopPropagation();openVcard('${e.teamLead.replace(/'/g,"\\'")}')" title="View contact card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></span>
+                    <span>📍 ${e.branch}</span>
+                    <span>🕐 ${e.time}</span>
+                </div>
+                <div class="ev-tags">
+                    <span class="ev-tag country">${e.country}</span>
+                    <span class="ev-tag mode">${e.mode}</span>
+                    <span class="ev-tag dept">${e.dept}</span>
+                </div>
+                <div class="ev-foot">
+                    <button class="btn btn-primary" onclick="openRegisterFor(${e.id})">Register</button>
+                    <button class="btn-invite" onclick="openInviteFor(${e.id})">⬇ Invitation</button>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// ==================== FILTERS ====================
+let activeFilter = 'all';
+const searchInput = document.getElementById('searchInput');
+
+document.querySelectorAll('.month-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.month-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeFilter = tab.dataset.filter;
+        applyFilters();
+    });
+});
+searchInput.addEventListener('input', applyFilters);
+
+function applyFilters() {
+    const q = searchInput.value.toLowerCase().trim();
+    let filtered = events;
+    if (activeFilter !== 'all') filtered = filtered.filter(e => e.type === activeFilter);
+    if (q) filtered = filtered.filter(e => `${e.mainEvent} ${e.activity} ${e.teamLead} ${e.country} ${e.branch} ${e.dept} ${e.day}`.toLowerCase().includes(q));
+    renderCards(filtered);
+}
+applyFilters();
+
+// ==================== POPULATE EVENT DROPDOWN ====================
+const regEventSelect = document.getElementById('regEvent');
+function populateEventDropdown() {
+    regEventSelect.innerHTML = '<option value="">-- Select an event --</option>';
+    events.forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e.id;
+        opt.textContent = `${e.date} | ${e.activity} — ${e.branch}`;
+        regEventSelect.appendChild(opt);
+    });
+}
+populateEventDropdown();
+
+// ==================== STUDENT TYPE ====================
+let currentStudentType = 'kanan';
+function setStudentType(type, el) {
+    currentStudentType = type;
+    document.querySelectorAll('.stt-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('kananIdField').classList.toggle('show', type === 'kanan');
+    document.getElementById('referralField').style.display = type === 'outside' ? 'block' : 'none';
+}
+
+// ==================== MODALS ====================
+let currentRegIdx = 0;
+
+function openRegisterFor(idx) {
+    currentRegIdx = idx;
+    const e = events[idx];
+    document.getElementById('modalTitle').textContent = e.activity;
+    document.getElementById('modalDetails').innerHTML = `<strong>${e.mainEvent}</strong><br>📍 ${e.branch} &nbsp;|&nbsp; 📅 ${e.date}, ${e.day} &nbsp;|&nbsp; 🕐 ${e.time}`;
+    regEventSelect.value = idx;
+    document.getElementById('registerModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setStudentType('kanan', document.querySelector('.stt-btn'));
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function submitReg() {
+    const name = document.getElementById('regName').value;
+    const typeLabel = currentStudentType === 'kanan' ? 'Kanan.co Student' : 'Outside Student';
+    closeModal('registerModal');
+    document.getElementById('successTitle').textContent = 'Registration Successful!';
+    document.getElementById('successMsg').innerHTML = `Thank you${name ? ', <strong>'+name+'</strong>' : ''}! You're registered as a <span style="display:inline-flex;align-items:center;gap:4px;background:${currentStudentType==='kanan'?'#E8F1FF':'#FFF0E0'};color:${currentStudentType==='kanan'?'#0052CC':'#FF6B00'};font-size:12px;font-weight:700;padding:3px 10px;border-radius:16px;">${typeLabel}</span><br><br>Our team will send you event details within 24 hours.<br><span style="color:#00B368;font-weight:700;font-size:13px;">📱 24×7 Helpline: +91 6356 568111</span>`;
+    document.getElementById('successInviteBtn').style.display = 'inline-flex';
+    document.getElementById('successModal').classList.add('active');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+    o.addEventListener('click', ev => { if (ev.target === o) { o.classList.remove('active'); document.body.style.overflow = ''; } });
+});
+
+// ==================== INVITATION CARD ====================
+function openInviteFor(idx) {
+    const e = events[idx];
+    generateInviteCard(e);
+    document.getElementById('inviteModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+let lastInviteEvent = null;
+
+function generateInviteCard(e) {
+    lastInviteEvent = e;
+    const canvas = document.getElementById('inviteCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = 1080, H = 1350;
+    canvas.width = W; canvas.height = H;
+
+    const themes = {
+        'visa-fair':      { g1:'#001233', g2:'#002D6B', accent:'#FF6B00', accentAlt:'#FFB347', icon:'✈️' },
+        'education-expo': { g1:'#0F0025', g2:'#3D0099', accent:'#00D68F', accentAlt:'#7BFFC4', icon:'🌍' },
+        'ptm':            { g1:'#001A0F', g2:'#005533', accent:'#2563EB', accentAlt:'#60A5FA', icon:'👨‍👩‍👧' },
+        'mock-test':      { g1:'#1A0F00', g2:'#995500', accent:'#E53935', accentAlt:'#FF8A80', icon:'📝' },
+        'seminar':        { g1:'#0D1B33', g2:'#1A3A66', accent:'#FF6B00', accentAlt:'#FFB347', icon:'🎓' },
+        'workshop':       { g1:'#1A0A0A', g2:'#8B1A1A', accent:'#F5A623', accentAlt:'#FFD54F', icon:'📚' },
+        'loan':           { g1:'#0A1A1A', g2:'#006B5B', accent:'#0052CC', accentAlt:'#4D94FF', icon:'💰' },
+        'career':         { g1:'#0D0D33', g2:'#2D2D8B', accent:'#FF6B00', accentAlt:'#FFB347', icon:'🧭' }
+    };
+    const t = themes[e.type] || themes['visa-fair'];
+
+    // BG
+    const bg = ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0, t.g1); bg.addColorStop(1, t.g2);
+    ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+    // Sparkle
+    ctx.globalAlpha = 0.04;
+    for (let i=0; i<250; i++) { ctx.beginPath(); ctx.arc(Math.random()*W, Math.random()*H, Math.random()*2+.5, 0, Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); }
+    ctx.globalAlpha = 1;
+
+    // Glowing orbs
+    const drawOrb = (x,y,r,col,a) => { const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,col); g.addColorStop(1,'transparent'); ctx.globalAlpha=a; ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; };
+    drawOrb(-50,180,400,t.accent,0.06);
+    drawOrb(W+80,H-400,450,t.accentAlt,0.05);
+
+    // Diagonal lines
+    ctx.globalAlpha=0.04; ctx.strokeStyle=t.accent; ctx.lineWidth=1;
+    for (let i=-H; i<W+H; i+=70) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+H,H); ctx.stroke(); }
+    ctx.globalAlpha=1;
+
+    // TOP BAR
+    ctx.fillStyle='rgba(0,0,0,.4)'; rr(ctx,0,0,W,88,0,true);
+    ctx.fillStyle=t.accent; rr(ctx,42,21,46,46,10,true);
+    ctx.fillStyle='#fff'; ctx.font='bold 28px Sora,sans-serif'; ctx.textAlign='center'; ctx.fillText('K',65,52);
+    ctx.textAlign='left'; ctx.fillStyle='#fff'; ctx.font='bold 26px Sora,sans-serif'; ctx.fillText('Kanan',100,50);
+    ctx.fillStyle=t.accent; ctx.fillText('.co',100+ctx.measureText('Kanan').width,50);
+    ctx.textAlign='right'; ctx.fillStyle='rgba(255,255,255,.5)'; ctx.font='15px "Plus Jakarta Sans",sans-serif'; ctx.fillText('Est. 2001 · Study Abroad Experts',W-50,48);
+
+    // CORNER FRAMES
+    ctx.strokeStyle=t.accent; ctx.lineWidth=3; ctx.globalAlpha=0.4;
+    ctx.beginPath(); ctx.moveTo(16,108); ctx.lineTo(16,98); ctx.lineTo(140,98); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W-16,108); ctx.lineTo(W-16,98); ctx.lineTo(W-140,98); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(16,H-88); ctx.lineTo(16,H-78); ctx.lineTo(140,H-78); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W-16,H-88); ctx.lineTo(W-16,H-78); ctx.lineTo(W-140,H-78); ctx.stroke();
+    ctx.globalAlpha=1;
+
+    // YOU'RE INVITED
+    ctx.textAlign='center';
+    ctx.fillStyle=t.accent; ctx.globalAlpha=0.4;
+    ctx.beginPath(); ctx.moveTo(W/2-180,136); ctx.lineTo(W/2-30,136); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W/2+30,136); ctx.lineTo(W/2+180,136); ctx.stroke();
+    ctx.globalAlpha=1; ctx.font='16px serif'; ctx.fillText('✦',W/2,141);
+    ctx.fillStyle=t.accent; ctx.font='600 15px "Plus Jakarta Sans",sans-serif';
+    ctx.fillText("Y O U ' R E   I N V I T E D",W/2,174);
+
+    // ICON
+    ctx.font='68px serif'; ctx.fillText(t.icon,W/2,260);
+
+    // MAIN EVENT LABEL
+    ctx.font='bold 13px "Plus Jakarta Sans",sans-serif';
+    const meText = e.mainEvent.toUpperCase();
+    const meW = ctx.measureText(meText).width + 44;
+    ctx.fillStyle=t.accent; rr(ctx,(W-meW)/2,280,meW,32,16,true);
+    ctx.fillStyle='#fff'; ctx.fillText(meText,W/2,301);
+
+    // EVENT TITLE
+    ctx.fillStyle='#fff'; ctx.font='bold 44px Sora,sans-serif';
+    const titleLines = wrapText(ctx, e.activity, W/2, 370, W-120, 54);
+    const afterTitle = 370 + titleLines*54;
+
+    // TAGLINE
+    ctx.fillStyle='rgba(255,255,255,.45)'; ctx.font='italic 18px "Plus Jakarta Sans",sans-serif';
+    ctx.fillText('Led by ' + e.teamLead, W/2, afterTitle + 10);
+
+    // WHITE CARD
+    const cardY = afterTitle + 50;
+    const cardH = 480;
+    const cX=50, cW=W-100;
+    ctx.shadowColor='rgba(0,0,0,.2)'; ctx.shadowBlur=40; ctx.shadowOffsetY=10;
+    ctx.fillStyle='#fff'; rr(ctx,cX,cardY,cW,cardH,24,true);
+    ctx.shadowColor='transparent'; ctx.shadowBlur=0; ctx.shadowOffsetY=0;
+
+    // Accent top stripe
+    ctx.fillStyle=t.accent;
+    ctx.beginPath(); ctx.moveTo(cX+24,cardY); ctx.lineTo(cX+cW-24,cardY); ctx.quadraticCurveTo(cX+cW,cardY,cX+cW,cardY+5); ctx.lineTo(cX,cardY+5); ctx.quadraticCurveTo(cX,cardY,cX+24,cardY); ctx.closePath(); ctx.fill();
+
+    // Date block
+    const dbX=cX+36, dbY=cardY+36;
+    ctx.fillStyle=t.accent; rr(ctx,dbX,dbY,110,110,14,true);
+    const dateNum = e.date.split('/')[0];
+    ctx.fillStyle='#fff'; ctx.textAlign='center';
+    ctx.font='bold 44px Sora,sans-serif'; ctx.fillText(dateNum,dbX+55,dbY+52);
+    ctx.font='bold 20px Sora,sans-serif'; ctx.fillText('MAR',dbX+55,dbY+78);
+    ctx.fillStyle='rgba(255,255,255,.6)'; ctx.font='600 13px "Plus Jakarta Sans",sans-serif'; ctx.fillText('2026',dbX+55,dbY+98);
+
+    // Date & day text
+    ctx.textAlign='left'; ctx.fillStyle='#0B1223';
+    ctx.font='bold 24px Sora,sans-serif'; ctx.fillText(e.date.replace(/\//g,' / '), dbX+130, dbY+38);
+    ctx.fillStyle='#7B8599'; ctx.font='18px "Plus Jakarta Sans",sans-serif'; ctx.fillText(e.day, dbX+130, dbY+66);
+
+    // Time row
+    const tY = dbY + 128;
+    ctx.fillStyle='rgba('+hexToRgb(t.accent)+',.08)'; rr(ctx,dbX,tY,cW-72,42,10,true);
+    ctx.fillStyle=t.g2; ctx.font='600 17px "Plus Jakarta Sans",sans-serif';
+    ctx.fillText('🕐  ' + e.time, dbX+14, tY+27);
+
+    // Venue row
+    const vY = tY + 52;
+    ctx.fillStyle='rgba(0,0,0,.03)'; rr(ctx,dbX,vY,cW-72,42,10,true);
+    ctx.fillStyle='#0B1223'; ctx.font='600 17px "Plus Jakarta Sans",sans-serif';
+    ctx.fillText('📍  ' + e.branch, dbX+14, vY+27);
+
+    // Divider with diamond
+    const divY = vY + 62;
+    ctx.strokeStyle='#E2E8F0'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(dbX,divY); ctx.lineTo(W/2-14,divY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W/2+14,divY); ctx.lineTo(cX+cW-36,divY); ctx.stroke();
+    ctx.fillStyle=t.accent; ctx.save(); ctx.translate(W/2,divY); ctx.rotate(Math.PI/4); ctx.fillRect(-5,-5,10,10); ctx.restore();
+
+    // Info rows
+    const infoY = divY + 30;
+    const infoItems = [
+        { label:'DEPARTMENT', value:e.dept },
+        { label:'COUNTRY / PROGRAM', value:e.country },
+        { label:'MODE', value:e.mode },
+        { label:'TEAM LEAD', value:e.teamLead }
+    ];
+    infoItems.forEach((item,i) => {
+        const iy = infoY + i*42;
+        ctx.fillStyle='#A0AEC0'; ctx.font='bold 11px "Plus Jakarta Sans",sans-serif'; ctx.textAlign='left';
+        ctx.fillText(item.label, dbX, iy);
+        ctx.fillStyle='#1A202C'; ctx.font='600 16px "Plus Jakarta Sans",sans-serif';
+        ctx.fillText(item.value, dbX+180, iy);
+    });
+
+    // FREE ENTRY
+    const feY = cardY + cardH - 52;
+    ctx.fillStyle='rgba(0,179,104,.08)'; rr(ctx,cX+cW-200,feY,165,38,19,true);
+    ctx.strokeStyle='#00B368'; ctx.lineWidth=1.5; rr(ctx,cX+cW-200,feY,165,38,19,false); ctx.stroke();
+    ctx.fillStyle='#00B368'; ctx.font='bold 17px Sora,sans-serif'; ctx.textAlign='center'; ctx.fillText('✦ FREE ENTRY',cX+cW-117,feY+25);
+
+    // CTA BAR
+    const ctaY = cardY + cardH + 28;
+    const ctaGrad = ctx.createLinearGradient(60,ctaY,W-60,ctaY);
+    ctaGrad.addColorStop(0,t.accent); ctaGrad.addColorStop(1,t.accentAlt);
+    ctx.fillStyle=ctaGrad; rr(ctx,60,ctaY,W-120,68,16,true);
+    ctx.fillStyle='#fff'; ctx.font='bold 24px Sora,sans-serif'; ctx.textAlign='center';
+    ctx.fillText('Register Now → kanan.co/events',W/2,ctaY+43);
+
+    // CONTACT
+    const inY = ctaY + 94;
+    ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='600 18px "Plus Jakarta Sans",sans-serif';
+    ctx.fillText('📞 +91 265 235 4400  ·  📱 24×7: +91 6356 568111',W/2,inY);
+    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='15px "Plus Jakarta Sans",sans-serif';
+    ctx.fillText('🌐 www.kanan.co  ·  Vadodara · Chennai · Toronto',W/2,inY+32);
+
+    // STATS FOOTER
+    ctx.fillStyle='rgba(0,0,0,.4)'; rr(ctx,0,H-72,W,72,0,true);
+    const stats = ['🎓 2,40,000+ Students','🏫 25+ Years','✈️ 30+ Countries','🏆 98% Visa Success'];
+    const sW = W/stats.length;
+    stats.forEach((s,i) => { ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='bold 14px "Plus Jakarta Sans",sans-serif'; ctx.textAlign='center'; ctx.fillText(s,sW*i+sW/2,H-30); });
+
+    // Ticket perforated edges
+    ctx.fillStyle=t.g2;
+    for (let ny=cardY+30; ny<cardY+cardH-20; ny+=20) {
+        ctx.globalAlpha=0.12;
+        ctx.beginPath(); ctx.arc(cX-1,ny,3.5,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(cX+cW+1,ny,3.5,0,Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha=1;
+}
+
+function hexToRgb(hex) {
+    hex = hex.replace('#','');
+    return parseInt(hex.substring(0,2),16)+','+parseInt(hex.substring(2,4),16)+','+parseInt(hex.substring(4,6),16);
+}
+
+function rr(ctx,x,y,w,h,r,fill) {
+    if (typeof r === 'number') { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath(); if(fill) ctx.fill(); }
+}
+
+function wrapText(ctx,text,x,y,maxW,lineH) {
+    const words=text.split(' '); let line='', lines=[];
+    words.forEach(w => { const test=line+(line?' ':'')+w; if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=w;}else{line=test;} });
+    if(line) lines.push(line);
+    lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lineH));
+    return lines.length;
+}
+
+function downloadInvite() {
+    const canvas=document.getElementById('inviteCanvas');
+    const link=document.createElement('a');
+    const name=lastInviteEvent?lastInviteEvent.activity.replace(/[^a-zA-Z0-9]/g,'-').toLowerCase():'event';
+    link.download=`kanan-invite-${name}.png`;
+    link.href=canvas.toDataURL('image/png',1.0);
+    link.click();
+}
+
+function shareInviteWhatsApp() {
+    const e=lastInviteEvent;
+    if(!e) return;
+    const text=encodeURIComponent(`🎓 You're Invited!\n\n*${e.activity}*\n📋 ${e.mainEvent}\n📅 ${e.date}, ${e.day}\n🕐 ${e.time}\n📍 ${e.branch}\n👤 ${e.teamLead}\n\n✨ FREE ENTRY — Register now!\n🌐 www.kanan.co/events\n📞 +91 265 235 4400\n📱 24×7 Helpline: +91 6356 568111`);
+    window.open(`https://wa.me/?text=${text}`,'_blank');
+}
+
+// ==================== TEAM LEADER DATABASE ====================
+const teamLeaders = {
+    'Rajeev Kumar': {
+        name: 'Rajeev Kumar', designation: 'Event Manager', department: 'Event Management & Visa Fairs',
+        phone: '+91 97275 00000', email: 'rajeev@kananinternational.com',
+        branch: 'Head Office, Vadodara', initials: 'RK', color: '#0052CC'
+    },
+    'Anil Goel': {
+        name: 'Anil Goel', designation: 'Head – Canada & B2C', department: 'Canada Admissions & Onshore Support',
+        phone: '+91 63590 75555', email: 'anilgoyal@kananinternational.com',
+        branch: 'Kanan House, 2nd Floor, Trident Complex, Opp. Adani Gas Station, Vadodara - 390007', initials: 'AG', color: '#003399'
+    },
+    'Bheru Singh': {
+        name: 'Bheru Singh', designation: 'Head – Germany Program', department: 'Germany & European Education',
+        phone: '+91 97275 00000', email: 'bheru@kananinternational.com',
+        branch: 'Head Office, Vadodara', initials: 'BS', color: '#1A3A66'
+    },
+    'Sagar Pokhrel': {
+        name: 'Sagar Pokhrel', designation: 'Head – Australia Program', department: 'Australia Admissions & Visa',
+        phone: '+91 97275 00000', email: 'sagar@kananinternational.com',
+        branch: 'Head Office, Vadodara', initials: 'SP', color: '#005533'
+    },
+    'Sneha Nair': {
+        name: 'Sneha Nair', designation: 'Head – Dubai Program', department: 'Dubai & UAE Education',
+        phone: '+91 97275 00000', email: 'sneha@kananinternational.com',
+        branch: 'Bhyli Branch, Vadodara', initials: 'SN', color: '#CC7A00'
+    },
+    'Kinnari V & Sanchita M': {
+        name: 'Kinnari V & Sanchita M', designation: 'IELTS & Coaching Trainers', department: 'Test Preparation & Coaching',
+        phone: '+91 97275 00000', email: 'coaching@kananinternational.com',
+        branch: 'Bhyli Branch, Vadodara', initials: 'KS', color: '#8B1A1A'
+    },
+    'Ankit Singh': {
+        name: 'Ankit Singh', designation: 'Head – Value Added Services', department: 'Loans, Insurance & VAS',
+        phone: '+91 97275 00000', email: 'ankit@kananinternational.com',
+        branch: 'Head Office, Vadodara', initials: 'AS', color: '#006B5B'
+    },
+    'Rahul Rajput': {
+        name: 'Rahul Rajput', designation: 'Head – Europe & Ireland', department: 'European Education Programs',
+        phone: '+91 97275 00000', email: 'rahul@kananinternational.com',
+        branch: 'Head Office, Vadodara', initials: 'RR', color: '#5500CC'
+    },
+    'Kinnari V & Varsha G': {
+        name: 'Kinnari V & Varsha G', designation: 'IELTS & Coaching Trainers', department: 'Test Preparation & Coaching',
+        phone: '+91 97275 00000', email: 'coaching@kananinternational.com',
+        branch: 'Head Office, Vadodara', initials: 'KV', color: '#8B1A1A'
+    },
+    'Kishori Modi': {
+        name: 'Kishori Modi', designation: 'Head – USA & Medicine', department: 'USA Admissions & Medical Education',
+        phone: '+91 97275 00000', email: 'kishori@kananinternational.com',
+        branch: 'Head Office, Vadodara', initials: 'KM', color: '#0052CC'
+    },
+    'Hardik Vadgama & Varsha G': {
+        name: 'Hardik Vadgama & Varsha G', designation: 'B2B & B2C Leads', department: 'B2B Partnerships & B2C Operations',
+        phone: '+91 97275 00000', email: 'b2b@kananinternational.com',
+        branch: 'All Branches, Vadodara', initials: 'HV', color: '#3D0099'
+    },
+    'Priyannka Patel': {
+        name: 'Priyannka Patel', designation: 'Head – UK Program', department: 'UK Admissions & Visa',
+        phone: '+91 97275 00000', email: 'priyannka@kananinternational.com',
+        branch: 'Head Office, Vadodara', initials: 'PP', color: '#0052CC'
+    },
+    'Himanshu Panwar': {
+        name: 'Himanshu Panwar', designation: 'Career Mentor Lead', department: 'My Career Mentor Program',
+        phone: '+91 97275 00000', email: 'himanshu@kananinternational.com',
+        branch: 'Head Office, Vadodara', initials: 'HP', color: '#2D2D8B'
+    },
+    'Varsha Godavale / Vikash Panchal / Akanksha Bagariya': {
+        name: 'Varsha G / Vikash P / Akanksha B', designation: 'Mock Test Coordinators', department: 'Test Preparation & Mock Drives',
+        phone: '+91 97275 00000', email: 'mocktest@kananinternational.com',
+        branch: 'Manjalpur Branch, Vadodara', initials: 'VVA', color: '#995500'
+    }
+};
+
+// ==================== VISITING CARD ====================
+let currentVcardLeader = null;
+
+function openVcard(leaderName) {
+    const leader = teamLeaders[leaderName];
+    if (!leader) { alert('Contact card not available for: ' + leaderName); return; }
+    currentVcardLeader = leader;
+    generateVcardCanvas(leader);
+    // Build quick contact buttons
+    const qc = document.getElementById('vcardQuickContact');
+    const phoneClean = leader.phone.replace(/[^0-9+]/g, '');
+    qc.innerHTML = `
+        <a class="vcard-qc-btn call" href="tel:${phoneClean}">📞 Call Direct</a>
+        <a class="vcard-qc-btn wa" href="https://wa.me/916356568111" target="_blank">💬 WhatsApp 24×7</a>
+        <a class="vcard-qc-btn email" href="mailto:${leader.email}">✉️ Email</a>
+        <a class="vcard-qc-btn call" href="tel:+916356568111" style="border-color:#00B368;color:#00B368;">📱 24×7 Helpline</a>
+    `;
+    document.getElementById('vcardModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function generateVcardCanvas(L) {
+    const canvas = document.getElementById('vcardCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = 600, H = 960;
+    canvas.width = W; canvas.height = H;
+    const accent = L.color;
+
+    // ===== BACKGROUND =====
+    ctx.fillStyle = '#F8FAFC';
+    rr(ctx, 0, 0, W, H, 0, true);
+
+    // Left accent bar
+    const barGrad = ctx.createLinearGradient(0, 0, 0, H);
+    barGrad.addColorStop(0, accent);
+    barGrad.addColorStop(1, shadeColor(accent, -30));
+    ctx.fillStyle = barGrad;
+    ctx.fillRect(0, 0, 6, H);
+
+    // ===== TOP HEADER =====
+    const headGrad = ctx.createLinearGradient(0, 0, W, 0);
+    headGrad.addColorStop(0, accent);
+    headGrad.addColorStop(1, shadeColor(accent, 30));
+    ctx.fillStyle = headGrad;
+    rr(ctx, 0, 0, W, 140, 0, true);
+
+    // Decorative dots in header
+    ctx.globalAlpha = 0.08;
+    for (let dx = 0; dx < W; dx += 20) {
+        for (let dy = 0; dy < 140; dy += 20) {
+            ctx.beginPath(); ctx.arc(dx, dy, 1.5, 0, Math.PI*2); ctx.fillStyle = '#fff'; ctx.fill();
+        }
+    }
+    ctx.globalAlpha = 1;
+
+    // Logo block
+    ctx.fillStyle = '#fff';
+    rr(ctx, 30, 30, 48, 48, 12, true);
+    ctx.fillStyle = accent;
+    ctx.font = 'bold 28px Sora, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('K', 54, 63);
+
+    // Brand name
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 28px Sora, sans-serif';
+    ctx.fillText('Kanan', 90, 56);
+    ctx.fillStyle = 'rgba(255,255,255,.7)';
+    ctx.fillText('.co', 90 + ctx.measureText('Kanan').width, 56);
+
+    // Tagline
+    ctx.fillStyle = 'rgba(255,255,255,.6)';
+    ctx.font = '13px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText("Let's Grow Globally", 90, 76);
+
+    // Right side — registered
+    ctx.textAlign = 'right';
+    ctx.fillStyle = 'rgba(255,255,255,.45)';
+    ctx.font = '12px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Est. 2001', W - 30, 52);
+    ctx.fillText('Study Abroad Experts', W - 30, 70);
+
+    // ===== AVATAR CIRCLE =====
+    const avX = W / 2, avY = 190, avR = 62;
+
+    // White ring
+    ctx.beginPath(); ctx.arc(avX, avY, avR + 6, 0, Math.PI*2);
+    ctx.fillStyle = '#fff';
+    ctx.shadowColor = 'rgba(0,0,0,.1)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 4;
+    ctx.fill();
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+    // Accent ring
+    ctx.beginPath(); ctx.arc(avX, avY, avR + 3, 0, Math.PI*2);
+    ctx.strokeStyle = accent; ctx.lineWidth = 3; ctx.stroke();
+
+    // Circle with initials
+    const avGrad = ctx.createLinearGradient(avX - avR, avY - avR, avX + avR, avY + avR);
+    avGrad.addColorStop(0, accent);
+    avGrad.addColorStop(1, shadeColor(accent, -20));
+    ctx.beginPath(); ctx.arc(avX, avY, avR, 0, Math.PI*2);
+    ctx.fillStyle = avGrad; ctx.fill();
+
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 36px Sora, sans-serif';
+    ctx.fillText(L.initials, avX, avY + 13);
+
+    // ===== NAME =====
+    ctx.fillStyle = '#0B1223';
+    ctx.font = 'bold 30px Sora, sans-serif';
+    ctx.fillText(L.name, W/2, 295);
+
+    // ===== DESIGNATION BADGE =====
+    ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
+    const desigText = L.designation.toUpperCase();
+    const desigW = ctx.measureText(desigText).width + 40;
+    ctx.fillStyle = accent;
+    rr(ctx, (W - desigW) / 2, 312, desigW, 32, 16, true);
+    ctx.fillStyle = '#fff';
+    ctx.fillText(desigText, W/2, 333);
+
+    // ===== DEPARTMENT =====
+    ctx.fillStyle = '#7B8599';
+    ctx.font = '15px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(L.department, W/2, 370);
+
+    // ===== DIVIDER =====
+    ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(50, 400); ctx.lineTo(W-50, 400); ctx.stroke();
+
+    // ===== CONTACT INFO ROWS =====
+    const startY = 430;
+    const rowH = 58;
+    const iconX = 60, textX = 108;
+
+    const rows = [
+        { icon: '📞', label: 'PHONE', value: L.phone, iconBg: '#E8F1FF', iconColor: accent },
+        { icon: '📱', label: '24×7 HELPLINE', value: '+91 6356 568111', iconBg: '#E0FFF0', iconColor: '#00B368' },
+        { icon: '✉️', label: 'EMAIL', value: L.email, iconBg: '#FFF0E0', iconColor: '#FF6B00' },
+        { icon: '🌐', label: 'WEBSITE', value: 'Kanan.co', iconBg: '#F0E6FF', iconColor: '#7B2FF7' },
+        { icon: '📍', label: 'OFFICE', value: L.branch, iconBg: '#FFF0E0', iconColor: '#CC7A00' }
+    ];
+
+    rows.forEach((r, i) => {
+        const ry = startY + i * rowH;
+
+        // Row background on hover
+        if (i % 2 === 0) {
+            ctx.fillStyle = 'rgba(0,0,0,.015)';
+            rr(ctx, 30, ry - 12, W - 60, rowH - 2, 10, true);
+        }
+
+        // Icon circle
+        ctx.fillStyle = r.iconBg;
+        ctx.beginPath(); ctx.arc(iconX, ry + 10, 18, 0, Math.PI*2); ctx.fill();
+        ctx.font = '18px serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(r.icon, iconX, ry + 17);
+
+        // Label
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#A0AEC0';
+        ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(r.label, textX, ry - 2);
+
+        // Value — handle long text
+        ctx.fillStyle = '#1A202C';
+        ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
+        const maxTextW = W - textX - 40;
+        if (ctx.measureText(r.value).width > maxTextW) {
+            // Wrap to 2 lines
+            const words = r.value.split(/[\s,]+/);
+            let line1 = '', line2 = '';
+            for (const w of words) {
+                const test = line1 + (line1 ? ' ' : '') + w;
+                if (ctx.measureText(test).width > maxTextW && line1) {
+                    line2 += (line2 ? ' ' : '') + w;
+                } else { line1 = test; }
+            }
+            ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText(line1, textX, ry + 14);
+            if (line2) ctx.fillText(line2, textX, ry + 30);
+        } else {
+            ctx.fillText(r.value, textX, ry + 18);
+        }
+    });
+
+    // ===== BOTTOM BANNER =====
+    const bannerY = H - 130;
+    const banGrad = ctx.createLinearGradient(0, bannerY, W, bannerY);
+    banGrad.addColorStop(0, accent);
+    banGrad.addColorStop(1, shadeColor(accent, 25));
+    ctx.fillStyle = banGrad;
+    rr(ctx, 30, bannerY, W - 60, 100, 16, true);
+
+    // QR-style decorative pattern
+    ctx.fillStyle = 'rgba(255,255,255,.12)';
+    const qrX = W - 120, qrY2 = bannerY + 18;
+    rr(ctx, qrX, qrY2, 65, 65, 8, true);
+    ctx.fillStyle = 'rgba(255,255,255,.25)';
+    for (let gx = 0; gx < 7; gx++) {
+        for (let gy = 0; gy < 7; gy++) {
+            if (Math.random() > 0.35) ctx.fillRect(qrX + 5 + gx * 8, qrY2 + 5 + gy * 8, 5.5, 5.5);
+        }
+    }
+    ctx.fillStyle = 'rgba(255,255,255,.5)';
+    ctx.font = '9px "Plus Jakarta Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('SCAN QR', qrX + 32, qrY2 + 80);
+
+    // Banner text
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 16px Sora, sans-serif';
+    ctx.fillText('Connect with us', 56, bannerY + 34);
+    ctx.fillStyle = 'rgba(255,255,255,.7)';
+    ctx.font = '12px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('📞 +91 265 235 4400', 56, bannerY + 54);
+    ctx.fillText('📱 24×7: +91 6356 568111', 56, bannerY + 72);
+    ctx.fillText('🌐 www.kanan.co', 56, bannerY + 90);
+
+    // ===== FOOTER STATS =====
+    ctx.fillStyle = '#A0AEC0';
+    ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('2,40,000+ Students  •  25+ Years  •  30+ Countries  •  98% Visa Success', W/2, H - 14);
+
+    // ===== DECORATIVE CORNER ACCENTS =====
+    ctx.strokeStyle = accent; ctx.lineWidth = 2.5; ctx.globalAlpha = 0.2;
+    ctx.beginPath(); ctx.moveTo(W-10, 150); ctx.lineTo(W-10, 145); ctx.lineTo(W-80, 145); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(10, H-10); ctx.lineTo(10, H-5); ctx.lineTo(80, H-5); ctx.stroke();
+    ctx.globalAlpha = 1;
+}
+
+function shadeColor(hex, percent) {
+    hex = hex.replace('#', '');
+    let r = parseInt(hex.substring(0,2), 16);
+    let g = parseInt(hex.substring(2,4), 16);
+    let b = parseInt(hex.substring(4,6), 16);
+    r = Math.min(255, Math.max(0, r + Math.round(r * percent / 100)));
+    g = Math.min(255, Math.max(0, g + Math.round(g * percent / 100)));
+    b = Math.min(255, Math.max(0, b + Math.round(b * percent / 100)));
+    return '#' + [r,g,b].map(c => c.toString(16).padStart(2,'0')).join('');
+}
+
+function downloadVcard() {
+    const canvas = document.getElementById('vcardCanvas');
+    const link = document.createElement('a');
+    const name = currentVcardLeader ? currentVcardLeader.name.replace(/[^a-zA-Z0-9]/g,'-').toLowerCase() : 'leader';
+    link.download = `kanan-${name}-card.png`;
+    link.href = canvas.toDataURL('image/png', 1.0);
+    link.click();
+}
+
+// ==================== BOOKING CALENDAR SYSTEM ====================
+let bookData = { date: null, time: null, counsellor: null, mode: 'inperson' };
+let calMonth = 2, calYear = 2026; // March = 2 (0-indexed)
+
+const counsellors = [
+    { name:'Anil Goel', dept:'Canada & B2C', initials:'AG', color:'#003399', email:'anilgoyal@kananinternational.com' },
+    { name:'Priyannka Patel', dept:'UK Programs', initials:'PP', color:'#0052CC', email:'priyannka@kananinternational.com' },
+    { name:'Bheru Singh', dept:'Germany', initials:'BS', color:'#1A3A66', email:'bheru@kananinternational.com' },
+    { name:'Sagar Pokhrel', dept:'Australia', initials:'SP', color:'#005533', email:'sagar@kananinternational.com' },
+    { name:'Rahul Rajput', dept:'Europe & Ireland', initials:'RR', color:'#5500CC', email:'rahul@kananinternational.com' },
+    { name:'Kishori Modi', dept:'USA & Medicine', initials:'KM', color:'#0052CC', email:'kishori@kananinternational.com' },
+    { name:'Sneha Nair', dept:'Dubai & UAE', initials:'SN', color:'#CC7A00', email:'sneha@kananinternational.com' },
+    { name:'Himanshu Panwar', dept:'Career Mentoring', initials:'HP', color:'#2D2D8B', email:'himanshu@kananinternational.com' },
+];
+
+const morningTimes = ['09:00 AM','09:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM'];
+const afternoonTimes = ['12:00 PM','12:30 PM','01:00 PM','01:30 PM','02:00 PM','02:30 PM','03:00 PM','03:30 PM'];
+const eveningTimes = ['04:00 PM','04:30 PM','05:00 PM','05:30 PM','06:00 PM','06:30 PM'];
+
+function openBooking() {
+    bookData = { date:null, time:null, counsellor:null, mode:'inperson' };
+    calMonth = 2; calYear = 2026;
+    goToStep(1);
+    renderCalendar();
+    renderCounsellors();
+    document.getElementById('bookingModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function setSessionMode(mode, el) {
+    bookData.mode = mode;
+    document.querySelectorAll('.session-type').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+}
+
+function goToStep(n) {
+    for (let i = 1; i <= 4; i++) {
+        document.getElementById('bPanel'+i).classList.toggle('active', i === n);
+        const step = document.getElementById('bStep'+i);
+        step.classList.remove('active','done');
+        if (i < n) step.classList.add('done');
+        if (i === n) step.classList.add('active');
+    }
+    if (n === 2) renderTimeSlots();
+    if (n === 4) renderSummary();
+}
+
+// ===== CALENDAR =====
+function renderCalendar() {
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('calMonthYear').textContent = months[calMonth] + ' ' + calYear;
+    // Disable prev if before March 2026
+    document.getElementById('calPrev').disabled = (calYear === 2026 && calMonth <= 2);
+
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const today = new Date();
+    const container = document.getElementById('calDays');
+    container.innerHTML = '';
+
+    // Empty cells before first day
+    for (let i = 0; i < firstDay; i++) {
+        const d = document.createElement('div');
+        d.className = 'cal-day empty';
+        container.appendChild(d);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const d = document.createElement('button');
+        d.className = 'cal-day';
+        d.type = 'button';
+        d.textContent = day;
+
+        const dateObj = new Date(calYear, calMonth, day);
+        const dayOfWeek = dateObj.getDay();
+        const isPast = dateObj < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const isSunday = dayOfWeek === 0;
+        const isToday = dateObj.toDateString() === today.toDateString();
+
+        if (isPast) {
+            d.classList.add('past');
+        } else if (isSunday) {
+            d.classList.add('disabled');
+            d.title = 'Closed on Sundays';
+        } else {
+            const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+            d.onclick = () => selectDate(dateStr, day, months[calMonth], calYear, ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dayOfWeek]);
+            if (bookData.date === dateStr) d.classList.add('selected');
+        }
+        if (isToday) d.classList.add('today');
+
+        container.appendChild(d);
+    }
+}
+
+function changeMonth(dir) {
+    calMonth += dir;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCalendar();
+}
+
+function selectDate(dateStr, day, month, year, dayName) {
+    bookData.date = dateStr;
+    bookData.dateLabel = `${dayName}, ${day} ${month} ${year}`;
+    renderCalendar();
+    const info = document.getElementById('selectedDateInfo');
+    info.textContent = '📅 ' + bookData.dateLabel;
+    info.classList.add('show');
+    document.getElementById('btnToStep2').disabled = false;
+}
+
+// ===== TIME SLOTS =====
+function renderTimeSlots() {
+    document.getElementById('step2DateLabel').textContent = bookData.dateLabel || '—';
+    const renderSlots = (times, containerId) => {
+        const c = document.getElementById(containerId);
+        c.innerHTML = '';
+        times.forEach(t => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'time-slot';
+            btn.textContent = t;
+            // Randomly make some unavailable for realism
+            const hash = (t.charCodeAt(0) + t.charCodeAt(3) + (bookData.date||'').charCodeAt(9)) % 7;
+            if (hash === 0) {
+                btn.classList.add('unavail');
+                btn.title = 'Already booked';
+            } else {
+                btn.onclick = () => selectTime(t, btn);
+            }
+            if (bookData.time === t) btn.classList.add('selected');
+            c.appendChild(btn);
+        });
+    };
+    renderSlots(morningTimes, 'morningSlots');
+    renderSlots(afternoonTimes, 'afternoonSlots');
+    renderSlots(eveningTimes, 'eveningSlots');
+}
+
+function selectTime(time, el) {
+    bookData.time = time;
+    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+    const info = document.getElementById('selectedTimeInfo');
+    info.textContent = '🕐 ' + time + ' · 30 min session';
+    info.classList.add('show');
+    document.getElementById('btnToStep3').disabled = false;
+}
+
+// ===== COUNSELLORS =====
+function renderCounsellors() {
+    const grid = document.getElementById('counsellorGrid');
+    grid.innerHTML = '';
+    counsellors.forEach((c, i) => {
+        const card = document.createElement('div');
+        card.className = 'counsellor-card';
+        card.onclick = () => selectCounsellor(c, card);
+        card.innerHTML = `
+            <div class="counsellor-avatar" style="background:${c.color}">${c.initials}</div>
+            <h5>${c.name}</h5>
+            <p>${c.dept}</p>
+        `;
+        if (bookData.counsellor && bookData.counsellor.name === c.name) card.classList.add('selected');
+        grid.appendChild(card);
+    });
+}
+
+function selectCounsellor(c, el) {
+    bookData.counsellor = c;
+    document.querySelectorAll('.counsellor-card').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+    const info = document.getElementById('selectedCounsellorInfo');
+    info.textContent = '👤 ' + c.name + ' — ' + c.dept;
+    info.classList.add('show');
+    document.getElementById('btnToStep4').disabled = false;
+}
+
+// ===== SUMMARY =====
+function renderSummary() {
+    document.getElementById('bookSummary').innerHTML = `
+        <div class="book-summary-row"><span class="label">📅 Date</span><span class="value">${bookData.dateLabel}</span></div>
+        <div class="book-summary-row"><span class="label">🕐 Time</span><span class="value">${bookData.time} (30 min)</span></div>
+        <div class="book-summary-row"><span class="label">👤 Counsellor</span><span class="value">${bookData.counsellor?.name || '—'}</span></div>
+        <div class="book-summary-row"><span class="label">📋 Department</span><span class="value">${bookData.counsellor?.dept || '—'}</span></div>
+        <div class="book-summary-row"><span class="label">${bookData.mode==='inperson'?'🏢':'💻'} Mode</span><span class="value">${bookData.mode==='inperson'?'In-Person · Head Office, Vadodara':'Online · Zoom Video Call'}</span></div>
+        <div class="book-summary-row"><span class="label">💰 Fee</span><span class="value" style="color:var(--k-green);">FREE</span></div>
+    `;
+}
+
+// ===== CONFIRM BOOKING — EMAIL + CALENDAR =====
+function confirmBooking() {
+    const name = document.getElementById('bookName').value || 'Student';
+    const phone = document.getElementById('bookPhone').value || '';
+    const email = document.getElementById('bookEmail').value || '';
+    const dest = document.getElementById('bookDest').value || 'Not specified';
+    const edu = document.getElementById('bookEdu').value || 'Not specified';
+    const notes = document.getElementById('bookNotes').value || 'None';
+    const counsellor = bookData.counsellor;
+    const modeLabel = bookData.mode === 'inperson' ? 'In-Person · Kanan Head Office, Vadodara' : 'Online · Zoom Video Call';
+    const modeShort = bookData.mode === 'inperson' ? 'In-Person' : 'Online (Zoom)';
+
+    // Generate booking reference
+    const bookRef = 'KN-' + Date.now().toString(36).toUpperCase().slice(-6);
+
+    // Parse date/time for ICS
+    const icsData = generateICSData(bookData.date, bookData.time, name, counsellor, bookData.mode);
+
+    // Build confirmation modal content
+    closeModal('bookingModal');
+
+    const body = document.getElementById('bookConfirmBody');
+    body.innerHTML = `
+        <!-- Summary Card -->
+        <div class="confirm-summary-card">
+            <h3>🎉 Your session is booked!</h3>
+            <div class="confirm-row"><div class="cr-icon">📅</div><div><div class="cr-label">Date & Time</div><div class="cr-value">${bookData.dateLabel} · ${bookData.time}</div></div></div>
+            <div class="confirm-row"><div class="cr-icon">👤</div><div><div class="cr-label">Counsellor</div><div class="cr-value">${counsellor?.name} — ${counsellor?.dept}</div></div></div>
+            <div class="confirm-row"><div class="cr-icon">${bookData.mode==='inperson'?'🏢':'💻'}</div><div><div class="cr-label">Mode</div><div class="cr-value">${modeShort}</div></div></div>
+            <div class="confirm-row"><div class="cr-icon">🏷️</div><div><div class="cr-label">Booking Ref</div><div class="cr-value">${bookRef}</div></div></div>
+            <div class="confirm-badge">✅ FREE · 30 min session · Confirmed</div>
+        </div>
+
+        <!-- Email Status -->
+        <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+            <div class="status-sent status-anim" id="emailStatus1">✉️ Email sent to ${name}</div>
+            <div class="status-sent status-anim" style="animation-delay:.3s" id="emailStatus2">✉️ Email sent to ${counsellor?.name}</div>
+        </div>
+
+        <!-- Email Preview Tabs -->
+        <div class="email-tabs">
+            <button class="email-tab active" onclick="switchEmailTab('student',this)">📩 Your Confirmation</button>
+            <button class="email-tab" onclick="switchEmailTab('counsellor',this)">📩 Counsellor Copy</button>
+        </div>
+        <div class="email-preview">
+            <!-- Student Email -->
+            <div class="email-preview-pane active" id="epStudent">
+                <div class="ep-header">
+                    <div class="ep-header-row"><strong>To:</strong> ${email}</div>
+                    <div class="ep-header-row"><strong>From:</strong> bookings@kanan.co</div>
+                    <div class="ep-header-row"><strong>Subject:</strong> ✅ Booking Confirmed — Free Counselling Session | Ref: ${bookRef}</div>
+                </div>
+                <div class="ep-body">
+                    Dear <strong>${name}</strong>,<br><br>
+                    Your <strong>free 1:1 counselling session</strong> at Kanan International has been confirmed! Here are your booking details:<br>
+                    <div class="ep-details-box">
+                        <div>📅 <strong>Date:</strong> ${bookData.dateLabel}</div>
+                        <div>🕐 <strong>Time:</strong> ${bookData.time} (30 minutes)</div>
+                        <div>👤 <strong>Counsellor:</strong> ${counsellor?.name} — ${counsellor?.dept}</div>
+                        <div>${bookData.mode==='inperson'?'🏢':'💻'} <strong>Mode:</strong> ${modeLabel}</div>
+                        <div>🏷️ <strong>Ref:</strong> ${bookRef}</div>
+                        ${bookData.mode==='inperson'?'<div>📍 <strong>Location:</strong> Kanan House, 2nd Floor, Trident Complex, Opp. Adani Gas Station, Vadodara - 390007</div>':'<div>🔗 <strong>Zoom Link:</strong> Will be emailed 1 hour before session</div>'}
+                    </div>
+                    <strong>What to bring:</strong><br>
+                    • Academic transcripts / marksheets<br>
+                    • Passport (if available)<br>
+                    • IELTS/PTE score (if taken)<br>
+                    • Any questions you have about ${dest}<br><br>
+                    <strong>Need to reschedule?</strong><br>
+                    Call us on 📱 <strong>+91 6356 568111</strong> (24×7) or reply to this email at least 24 hours before your session.<br>
+                    <div class="ep-footer">
+                        Kanan International | Est. 2001 | www.kanan.co<br>
+                        📞 +91 265 235 4400 | 📱 24×7: +91 6356 568111<br>
+                        Vadodara · Chennai · Toronto
+                    </div>
+                </div>
+            </div>
+
+            <!-- Counsellor Email -->
+            <div class="email-preview-pane" id="epCounsellor">
+                <div class="ep-header">
+                    <div class="ep-header-row"><strong>To:</strong> ${counsellor?.email || 'counsellor@kananinternational.com'}</div>
+                    <div class="ep-header-row"><strong>From:</strong> bookings@kanan.co</div>
+                    <div class="ep-header-row"><strong>Subject:</strong> 📅 New Counselling Booking — ${name} | ${bookData.dateLabel} | Ref: ${bookRef}</div>
+                </div>
+                <div class="ep-body">
+                    Hi <strong>${counsellor?.name}</strong>,<br><br>
+                    A new <strong>1:1 counselling session</strong> has been booked with you. Please find the details below:<br>
+                    <div class="ep-details-box">
+                        <div>👤 <strong>Student:</strong> ${name}</div>
+                        <div>📱 <strong>Phone:</strong> ${phone}</div>
+                        <div>✉️ <strong>Email:</strong> ${email}</div>
+                        <div>📅 <strong>Date:</strong> ${bookData.dateLabel}</div>
+                        <div>🕐 <strong>Time:</strong> ${bookData.time} (30 min)</div>
+                        <div>${bookData.mode==='inperson'?'🏢':'💻'} <strong>Mode:</strong> ${modeShort}</div>
+                        <div>🌍 <strong>Interested In:</strong> ${dest}</div>
+                        <div>🎓 <strong>Education:</strong> ${edu}</div>
+                        <div>📝 <strong>Notes:</strong> ${notes}</div>
+                        <div>🏷️ <strong>Ref:</strong> ${bookRef}</div>
+                    </div>
+                    Please ensure your calendar is updated. ${bookData.mode==='online'?'A Zoom meeting link needs to be shared with the student at least 1 hour before the session.':'The student has been informed to visit the Head Office.'}<br><br>
+                    <strong>Student contact for any changes:</strong> ${phone}<br>
+                    <div class="ep-footer">
+                        Kanan International — Internal Booking System<br>
+                        Auto-generated · Do not reply to this email
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="confirm-actions-grid">
+            <button class="confirm-action-btn" onclick="downloadICS()">
+                <div class="ca-icon" style="background:#E8F1FF;color:#0052CC;">📅</div>
+                <span class="ca-title">Add to Calendar</span>
+                <span class="ca-desc">Download .ics file</span>
+            </button>
+            <button class="confirm-action-btn" onclick="addToGoogleCalendar()">
+                <div class="ca-icon" style="background:#FFF0E0;color:#FF6B00;">📆</div>
+                <span class="ca-title">Google Calendar</span>
+                <span class="ca-desc">Open & add directly</span>
+            </button>
+            <button class="confirm-action-btn" onclick="sendStudentEmail()">
+                <div class="ca-icon" style="background:#E0FFF0;color:#00B368;">✉️</div>
+                <span class="ca-title">Email to Student</span>
+                <span class="ca-desc">Open in email client</span>
+            </button>
+            <button class="confirm-action-btn" onclick="sendCounsellorEmail()">
+                <div class="ca-icon" style="background:#F0E6FF;color:#7B2FF7;">✉️</div>
+                <span class="ca-title">Email to Counsellor</span>
+                <span class="ca-desc">Notify ${counsellor?.name?.split(' ')[0]}</span>
+            </button>
+        </div>
+
+        <div style="text-align:center; margin-top:6px;">
+            <button class="btn btn-primary btn-lg" style="width:100%;" onclick="closeModal('bookConfirmModal')">Done — Close</button>
+            <p class="form-note" style="margin-top:10px;">📱 24×7 Helpline: <a href="tel:+916356568111" style="color:var(--k-green);text-decoration:none;font-weight:700;">+91 6356 568111</a></p>
+        </div>
+    `;
+
+    // Store booking data for action buttons
+    window._lastBooking = { name, phone, email, dest, edu, notes, bookRef, counsellor, modeLabel, modeShort, icsData };
+
+    document.getElementById('bookConfirmModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// ===== EMAIL PREVIEW TAB SWITCH =====
+function switchEmailTab(tab, el) {
+    document.querySelectorAll('.email-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('epStudent').classList.toggle('active', tab === 'student');
+    document.getElementById('epCounsellor').classList.toggle('active', tab === 'counsellor');
+}
+
+// ===== ICS CALENDAR FILE GENERATOR =====
+function generateICSData(dateStr, timeStr, studentName, counsellor, mode) {
+    // Parse date: "2026-03-05"
+    const [y, m, d] = dateStr.split('-').map(Number);
+    // Parse time: "10:00 AM"
+    let [timePart, ampm] = timeStr.split(' ');
+    let [hr, min] = timePart.split(':').map(Number);
+    if (ampm === 'PM' && hr !== 12) hr += 12;
+    if (ampm === 'AM' && hr === 12) hr = 0;
+
+    // Start time (IST → UTC: subtract 5:30)
+    const startUTC = new Date(Date.UTC(y, m - 1, d, hr - 5, min - 30));
+    const endUTC = new Date(startUTC.getTime() + 30 * 60 * 1000); // 30 min
+
+    const fmt = (dt) => dt.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const now = fmt(new Date());
+
+    const location = mode === 'inperson'
+        ? 'Kanan House, 2nd Floor, Trident Complex, Opp. Adani Gas Station, Vadodara - 390007'
+        : 'Online - Zoom Video Call';
+
+    const description = `Free 1:1 Counselling Session at Kanan International\\n\\nStudent: ${studentName}\\nCounsellor: ${counsellor?.name} (${counsellor?.dept})\\nMode: ${mode === 'inperson' ? 'In-Person' : 'Online (Zoom)'}\\nDuration: 30 minutes\\n\\n24x7 Helpline: +91 6356 568111\\nWebsite: www.kanan.co`;
+
+    return {
+        start: fmt(startUTC),
+        end: fmt(endUTC),
+        now,
+        location,
+        description,
+        summary: `Kanan Counselling — ${studentName} with ${counsellor?.name}`,
+        organizerEmail: counsellor?.email || 'bookings@kanan.co',
+        attendeeEmail: '',
+        dateObj: { y, m, d, hr, min }
+    };
+}
+
+function buildICSString(icsData, attendeeEmail) {
+    return [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Kanan International//Booking System//EN',
+        'CALSCALE:GREGORIAN',
+        'METHOD:REQUEST',
+        'BEGIN:VEVENT',
+        `DTSTART:${icsData.start}`,
+        `DTEND:${icsData.end}`,
+        `DTSTAMP:${icsData.now}`,
+        `UID:${Date.now()}@kanan.co`,
+        `SUMMARY:${icsData.summary}`,
+        `DESCRIPTION:${icsData.description}`,
+        `LOCATION:${icsData.location}`,
+        `ORGANIZER;CN=Kanan Bookings:mailto:${icsData.organizerEmail}`,
+        attendeeEmail ? `ATTENDEE;CN=Student;RSVP=TRUE:mailto:${attendeeEmail}` : '',
+        'STATUS:CONFIRMED',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT30M',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Counselling session in 30 minutes',
+        'END:VALARM',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT1H',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Counselling session in 1 hour',
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR'
+    ].filter(Boolean).join('\r\n');
+}
+
+function downloadICS() {
+    const b = window._lastBooking;
+    const icsContent = buildICSString(b.icsData, b.email);
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `kanan-counselling-${b.bookRef}.ics`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+}
+
+// ===== GOOGLE CALENDAR LINK =====
+function addToGoogleCalendar() {
+    const b = window._lastBooking;
+    const d = b.icsData;
+    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(d.summary)}&dates=${d.start}/${d.end}&details=${encodeURIComponent(d.description.replace(/\\n/g,'\n'))}&location=${encodeURIComponent(d.location)}&sf=true`;
+    window.open(url, '_blank');
+}
+
+// ===== MAILTO: EMAIL TRIGGERS =====
+function sendStudentEmail() {
+    const b = window._lastBooking;
+    const subject = encodeURIComponent(`✅ Booking Confirmed — Free Counselling Session | Ref: ${b.bookRef}`);
+    const body = encodeURIComponent(
+`Dear ${b.name},
+
+Your free 1:1 counselling session at Kanan International is confirmed!
+
+BOOKING DETAILS:
+📅 Date: ${bookData.dateLabel}
+🕐 Time: ${bookData.time} (30 minutes)
+👤 Counsellor: ${b.counsellor?.name} — ${b.counsellor?.dept}
+${bookData.mode==='inperson'?'🏢':'💻'} Mode: ${b.modeLabel}
+🏷️ Ref: ${b.bookRef}
+
+${bookData.mode==='inperson'?'📍 Location: Kanan House, 2nd Floor, Trident Complex, Opp. Adani Gas Station, Vadodara - 390007':'🔗 Zoom Link: Will be emailed 1 hour before session'}
+
+WHAT TO BRING:
+• Academic transcripts / marksheets
+• Passport (if available)
+• IELTS/PTE score (if taken)
+
+NEED TO RESCHEDULE?
+Call 📱 +91 6356 568111 (24×7) at least 24 hours before your session.
+
+—
+Kanan International | Est. 2001
+📞 +91 265 235 4400 | 📱 24×7: +91 6356 568111
+🌐 www.kanan.co | Vadodara · Chennai · Toronto`
+    );
+    window.open(`mailto:${b.email}?subject=${subject}&body=${body}`, '_self');
+}
+
+function sendCounsellorEmail() {
+    const b = window._lastBooking;
+    const subject = encodeURIComponent(`📅 New Counselling Booking — ${b.name} | ${bookData.dateLabel} | Ref: ${b.bookRef}`);
+    const body = encodeURIComponent(
+`Hi ${b.counsellor?.name},
+
+A new 1:1 counselling session has been booked with you.
+
+STUDENT DETAILS:
+👤 Name: ${b.name}
+📱 Phone: ${b.phone}
+✉️ Email: ${b.email}
+🌍 Interested In: ${b.dest}
+🎓 Education: ${b.edu}
+📝 Notes: ${b.notes}
+
+SESSION DETAILS:
+📅 Date: ${bookData.dateLabel}
+🕐 Time: ${bookData.time} (30 min)
+${bookData.mode==='inperson'?'🏢':'💻'} Mode: ${b.modeShort}
+🏷️ Ref: ${b.bookRef}
+
+${bookData.mode==='online'?'ACTION REQUIRED: Please create a Zoom meeting and share the link with the student at least 1 hour before the session.':'The student has been asked to visit Head Office.'}
+
+Student contact: ${b.phone}
+
+—
+Kanan International — Internal Booking System
+Auto-generated notification`
+    );
+    window.open(`mailto:${b.counsellor?.email}?subject=${subject}&body=${body}`, '_self');
+}
+
+// SCROLL
+window.addEventListener('scroll',()=>{ document.getElementById('fabUp').classList.toggle('visible',window.scrollY>400); });
+</script>
+</body>
+</html>

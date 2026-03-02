@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Calendar | Kanan.co — Study Abroad Education Consultants</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --k-ink: #0B1223;
+            --k-ink-soft: #3D4A63;
+            --k-ink-muted: #7B8599;
+            --k-blue: #0052CC;
+            --k-blue-deep: #003399;
+            --k-blue-glow: #4D94FF;
+            --k-blue-pale: #E8F1FF;
+            --k-orange: #FF6B00;
+            --k-orange-soft: #FFF0E0;
+            --k-green: #00B368;
+            --k-green-soft: #E0FFF0;
+            --k-purple: #7B2FF7;
+            --k-purple-soft: #F0E6FF;
+            --k-red: #E53935;
+            --k-gold: #F5A623;
+            --k-surface: #FFFFFF;
+            --k-canvas: #F4F6FA;
+            --k-border: #E2E8F0;
+            --k-shadow-sm: 0 1px 4px rgba(11,18,35,0.06);
+            --k-shadow-md: 0 6px 24px rgba(11,18,35,0.08);
+            --k-shadow-lg: 0 16px 48px rgba(11,18,35,0.1);
+            --k-shadow-glow: 0 0 60px rgba(0,82,204,0.15);
+            --radius: 14px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--k-canvas);
+            color: var(--k-ink);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1260px; margin: 0 auto; padding: 0 28px; }
+
+        /* ====== TOPBAR ====== */
+        .topbar {
+            background: var(--k-ink);
+            color: rgba(255,255,255,0.7);
+            font-size: 12.5px;
+            padding: 7px 0;
+            letter-spacing: 0.2px;
+        }
+        .topbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .topbar a { color: rgba(255,255,255,0.7); text-decoration: none; transition: color .2s; }
+        .topbar a:hover { color: #fff; }
+        .topbar-links { display: flex; gap: 18px; align-items: center; }
+        .topbar-sep { width: 1px; height: 12px; background: rgba(255,255,255,0.15); }
+
+        /* ====== NAVBAR ====== */
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--k-border);
+        }
+        .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-mark {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--k-blue), var(--k-blue-deep));
+            border-radius: 10px;
+            display: grid; place-items: center;
+            color: #fff;
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+        }
+        .logo-word { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 24px; color: var(--k-blue); letter-spacing: -0.5px; }
+        .logo-word b { color: var(--k-orange); font-weight: 800; }
+
+        .nav-menu { display: flex; gap: 28px; list-style: none; }
+        .nav-menu a {
+            text-decoration: none; font-size: 14px; font-weight: 600; color: var(--k-ink-soft);
+            transition: color .2s; position: relative;
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--k-blue); }
+        .nav-menu a.active::after {
+            content: ''; position: absolute; bottom: -22px; left: 0; right: 0;
+            height: 2.5px; background: var(--k-blue); border-radius: 3px 3px 0 0;
+        }
+        .nav-actions { display: flex; gap: 10px; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 9px 22px; border-radius: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13.5px;
+            cursor: pointer; transition: all .2s; border: none; text-decoration: none;
+        }
+        .btn-primary { background: var(--k-blue); color: #fff; }
+        .btn-primary:hover { background: var(--k-blue-deep); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,82,204,0.3); }
+        .btn-outline { background: transparent; color: var(--k-blue); border: 2px solid var(--k-blue); }
+        .btn-outline:hover { background: var(--k-blue); color: #fff; }
+        .btn-orange { background: var(--k-orange); color: #fff; }
+        .btn-orange:hover { background: #E55F00; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(255,107,0,0.3); }
+        .btn-white { background: #fff; color: var(--k-blue); }
+        .btn-white:hover { background: var(--k-blue-pale); }
+        .btn-ghost { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.25); }
+        .btn-lg { padding: 13px 30px; font-size: 15px; border-radius: 10px; }
+        .btn-sm { padding: 7px 16px; font-size: 12.5px; }
+        .btn-icon { width: 40px; height: 40px; padding: 0; justify-content: center; border-radius: 10px; }
+
+        .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+        .hamburger span { display: block; width: 22px; height: 2px; background: var(--k-ink); margin: 5px 0; transition: .3s; }
+
+        /* ====== HERO ====== */
+        .hero {
+            background: linear-gradient(135deg, #001233 0%, #002566 30%, #003DA5 65%, #0052CC 100%);
+            padding: 72px 0 64px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: -200px; right: -150px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,107,0,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: heroOrb 12s ease-in-out infinite alternate;
+        }
+        .hero::after {
+            content: '';
+            position: absolute; bottom: -150px; left: -100px;
+            width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(77,148,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: heroOrb 15s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes heroOrb { 0% { transform: translate(0,0); } 100% { transform: translate(30px,-20px); } }
+
+        /* Mesh dots pattern */
+        .hero-pattern {
+            position: absolute; inset: 0; opacity: 0.04;
+            background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        .hero-inner { display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: center; position: relative; z-index: 2; }
+
+        .hero h1 {
+            font-family: 'Sora', sans-serif; font-size: 48px; font-weight: 800;
+            color: #fff; line-height: 1.12; letter-spacing: -1.5px; margin-bottom: 18px;
+        }
+        .hero h1 em { font-style: normal; color: var(--k-orange); }
+        .hero-sub { color: rgba(255,255,255,0.75); font-size: 16.5px; max-width: 500px; margin-bottom: 32px; line-height: 1.7; }
+        .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+        .hero-stats { display: flex; gap: 44px; margin-top: 44px; }
+        .h-stat-val { font-family: 'Sora', sans-serif; font-size: 38px; font-weight: 800; color: var(--k-orange); line-height: 1; }
+        .h-stat-lbl { color: rgba(255,255,255,0.55); font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-top: 6px; }
+
+        /* Featured card */
+        .feat-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 18px;
+            padding: 30px;
+            position: relative;
+        }
+        .feat-badge {
+            position: absolute; top: -13px; left: 26px;
+            background: linear-gradient(135deg, var(--k-orange), #FF8C38);
+            color: #fff; padding: 6px 20px; border-radius: 50px;
+            font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .feat-card h3 { font-family: 'Sora', sans-serif; color: #fff; font-size: 19px; font-weight: 700; margin: 12px 0 18px; line-height: 1.35; }
+        .feat-meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+        .feat-meta-item { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.8); font-size: 13.5px; }
+        .feat-meta-item svg { flex-shrink: 0; opacity: 0.6; }
+        .feat-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+        .feat-tag { padding: 4px 14px; background: rgba(255,255,255,0.12); border-radius: 50px; font-size: 12px; color: #fff; font-weight: 600; }
+        .feat-card .btn { width: 100%; justify-content: center; }
+
+        /* ====== MONTH TABS ====== */
+        .month-nav {
+            background: var(--k-surface);
+            border-bottom: 1px solid var(--k-border);
+            position: sticky; top: 68px; z-index: 900;
+        }
+        .month-nav .container { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; padding-bottom: 14px; gap: 16px; }
+        .month-tabs { display: flex; gap: 4px; background: var(--k-canvas); padding: 4px; border-radius: 10px; }
+        .month-tab {
+            padding: 10px 22px; border: none; background: transparent; cursor: pointer;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; font-weight: 600;
+            color: var(--k-ink-muted); border-radius: 7px; transition: all .2s; white-space: nowrap;
+        }
+        .month-tab:hover { color: var(--k-blue); }
+        .month-tab.active { background: var(--k-blue); color: #fff; box-shadow: 0 2px 10px rgba(0,82,204,0.25); }
+
+        .filter-group { display: flex; gap: 10px; align-items: center; }
+        .search-wrap { position: relative; }
+        .search-wrap input {
+            width: 230px; padding: 10px 16px 10px 38px;
+            border: 2px solid var(--k-border); border-radius: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px;
+            background: var(--k-canvas); transition: all .2s;
+        }
+        .search-wrap input:focus { outline: none; border-color: var(--k-blue); background: #fff; box-shadow: 0 0 0 3px rgba(0,82,204,0.08); }
+        .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--k-ink-muted); }
+
+        .filter-select {
+            padding: 10px 36px 10px 14px; border: 2px solid var(--k-border); border-radius: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px;
+            background: var(--k-canvas); color: var(--k-ink); cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237B8599' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center;
+            transition: all .2s;
+        }
+        .filter-select:focus { outline: none; border-color: var(--k-blue); box-shadow: 0 0 0 3px rgba(0,82,204,0.08); }
+
+        /* ====== EVENTS GRID ====== */
+        .events-area { padding: 44px 0 72px; }
+        .events-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+        .events-head h2 { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 800; }
+        .events-count { color: var(--k-ink-muted); font-size: 14px; font-weight: 500; }
+        .events-count b { color: var(--k-blue); }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        /* ====== EVENT CARD ====== */
+        .ev-card {
+            background: var(--k-surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--k-border);
+            overflow: hidden;
+            transition: all .3s cubic-bezier(.4,0,.2,1);
+            display: flex; flex-direction: column;
+            position: relative;
+        }
+        .ev-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--k-shadow-lg);
+            border-color: transparent;
+        }
+        .ev-card-ribbon {
+            height: 4px;
+            background: linear-gradient(90deg, var(--k-blue), var(--k-blue-glow));
+        }
+        .ev-card-ribbon.orange { background: linear-gradient(90deg, var(--k-orange), #FFA94D); }
+        .ev-card-ribbon.purple { background: linear-gradient(90deg, var(--k-purple), #A770FF); }
+        .ev-card-ribbon.green { background: linear-gradient(90deg, var(--k-green), #33CC88); }
+        .ev-card-ribbon.gold { background: linear-gradient(90deg, var(--k-gold), #FFD166); }
+
+        .ev-card-head { display: flex; gap: 14px; padding: 20px 20px 0; }
+        .ev-date {
+            flex-shrink: 0; width: 58px; height: 64px;
+            background: linear-gradient(135deg, var(--k-blue), var(--k-blue-deep));
+            border-radius: 10px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: #fff; box-shadow: 0 4px 14px rgba(0,82,204,0.2);
+        }
+        .ev-date.orange { background: linear-gradient(135deg, var(--k-orange), #E55F00); box-shadow: 0 4px 14px rgba(255,107,0,0.2); }
+        .ev-date.purple { background: linear-gradient(135deg, var(--k-purple), #5B1AD0); box-shadow: 0 4px 14px rgba(123,47,247,0.2); }
+        .ev-date.green { background: linear-gradient(135deg, var(--k-green), #008A50); box-shadow: 0 4px 14px rgba(0,179,104,0.2); }
+        .ev-date.gold { background: linear-gradient(135deg, var(--k-gold), #E89A1C); box-shadow: 0 4px 14px rgba(245,166,35,0.2); }
+        .ev-date-d { font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 800; line-height: 1; }
+        .ev-date-m { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.85; }
+
+        .ev-info { flex: 1; min-width: 0; }
+        .ev-title { font-family: 'Sora', sans-serif; font-size: 15.5px; font-weight: 700; color: var(--k-ink); line-height: 1.35; margin-bottom: 3px; }
+        .ev-sub { font-size: 12.5px; color: var(--k-ink-muted); font-weight: 500; }
+
+        .ev-body { padding: 16px 20px; flex: 1; }
+        .ev-row { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 9px; font-size: 13px; color: var(--k-ink-soft); }
+        .ev-row svg { flex-shrink: 0; margin-top: 2px; color: var(--k-blue); }
+
+        .ev-tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 12px 0; }
+        .ev-tag {
+            padding: 3px 10px; border-radius: 50px;
+            font-size: 10.5px; font-weight: 700; letter-spacing: 0.3px;
+        }
+        .t-canada { background: #FEE2E2; color: #DC2626; }
+        .t-uk { background: #DBEAFE; color: #2563EB; }
+        .t-usa { background: #E0E7FF; color: #4338CA; }
+        .t-australia { background: #FEF3C7; color: #D97706; }
+        .t-germany { background: #F3E8FF; color: #7C3AED; }
+        .t-ireland { background: #CCFBF1; color: #0D9488; }
+        .t-europe { background: #FCE7F3; color: #DB2777; }
+        .t-dubai { background: #FFF7ED; color: #EA580C; }
+        .t-coaching { background: #ECFDF5; color: #059669; }
+
+        .ev-mode {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 4px 12px; border-radius: 50px;
+            font-size: 11.5px; font-weight: 700;
+        }
+        .mode-offline { background: var(--k-green-soft); color: var(--k-green); }
+        .mode-online { background: var(--k-purple-soft); color: var(--k-purple); }
+
+        .ev-activities {
+            margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--k-border);
+        }
+        .ev-act-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--k-ink-muted); margin-bottom: 6px; }
+        .ev-act-list { font-size: 12px; color: var(--k-ink-soft); line-height: 1.7; }
+
+        .ev-foot { padding: 0 20px 20px; }
+        .ev-foot .btn { width: 100%; justify-content: center; }
+
+        /* ====== CTA BANNER ====== */
+        .cta-banner {
+            background: linear-gradient(135deg, var(--k-orange), #FF8C38, #FFA94D);
+            padding: 64px 0;
+            position: relative; overflow: hidden;
+        }
+        .cta-banner::before {
+            content: ''; position: absolute; top: -100px; right: -50px;
+            width: 350px; height: 350px;
+            background: rgba(255,255,255,0.1); border-radius: 50%;
+        }
+        .cta-inner { text-align: center; position: relative; z-index: 2; }
+        .cta-inner h2 { font-family: 'Sora', sans-serif; font-size: 34px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+        .cta-inner p { color: rgba(255,255,255,0.9); font-size: 16px; margin-bottom: 28px; max-width: 520px; margin-left: auto; margin-right: auto; }
+        .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+        /* ====== NEWSLETTER ====== */
+        .newsletter { background: var(--k-ink); padding: 56px 0; }
+        .nl-inner { display: flex; justify-content: space-between; align-items: center; gap: 40px; }
+        .nl-inner h3 { font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+        .nl-inner p { color: #7B8599; font-size: 14px; }
+        .nl-form { display: flex; gap: 10px; }
+        .nl-form input {
+            width: 280px; padding: 13px 18px;
+            border: 2px solid #2D3748; border-radius: 8px;
+            background: #151D2C; color: #fff;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px;
+        }
+        .nl-form input::placeholder { color: #4A5568; }
+        .nl-form input:focus { outline: none; border-color: var(--k-blue); }
+
+        /* ====== FOOTER ====== */
+        .footer { background: #060D1A; padding: 48px 0 28px; color: #7B8599; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 36px; }
+        .footer-brand .logo-word { color: #fff; }
+        .footer-brand p { font-size: 13.5px; margin-top: 12px; line-height: 1.75; color: #4A5568; }
+        .footer h4 { color: #fff; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 14px; }
+        .footer ul { list-style: none; }
+        .footer ul li { margin-bottom: 9px; }
+        .footer ul a { color: #4A5568; text-decoration: none; font-size: 13.5px; transition: color .2s; }
+        .footer ul a:hover { color: var(--k-orange); }
+        .footer-bottom {
+            border-top: 1px solid #1A2332; padding-top: 20px;
+            display: flex; justify-content: space-between; align-items: center; font-size: 12.5px;
+        }
+        .social-links { display: flex; gap: 10px; }
+        .social-links a {
+            width: 34px; height: 34px; border-radius: 50%; background: #1A2332;
+            display: grid; place-items: center; color: #4A5568; text-decoration: none; transition: all .2s;
+        }
+        .social-links a:hover { background: var(--k-blue); color: #fff; }
+
+        /* ====== MODALS ====== */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(11,18,35,0.65); backdrop-filter: blur(8px);
+            z-index: 9999; align-items: center; justify-content: center; padding: 24px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: #fff; border-radius: 18px;
+            width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
+            animation: modalIn .3s cubic-bezier(.4,0,.2,1);
+        }
+        @keyframes modalIn { from { opacity: 0; transform: translateY(24px) scale(0.97); } to { opacity: 1; transform: none; } }
+        .modal-head {
+            padding: 22px 26px; border-bottom: 1px solid var(--k-border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-head h3 { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; }
+        .modal-x {
+            width: 34px; height: 34px; border: none; background: var(--k-canvas); border-radius: 50%;
+            cursor: pointer; display: grid; place-items: center; transition: all .2s;
+        }
+        .modal-x:hover { background: #FEE2E2; color: var(--k-red); }
+        .modal-body { padding: 26px; }
+        .modal-event-box {
+            background: var(--k-blue-pale); border-radius: 10px; padding: 16px; margin-bottom: 22px;
+        }
+        .modal-event-box h4 { font-family: 'Sora', sans-serif; font-weight: 700; color: var(--k-blue); margin-bottom: 5px; font-size: 15px; }
+        .modal-event-box p { font-size: 13px; color: var(--k-ink-soft); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 12.5px; font-weight: 700; color: var(--k-ink-soft); margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 11px 14px;
+            border: 2px solid var(--k-border); border-radius: 8px;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; transition: all .2s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--k-blue); box-shadow: 0 0 0 3px rgba(0,82,204,0.08);
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .form-submit { margin-top: 22px; }
+        .form-submit .btn { width: 100%; justify-content: center; padding: 13px; font-size: 15px; }
+        .form-note { text-align: center; font-size: 12px; color: var(--k-ink-muted); margin-top: 10px; }
+
+        .success-body { text-align: center; padding: 40px 26px; }
+        .success-icon {
+            width: 68px; height: 68px; background: var(--k-green-soft); border-radius: 50%;
+            display: grid; place-items: center; margin: 0 auto 18px;
+        }
+        .success-body h3 { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+        .success-body p { color: var(--k-ink-soft); font-size: 14.5px; margin-bottom: 22px; }
+        .success-actions { display: flex; flex-direction: column; gap: 10px; }
+        .success-actions .btn { width: 100%; justify-content: center; }
+        .btn-invite-success {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px 20px; border-radius: 12px;
+            background: linear-gradient(135deg, #7B2FF7, #5500CC); color: #fff;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700;
+            border: none; cursor: pointer; transition: all .25s;
+        }
+        .btn-invite-success:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(123,47,247,0.3); }
+
+        /* ====== STUDENT TYPE SELECTOR ====== */
+        .student-type-wrap { margin-bottom: 22px; }
+        .student-type-label { font-size: 12.5px; font-weight: 700; color: var(--k-ink-soft); margin-bottom: 10px; display: block; }
+        .student-type-toggle {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+            background: var(--k-canvas); border-radius: 12px; padding: 4px;
+            border: 2px solid var(--k-border);
+        }
+        .stt-btn {
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            padding: 14px 12px; border-radius: 10px; cursor: pointer; border: 2px solid transparent;
+            transition: all .25s cubic-bezier(.4,0,.2,1); background: transparent; text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .stt-btn:hover { background: rgba(0,82,204,0.04); }
+        .stt-btn.active {
+            background: #fff; border-color: var(--k-blue);
+            box-shadow: 0 2px 12px rgba(0,82,204,0.12);
+        }
+        .stt-icon {
+            width: 42px; height: 42px; border-radius: 50%;
+            display: grid; place-items: center; transition: all .25s;
+        }
+        .stt-btn:first-child .stt-icon { background: var(--k-blue-pale); color: var(--k-blue); }
+        .stt-btn:last-child .stt-icon { background: var(--k-orange-soft); color: var(--k-orange); }
+        .stt-btn.active:first-child .stt-icon { background: var(--k-blue); color: #fff; }
+        .stt-btn.active:last-child .stt-icon { background: var(--k-orange); color: #fff; }
+        .stt-title { font-weight: 700; font-size: 13px; color: var(--k-ink); }
+        .stt-desc { font-size: 11px; color: var(--k-ink-muted); line-height: 1.3; }
+        .stt-btn.active .stt-title { color: var(--k-blue-deep); }
+        .stt-btn:last-child.active .stt-title { color: #CC5500; }
+        .kanan-id-field { max-height: 0; overflow: hidden; transition: max-height .35s ease, opacity .25s; opacity: 0; }
+        .kanan-id-field.show { max-height: 90px; opacity: 1; }
+        .kanan-badge {
+            display: inline-flex; align-items: center; gap: 5px; background: var(--k-blue-pale);
+            color: var(--k-blue); font-size: 11px; font-weight: 700; padding: 4px 10px;
+            border-radius: 20px; margin-top: 4px;
+        }
+        .outside-badge {
+            display: inline-flex; align-items: center; gap: 5px; background: var(--k-orange-soft);
+            color: var(--k-orange); font-size: 11px; font-weight: 700; padding: 4px 10px;
+            border-radius: 20px; margin-top: 4px;
+        }
+
+        /* ====== DOWNLOAD INVITE BUTTON ====== */
+        .ev-foot { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-invite {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 10px 16px; border-radius: 10px; border: 2px solid var(--k-border);
+            background: #fff; color: var(--k-ink-soft); font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+            flex: 1; justify-content: center;
+        }
+        .btn-invite:hover {
+            border-color: var(--k-purple); color: var(--k-purple);
+            background: var(--k-purple-soft); transform: translateY(-1px);
+        }
+        .btn-invite svg { flex-shrink: 0; }
+        .ev-foot .btn-primary, .ev-foot .btn-disabled { flex: 1.4; }
+
+        /* ====== INVITATION CARD PREVIEW MODAL ====== */
+        .invite-modal-inner { max-width: 580px; }
+        .invite-preview-wrap {
+            position: relative; border-radius: 14px; overflow: hidden;
+            box-shadow: 0 8px 32px rgba(11,18,35,0.15); margin-bottom: 20px;
+        }
+        .invite-canvas { width: 100%; display: block; border-radius: 14px; }
+        .invite-actions { display: flex; gap: 10px; }
+        .invite-actions .btn { flex: 1; justify-content: center; font-size: 14px; padding: 12px; }
+        .invite-share-row { display: flex; gap: 8px; margin-top: 12px; justify-content: center; }
+        .invite-share-btn {
+            width: 40px; height: 40px; border-radius: 50%; border: none;
+            display: grid; place-items: center; cursor: pointer; transition: all .2s; color: #fff;
+        }
+        .invite-share-btn:hover { transform: scale(1.1); }
+        .share-wa { background: #25D366; }
+        .share-fb { background: #1877F2; }
+        .share-tw { background: #1DA1F2; }
+        .share-copy { background: var(--k-ink); }
+        .invite-note { text-align: center; font-size: 12px; color: var(--k-ink-muted); margin-top: 14px; }
+
+        /* ====== NO RESULTS ====== */
+        .no-results { text-align: center; padding: 80px 20px; display: none; }
+        .no-results svg { color: var(--k-ink-muted); margin-bottom: 14px; }
+        .no-results h3 { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .no-results p { color: var(--k-ink-muted); font-size: 14px; }
+
+        /* ====== FLOATING ====== */
+        .floating { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 800; }
+        .fab {
+            width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
+            display: grid; place-items: center; box-shadow: var(--k-shadow-lg); transition: all .25s;
+        }
+        .fab:hover { transform: scale(1.1); }
+        .fab-wa { background: #25D366; color: #fff; }
+        .fab-call { background: var(--k-blue); color: #fff; }
+        .fab-up { background: #fff; color: var(--k-ink); opacity: 0; pointer-events: none; }
+        .fab-up.visible { opacity: 1; pointer-events: all; }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 1024px) {
+            .events-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .topbar { display: none; }
+            .hamburger { display: block; }
+            .nav-menu, .nav-actions { display: none; }
+            .nav-menu.open {
+                display: flex; flex-direction: column;
+                position: absolute; top: 68px; left: 0; right: 0;
+                background: #fff; padding: 20px 24px; box-shadow: var(--k-shadow-lg);
+                border-top: 1px solid var(--k-border);
+            }
+            .nav-menu.open a.active::after { display: none; }
+            .hero { padding: 40px 0 36px; }
+            .hero h1 { font-size: 32px; }
+            .hero-stats { gap: 20px; }
+            .h-stat-val { font-size: 28px; }
+            .events-grid { grid-template-columns: 1fr; }
+            .month-nav .container { flex-direction: column; align-items: stretch; }
+            .month-tabs { overflow-x: auto; }
+            .filter-group { flex-direction: column; }
+            .search-wrap input { width: 100%; }
+            .nl-inner { flex-direction: column; text-align: center; }
+            .nl-form { flex-direction: column; width: 100%; }
+            .nl-form input { width: 100%; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 14px; text-align: center; }
+            .cta-btns { flex-direction: column; align-items: center; }
+            .form-row { grid-template-columns: 1fr; }
+            .modal { margin: 16px; }
+        }
+
+        /* ====== ANIMATIONS ====== */
+        .ev-card { opacity: 0; transform: translateY(20px); animation: cardIn .5s ease forwards; }
+        @keyframes cardIn { to { opacity: 1; transform: none; } }
+        .ev-card:nth-child(1) { animation-delay: .05s; }
+        .ev-card:nth-child(2) { animation-delay: .1s; }
+        .ev-card:nth-child(3) { animation-delay: .15s; }
+        .ev-card:nth-child(4) { animation-delay: .2s; }
+        .ev-card:nth-child(5) { animation-delay: .25s; }
+        .ev-card:nth-child(6) { animation-delay: .3s; }
+        .ev-card:nth-child(7) { animation-delay: .35s; }
+        .ev-card:nth-child(8) { animation-delay: .4s; }
+        .ev-card:nth-child(9) { animation-delay: .45s; }
+
+        /* Hide April & May events by default */
+        .ev-card[data-month="april"],
+        .ev-card[data-month="may"] { display: none; }
+
+        /* Disabled registration button for upcoming months */
+        .btn-disabled {
+            background: #CBD5E0 !important;
+            color: #7B8599 !important;
+            cursor: not-allowed !important;
+            pointer-events: none;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="container">
+        <div class="topbar-links">
+            <a href="tel:+912652354400">📞 +91-265-2354400</a>
+            <span class="topbar-sep"></span>
+            <a href="mailto:info@kanan.co">✉️ info@kanan.co</a>
+        </div>
+        <div class="topbar-links">
+            <a href="#">IELTS</a><span class="topbar-sep"></span>
+            <a href="#">PTE</a><span class="topbar-sep"></span>
+            <a href="#">Immigration</a><span class="topbar-sep"></span>
+            <a href="#">Education Loan</a>
+        </div>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="container">
+        <a href="#" class="logo">
+            <div class="logo-mark">K</div>
+            <div class="logo-word">Kanan<b>.co</b></div>
+        </a>
+        <ul class="nav-menu" id="navMenu"></ul>
+        <div class="nav-actions">
+            <button class="btn btn-outline btn-sm" onclick="openCallback()">Request Callback</button>
+            <button class="btn btn-primary btn-sm">Free Counselling</button>
+        </div>
+        <button class="hamburger" onclick="document.getElementById('navMenu').classList.toggle('open')">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-pattern"></div>
+    <div class="container">
+        <div class="hero-inner">
+            <div>
+                <h1>Your <em>Study Abroad</em> Journey Starts Here</h1>
+                <p class="hero-sub">Explore our upcoming events for March 2026. Attend visa fairs, education expos, mock tests, and parent-teacher meets — in person or online.</p>
+                <div class="hero-btns">
+                    <a href="#events" class="btn btn-orange btn-lg">Browse All Events</a>
+                    <button class="btn btn-ghost btn-lg" onclick="openCallback()">Book Free Session</button>
+                </div>
+                <div class="hero-stats">
+                    <div><div class="h-stat-val">240K+</div><div class="h-stat-lbl">Students Served</div></div>
+                    <div><div class="h-stat-val">37</div><div class="h-stat-lbl">Events in March</div></div>
+                    <div><div class="h-stat-val">25+</div><div class="h-stat-lbl">Years Experience</div></div>
+                </div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-badge">🔥 Flagship Event</div>
+                <h3>Kanan Student Visa Fair — Bhyli Branch</h3>
+                <div class="feat-meta">
+                    <div class="feat-meta-item">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        5th March 2026 (Thursday)
+                    </div>
+                    <div class="feat-meta-item">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        10:00 AM – 7:00 PM
+                    </div>
+                    <div class="feat-meta-item">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Kanan International, Bhyli Branch, Vadodara
+                    </div>
+                </div>
+                <div class="feat-tags">
+                    <span class="feat-tag">🇨🇦 Canada</span>
+                    <span class="feat-tag">🇩🇪 Germany</span>
+                    <span class="feat-tag">🇦🇺 Australia</span>
+                    <span class="feat-tag">🇦🇪 Dubai</span>
+                    <span class="feat-tag">📝 IELTS</span>
+                    <span class="feat-tag">💰 Loan Mela</span>
+                </div>
+                <button class="btn btn-orange btn-lg" onclick="openRegister('Kanan Student Visa Fair — Bhyli','Kanan International, Bhyli Branch, Vadodara','5th March 2026, Thursday','10:00 AM – 7:00 PM','visa-fair','Canada • Germany • Australia • Dubai','Visa Fair • Germany Seminar • Australia Seminar • IELTS Workshop • Loan Mela')">Register Now — Free Entry</button>
+                    <button class="btn btn-lg" style="background:rgba(255,255,255,0.15);color:#fff;border:2px solid rgba(255,255,255,0.3);backdrop-filter:blur(8px);" onclick="openInvite('Kanan Student Visa Fair','Bhyli Branch, Vadodara','5th March 2026, Thursday','10:00 AM – 7:00 PM','visa-fair','Canada • Germany • Australia • Dubai','Visa Fair • Germany Seminar • Australia Seminar • IELTS Workshop • Loan Mela')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Invitation</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MONTH NAV -->
+<div class="month-nav">
+    <div class="container">
+        <div class="month-tabs">
+            <button class="month-tab active" data-month="all">All Events</button>
+            <button class="month-tab" data-month="march">March 2026</button>
+        </div>
+        <div class="filter-group">
+            <div class="search-wrap">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="searchInput" placeholder="Search events...">
+            </div>
+            <select class="filter-select" id="typeFilter">
+                <option value="">All Types</option>
+                <option value="visa-fair">Visa Fair</option>
+                <option value="education-expo">Education Expo</option>
+                <option value="mock-test">Mock Test Drive</option>
+                <option value="ptm">Parent-Teacher Meet</option>
+                <option value="ceremony">Certification Ceremony</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- EVENTS SECTION -->
+<section class="events-area" id="events">
+    <div class="container">
+        <div class="events-head">
+            <h2>Upcoming Events</h2>
+            <div class="events-count">Showing <b id="eventCount">20</b> events</div>
+        </div>
+
+        <div class="events-grid" id="eventsGrid">
+
+            <!-- =================== MARCH 2026 =================== -->
+
+            <!-- 1. Visa Fair - Bhyli - Mar 5 -->
+            <div class="ev-card" data-month="march" data-type="visa-fair" data-search="kanan student visa fair bhyli vadodara canada germany australia dubai ielts loan">
+                <div class="ev-card-ribbon orange"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date orange"><div class="ev-date-d">05</div><div class="ev-date-m">Mar</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Kanan Student Visa Fair</div>
+                        <div class="ev-sub">Bhyli Branch, Vadodara • Thursday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Bhyli, Vadodara</div>
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00 AM – 7:00 PM</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-canada">Canada</span>
+                        <span class="ev-tag t-germany">Germany</span>
+                        <span class="ev-tag t-australia">Australia</span>
+                        <span class="ev-tag t-dubai">Dubai</span>
+                        <span class="ev-tag t-coaching">IELTS</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Activities</div>
+                        <div class="ev-act-list">Visa Fair • Free Education in Germany Seminar • Study in Australia Seminar • Study in Dubai Seminar • IELTS & Spoken English Workshop • Loan Mela • Canada Onshore Support</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary" onclick="openRegister('Kanan Student Visa Fair — Bhyli','Bhyli Branch, Vadodara','5th Mar 2026, Thursday','10:00 AM – 7:00 PM','visa-fair','Canada • Germany • Australia • Dubai','Visa Fair • Germany Seminar • Australia Seminar • IELTS Workshop • Loan Mela')">Register Now</button><button class="btn-invite" onclick="openInvite('Kanan Student Visa Fair','Bhyli Branch, Vadodara','5th March 2026, Thursday','10:00 AM – 7:00 PM','visa-fair','Canada • Germany • Australia • Dubai','Visa Fair • Germany Seminar • Australia Seminar • IELTS Workshop • Loan Mela')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Invitation</button></div>
+            </div>
+
+            <!-- 2. Abroad Education Expo - Online - Mar 6 -->
+            <div class="ev-card" data-month="march" data-type="education-expo" data-search="abroad education expo online uk ireland career mentor loan">
+                <div class="ev-card-ribbon purple"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date purple"><div class="ev-date-d">06</div><div class="ev-date-m">Mar</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Abroad Education Expo</div>
+                        <div class="ev-sub">Online — All Branches & B2B • Friday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Online — Virtual Event</div>
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00 AM – 1:00 PM</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-uk">UK</span>
+                        <span class="ev-tag t-ireland">Ireland</span>
+                    </div>
+                    <span class="ev-mode mode-online">● Virtual Event</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Sessions</div>
+                        <div class="ev-act-list">Study in UK (10:00–11:00 AM) • Study in Ireland (11:30 AM–12:30 PM) • My Career Mentor • Loan Session</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary" onclick="openRegister('Abroad Education Expo','Online — Virtual Event','6th Mar 2026, Friday','10:00 AM – 1:00 PM','education-expo','UK • Ireland • Europe','Career Mentoring • Loan Session • Scholarships Info')">Register Now</button><button class="btn-invite" onclick="openInvite('Abroad Education Expo','Online — Virtual Event','6th March 2026, Friday','10:00 AM – 1:00 PM','education-expo','UK • Ireland • Europe','Career Mentoring • Loan Session • Scholarships Info')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Invitation</button></div>
+            </div>
+
+            <!-- 3. Visa Fair - Bhyli - Seminar 2 Canada - Mar 7 -->
+            <div class="ev-card" data-month="march" data-type="visa-fair" data-search="kanan student visa fair seminar study canada bhyli">
+                <div class="ev-card-ribbon"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date"><div class="ev-date-d">07</div><div class="ev-date-m">Mar</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Seminar — Study in Canada</div>
+                        <div class="ev-sub">Bhyli Branch, Vadodara • Saturday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Bhyli, Vadodara</div>
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>2:00 – 3:00 PM</div>
+                    <div class="ev-tags"><span class="ev-tag t-canada">Canada</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary" onclick="openRegister('Seminar — Study in Canada','Bhyli Branch, Vadodara','7th Mar 2026, Saturday','2:00 – 3:00 PM','seminar','Canada','Canada Immigration Pathways • PR Guidance • Visa Support')">Register Now</button><button class="btn-invite" onclick="openInvite('Seminar — Study in Canada','Bhyli Branch, Vadodara','7th March 2026, Saturday','2:00 – 3:00 PM','seminar','Canada','Canada Immigration Pathways • PR Guidance • Visa Support')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Invitation</button></div>
+            </div>
+
+            <!-- 4. PTM UK & EU - Mar 14 -->
+            <div class="ev-card" data-month="march" data-type="ptm" data-search="ptm parent teacher meet study uk eu europe usa head office loan career mentor">
+                <div class="ev-card-ribbon green"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date green"><div class="ev-date-d">14</div><div class="ev-date-m">Mar</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">PTM — Study in UK, EU & USA</div>
+                        <div class="ev-sub">Head Office, Vadodara • Saturday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5:00 – 7:00 PM</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-uk">UK</span>
+                        <span class="ev-tag t-europe">Europe</span>
+                        <span class="ev-tag t-usa">USA</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Includes</div>
+                        <div class="ev-act-list">PTM Sessions (UK, Europe, USA) • Loan Session • My Career Mentor Workshop</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary" onclick="openRegister('PTM — Study in UK, EU & USA','Head Office, Vadodara','14th Mar 2026, Saturday','5:00 – 7:00 PM','ptm','UK • EU • USA','Parent-Teacher Meet • Progress Review • Visa Guidance')">Register Now</button><button class="btn-invite" onclick="openInvite('PTM — UK, EU & USA','Head Office, Vadodara','14th March 2026, Saturday','5:00 – 7:00 PM','ptm','UK • EU • USA','Parent-Teacher Meet • Progress Review • Visa Guidance')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Invitation</button></div>
+            </div>
+
+            <!-- 5. PTM Australia - Mar 15 -->
+            <div class="ev-card" data-month="march" data-type="ptm" data-search="ptm parent teacher meet study australia head office">
+                <div class="ev-card-ribbon green"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date green"><div class="ev-date-d">15</div><div class="ev-date-m">Mar</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">PTM — Study in Australia</div>
+                        <div class="ev-sub">Head Office, Vadodara • Sunday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>11:00 AM – 1:00 PM</div>
+                    <div class="ev-tags"><span class="ev-tag t-australia">Australia</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Includes</div>
+                        <div class="ev-act-list">PTM Session • Loan Session • My Career Mentor Workshop</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary" onclick="openRegister('PTM — Study in Australia','Head Office, Vadodara','15th Mar 2026, Sunday','11:00 AM – 1:00 PM','ptm','Australia','Parent-Teacher Meet • Australia Intake Update • Visa Info')">Register Now</button><button class="btn-invite" onclick="openInvite('PTM — Study in Australia','Head Office, Vadodara','15th March 2026, Sunday','11:00 AM – 1:00 PM','ptm','Australia','Parent-Teacher Meet • Australia Intake Update • Visa Info')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Invitation</button></div>
+            </div>
+
+            <!-- 6. PTM Canada & Germany - Mar 16 -->
+            <div class="ev-card" data-month="march" data-type="ptm" data-search="ptm parent teacher meet study canada germany head office">
+                <div class="ev-card-ribbon green"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date green"><div class="ev-date-d">16</div><div class="ev-date-m">Mar</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">PTM — Study in Canada & Germany</div>
+                        <div class="ev-sub">Head Office, Vadodara • Monday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5:00 – 7:00 PM</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-canada">Canada</span>
+                        <span class="ev-tag t-germany">Germany</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Includes</div>
+                        <div class="ev-act-list">PTM Sessions (Canada & Germany) • Loan Sessions • My Career Mentor Workshop</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary" onclick="openRegister('PTM — Study in Canada & Germany','Head Office, Vadodara','16th Mar 2026, Monday','5:00 – 7:00 PM','ptm','Canada • Germany','Parent-Teacher Meet • Progress Review • Pathway Update')">Register Now</button><button class="btn-invite" onclick="openInvite('PTM — Canada & Germany','Head Office, Vadodara','16th March 2026, Monday','5:00 – 7:00 PM','ptm','Canada • Germany','Parent-Teacher Meet • Progress Review • Pathway Update')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Invitation</button></div>
+            </div>
+
+            <!-- 7. Seminar - Study in Canada - HO - Mar 21 -->
+            <div class="ev-card" data-month="march" data-type="visa-fair" data-search="seminar study canada head office">
+                <div class="ev-card-ribbon"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date"><div class="ev-date-d">21</div><div class="ev-date-m">Mar</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Seminar — Study in Canada</div>
+                        <div class="ev-sub">Head Office, Vadodara • Saturday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>11:00 AM – 12:00 PM</div>
+                    <div class="ev-tags"><span class="ev-tag t-canada">Canada</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary" onclick="openRegister('Seminar — Study in Canada','Head Office, Vadodara','21st Mar 2026, Saturday','11:00 AM – 12:00 PM','seminar','Canada','Canada Immigration • Study Permits • Scholarship Guidance')">Register Now</button><button class="btn-invite" onclick="openInvite('Seminar — Study in Canada','Head Office, Vadodara','21st March 2026, Saturday','11:00 AM – 12:00 PM','seminar','Canada','Canada Immigration • Study Permits • Scholarship Guidance')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Invitation</button></div>
+            </div>
+
+            <!-- 8. Visa Fair - HO - Mar 23 -->
+            <div class="ev-card" data-month="march" data-type="visa-fair" data-search="kanan student visa fair head office europe medicine canada ielts coaching loan">
+                <div class="ev-card-ribbon orange"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date orange"><div class="ev-date-d">23</div><div class="ev-date-m">Mar</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Kanan Student Visa Fair</div>
+                        <div class="ev-sub">Head Office, Vadodara • Monday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00 AM – 7:00 PM</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-europe">Europe</span>
+                        <span class="ev-tag t-usa">Medicine</span>
+                        <span class="ev-tag t-canada">Canada</span>
+                        <span class="ev-tag t-coaching">IELTS</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Activities</div>
+                        <div class="ev-act-list">Visa Fair • Study in Europe Seminar • Study Medicine Seminar • IELTS & Personalized Coaching Workshop • Loan Mela • Canada Onshore Support</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary" onclick="openRegister('Kanan Student Visa Fair — Head Office','Head Office, Vadodara','23rd Mar 2026, Monday','10:00 AM – 7:00 PM','visa-fair','Canada • UK • USA • Australia • Germany','Visa Fair • University Meet • IELTS Workshop • Loan Mela • PTE Workshop')">Register Now</button><button class="btn-invite" onclick="openInvite('Kanan Student Visa Fair','Head Office, Vadodara','23rd March 2026, Monday','10:00 AM – 7:00 PM','visa-fair','Canada • UK • USA • Australia • Germany','Visa Fair • University Meet • IELTS Workshop • Loan Mela • PTE Workshop')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Invitation</button></div>
+            </div>
+
+            <!-- 9. Mega Mock Test - Mar 29 -->
+            <div class="ev-card" data-month="march" data-type="mock-test" data-search="kanan mega mock test drive ielts pte manjalpur">
+                <div class="ev-card-ribbon gold"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date gold"><div class="ev-date-d">29</div><div class="ev-date-m">Mar</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Kanan Mega Mock Test Drive</div>
+                        <div class="ev-sub">Manjalpur Branch • Sunday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Manjalpur</div>
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8:00 AM – 8:00 PM</div>
+                    <div class="ev-tags"><span class="ev-tag t-coaching">IELTS / PTE Mock</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary" onclick="openRegister('Kanan Mega Mock Test Drive','Manjalpur Branch, Vadodara','29th Mar 2026, Sunday','8:00 AM – 8:00 PM','mock-test','IELTS • PTE • Duolingo','Full-Day Mock Tests • Real Exam Conditions • Instant Score Review')">Register Now</button><button class="btn-invite" onclick="openInvite('Mega Mock Test Drive','Manjalpur Branch, Vadodara','29th March 2026, Sunday','8:00 AM – 8:00 PM','mock-test','IELTS • PTE • Duolingo','Full-Day Mock Tests • Real Exam Conditions • Instant Score Review')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Invitation</button></div>
+            </div>
+
+            <!-- =================== APRIL 2026 =================== -->
+
+            <!-- 10. Visa Fair - Waghodia - Apr 4-6 -->
+            <div class="ev-card" data-month="april" data-type="visa-fair" data-search="kanan student visa fair waghodia canada germany dubai medicine ielts loan april">
+                <div class="ev-card-ribbon orange"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date orange"><div class="ev-date-d">04</div><div class="ev-date-m">Apr</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Kanan Student Visa Fair</div>
+                        <div class="ev-sub">Waghodia Branch • Sat–Mon (4th–6th Apr)</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Waghodia</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-canada">Canada</span>
+                        <span class="ev-tag t-germany">Germany</span>
+                        <span class="ev-tag t-dubai">Dubai</span>
+                        <span class="ev-tag t-coaching">IELTS</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Activities</div>
+                        <div class="ev-act-list">Study in Canada Seminar • Free Education in Germany • Study Medicine • Study in Dubai • IELTS & Spoken English Workshop • Loan Mela • Canada Onshore Support</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 11. Mega Mock Test - Bhyli - Apr 5 -->
+            <div class="ev-card" data-month="april" data-type="mock-test" data-search="kanan mega mock test drive bhyli april">
+                <div class="ev-card-ribbon gold"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date gold"><div class="ev-date-d">05</div><div class="ev-date-m">Apr</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Kanan Mega Mock Test Drive</div>
+                        <div class="ev-sub">Bhyli Branch • Sunday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Bhyli Branch</div>
+                    <div class="ev-tags"><span class="ev-tag t-coaching">IELTS / PTE Mock</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 12. AEE - Online - Apr 6 -->
+            <div class="ev-card" data-month="april" data-type="education-expo" data-search="abroad education expo online career mentor loan april">
+                <div class="ev-card-ribbon purple"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date purple"><div class="ev-date-d">06</div><div class="ev-date-m">Apr</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Abroad Education Expo</div>
+                        <div class="ev-sub">Online — All Branches & B2B • Monday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Online — Virtual Event</div>
+                    <span class="ev-mode mode-online">● Virtual Event</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Sessions</div>
+                        <div class="ev-act-list">Study Abroad Sessions (TBD) • My Career Mentor • Loan Session</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 13. PTM UK/EU & Canada - Apr 11 -->
+            <div class="ev-card" data-month="april" data-type="ptm" data-search="ptm study uk eu canada head office loan career mentor april">
+                <div class="ev-card-ribbon green"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date green"><div class="ev-date-d">11</div><div class="ev-date-m">Apr</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">PTM — UK, EU & Canada</div>
+                        <div class="ev-sub">Head Office • Saturday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-uk">UK</span>
+                        <span class="ev-tag t-europe">EU</span>
+                        <span class="ev-tag t-canada">Canada</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Includes</div>
+                        <div class="ev-act-list">PTM Sessions • Loan Sessions • My Career Mentor Workshops</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 14. PTM Germany & Dubai - Apr 16 -->
+            <div class="ev-card" data-month="april" data-type="ptm" data-search="ptm study germany dubai head office april">
+                <div class="ev-card-ribbon green"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date green"><div class="ev-date-d">16</div><div class="ev-date-m">Apr</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">PTM — Germany & Dubai</div>
+                        <div class="ev-sub">Head Office • Thursday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-germany">Germany</span>
+                        <span class="ev-tag t-dubai">Dubai</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Includes</div>
+                        <div class="ev-act-list">PTM Sessions • Loan Sessions • My Career Mentor Workshops</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 15. Visa Fair - Manjalpur & Sayajigunj - Apr 20-23 -->
+            <div class="ev-card" data-month="april" data-type="visa-fair" data-search="kanan student visa fair manjalpur sayajigunj dubai usa canada ielts loan april">
+                <div class="ev-card-ribbon orange"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date orange"><div class="ev-date-d">20</div><div class="ev-date-m">Apr</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Kanan Student Visa Fair</div>
+                        <div class="ev-sub">Manjalpur & Sayajigunj • Mon–Thu (20th–23rd)</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Manjalpur & Sayajigunj Branches</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-dubai">Dubai</span>
+                        <span class="ev-tag t-usa">USA</span>
+                        <span class="ev-tag t-canada">Canada</span>
+                        <span class="ev-tag t-coaching">IELTS</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Activities</div>
+                        <div class="ev-act-list">Study in Dubai • Study in USA • Study in Canada Seminar • IELTS & Spoken English Workshop • Loan Mela • Canada Onshore Support</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 16. Mega Mock Test - HO - Apr 25 -->
+            <div class="ev-card" data-month="april" data-type="mock-test" data-search="kanan mega mock test head office april">
+                <div class="ev-card-ribbon gold"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date gold"><div class="ev-date-d">25</div><div class="ev-date-m">Apr</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Kanan Mega Mock Test Drive</div>
+                        <div class="ev-sub">Head Office • Saturday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-tags"><span class="ev-tag t-coaching">IELTS / PTE Mock</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 17. PTM Australia - Apr 26 -->
+            <div class="ev-card" data-month="april" data-type="ptm" data-search="ptm study australia head office april">
+                <div class="ev-card-ribbon green"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date green"><div class="ev-date-d">26</div><div class="ev-date-m">Apr</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">PTM — Study in Australia</div>
+                        <div class="ev-sub">Head Office • Sunday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-tags"><span class="ev-tag t-australia">Australia</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Includes</div>
+                        <div class="ev-act-list">PTM Session • Loan Session • My Career Mentor Workshop</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 18. Certification Ceremony - Apr 30 -->
+            <div class="ev-card" data-month="april" data-type="ceremony" data-search="certification ceremony sayajigunj dubai career mentor loan april">
+                <div class="ev-card-ribbon gold"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date gold"><div class="ev-date-d">30</div><div class="ev-date-m">Apr</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Certification Ceremony</div>
+                        <div class="ev-sub">Sayajigunj Branch • Thursday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Sayajigunj</div>
+                    <div class="ev-tags"><span class="ev-tag t-dubai">Dubai</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Program</div>
+                        <div class="ev-act-list">Certification Ceremony • My Career Mentor Workshop • Loan Session • Study in Dubai Session</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- =================== MAY 2026 =================== -->
+
+            <!-- 19. Visa Fair - Bhyli - May 2-5 -->
+            <div class="ev-card" data-month="may" data-type="visa-fair" data-search="kanan student visa fair bhyli uk eu dubai canada spoken english pte loan may">
+                <div class="ev-card-ribbon orange"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date orange"><div class="ev-date-d">02</div><div class="ev-date-m">May</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Kanan Student Visa Fair</div>
+                        <div class="ev-sub">Bhyli Branch • Sat–Tue (2nd–5th May)</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Bhyli Branch</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-europe">UK & EU</span>
+                        <span class="ev-tag t-dubai">Dubai</span>
+                        <span class="ev-tag t-canada">Canada</span>
+                        <span class="ev-tag t-coaching">PTE / English</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Activities</div>
+                        <div class="ev-act-list">Study in UK & EU • Study in Dubai • Study in Canada • Spoken English • PTE & Spoken English Workshop • Loan Mela • Canada Onshore Support</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 20. AEE Online - May 6 -->
+            <div class="ev-card" data-month="may" data-type="education-expo" data-search="abroad education expo online career mentor loan may">
+                <div class="ev-card-ribbon purple"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date purple"><div class="ev-date-d">06</div><div class="ev-date-m">May</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Abroad Education Expo</div>
+                        <div class="ev-sub">Online — All Branches & B2B • Wednesday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Online — Virtual Event</div>
+                    <span class="ev-mode mode-online">● Virtual Event</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Sessions</div>
+                        <div class="ev-act-list">Study Abroad Sessions (TBD) • My Career Mentor • Loan Session</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 21. PTM UK/EU - May 16 -->
+            <div class="ev-card" data-month="may" data-type="ptm" data-search="ptm study uk eu head office may">
+                <div class="ev-card-ribbon green"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date green"><div class="ev-date-d">16</div><div class="ev-date-m">May</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">PTM — Study in UK & EU</div>
+                        <div class="ev-sub">Head Office • Saturday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-tags"><span class="ev-tag t-uk">UK</span><span class="ev-tag t-europe">EU</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities"><div class="ev-act-label">Includes</div><div class="ev-act-list">PTM Session • Loan Session • My Career Mentor Workshop</div></div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 22. Visa Fair HO + PTMs - May 23 -->
+            <div class="ev-card" data-month="may" data-type="visa-fair" data-search="kanan student visa fair head office medicine career mentor canada pte loan ptm germany usa may">
+                <div class="ev-card-ribbon orange"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date orange"><div class="ev-date-d">23</div><div class="ev-date-m">May</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Visa Fair + Multi-Country PTMs</div>
+                        <div class="ev-sub">Head Office • Saturday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-tags">
+                        <span class="ev-tag t-canada">Canada</span>
+                        <span class="ev-tag t-germany">Germany</span>
+                        <span class="ev-tag t-usa">USA</span>
+                        <span class="ev-tag t-coaching">PTE</span>
+                    </div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities">
+                        <div class="ev-act-label">Mega Day</div>
+                        <div class="ev-act-list">Visa Fair • Study Medicine Seminar • My Career Mentor • Study in Canada • PTE & Spoken English Workshop • Loan Mela • PTMs for Canada, Germany & USA</div>
+                    </div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 23. PTM Australia - May 24 -->
+            <div class="ev-card" data-month="may" data-type="ptm" data-search="ptm study australia head office may">
+                <div class="ev-card-ribbon green"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date green"><div class="ev-date-d">24</div><div class="ev-date-m">May</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">PTM — Study in Australia</div>
+                        <div class="ev-sub">Head Office • Sunday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Head Office</div>
+                    <div class="ev-tags"><span class="ev-tag t-australia">Australia</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                    <div class="ev-activities"><div class="ev-act-label">Includes</div><div class="ev-act-list">PTM Session • Loan Session • My Career Mentor Workshop</div></div>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+            <!-- 24. Mega Mock Test - Waghodia - May 30 -->
+            <div class="ev-card" data-month="may" data-type="mock-test" data-search="kanan mega mock test drive waghodia may">
+                <div class="ev-card-ribbon gold"></div>
+                <div class="ev-card-head">
+                    <div class="ev-date gold"><div class="ev-date-d">30</div><div class="ev-date-m">May</div></div>
+                    <div class="ev-info">
+                        <div class="ev-title">Kanan Mega Mock Test Drive</div>
+                        <div class="ev-sub">Waghodia Branch • Saturday</div>
+                    </div>
+                </div>
+                <div class="ev-body">
+                    <div class="ev-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Kanan International, Waghodia</div>
+                    <div class="ev-tags"><span class="ev-tag t-coaching">IELTS / PTE Mock</span></div>
+                    <span class="ev-mode mode-offline">● In-Person</span>
+                </div>
+                <div class="ev-foot"><button class="btn btn-primary btn-disabled">Coming Soon</button></div>
+            </div>
+
+        </div><!-- grid -->
+
+        <div class="no-results" id="noResults">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <h3>No events found</h3>
+            <p>Try adjusting your filters or search terms.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+    <div class="container">
+        <div class="cta-inner">
+            <h2>Can't Find the Right Event?</h2>
+            <p>Schedule a free one-on-one counselling session with our study abroad experts. We'll help you find the perfect path.</p>
+            <div class="cta-btns">
+                <button class="btn btn-white btn-lg" onclick="openCallback()">Request Free Callback</button>
+                <a href="tel:+912652354400" class="btn btn-ghost btn-lg">📞 Call Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter">
+    <div class="container">
+        <div class="nl-inner">
+            <div>
+                <h3>Never Miss an Event</h3>
+                <p>Subscribe for event alerts, deadlines, and study abroad tips.</p>
+            </div>
+            <form class="nl-form" onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit" class="btn btn-orange">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo-word">Kanan<b>.co</b></div>
+                <p>India's trusted study abroad and immigration consultancy with 25+ years of experience. Helping 240,000+ students achieve their global education dreams.</p>
+            </div>
+            <div>
+                <h4>Services</h4>
+                <ul>
+                    <li><a href="#">Study Abroad</a></li>
+                    <li><a href="#">IELTS Coaching</a></li>
+                    <li><a href="#">PTE Coaching</a></li>
+                    <li><a href="#">Canada Immigration</a></li>
+                    <li><a href="#">Education Loan</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Study In</h4>
+                <ul>
+                    <li><a href="#">Canada</a></li>
+                    <li><a href="#">UK</a></li>
+                    <li><a href="#">USA</a></li>
+                    <li><a href="#">Australia</a></li>
+                    <li><a href="#">Germany</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Branches</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Kanan International Pvt. Ltd. All rights reserved.</span>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="registerModal">
+    <div class="modal">
+        <div class="modal-head">
+            <h3>Register for Event</h3>
+            <button class="modal-x" onclick="closeModal('registerModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-event-box">
+                <h4 id="modalTitle">Event Name</h4>
+                <p id="modalDetails">Details</p>
+            </div>
+
+            <!-- Student Type Selector -->
+            <div class="student-type-wrap">
+                <span class="student-type-label">Are you a Kanan.co student? *</span>
+                <div class="student-type-toggle">
+                    <div class="stt-btn active" onclick="setStudentType('kanan', this)">
+                        <div class="stt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg></div>
+                        <span class="stt-title">Kanan Student</span>
+                        <span class="stt-desc">Already enrolled with Kanan.co</span>
+                    </div>
+                    <div class="stt-btn" onclick="setStudentType('outside', this)">
+                        <div class="stt-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+                        <span class="stt-title">Outside Student</span>
+                        <span class="stt-desc">New to Kanan.co? Welcome!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kanan ID Field (hidden by default, shown for Kanan students) -->
+            <div class="kanan-id-field show" id="kananIdField">
+                <div class="form-group">
+                    <label>Kanan Student ID / File No.</label>
+                    <input type="text" id="regKananId" placeholder="e.g. KN-2025-00412">
+                </div>
+            </div>
+
+            <form id="regForm" onsubmit="event.preventDefault(); submitReg();">
+                <div class="form-row">
+                    <div class="form-group"><label>Full Name *</label><input type="text" id="regName" placeholder="Your full name" required></div>
+                    <div class="form-group"><label>Mobile *</label><input type="tel" id="regMobile" placeholder="+91 XXXXX XXXXX" required></div>
+                </div>
+                <div class="form-group"><label>Email *</label><input type="email" id="regEmail" placeholder="your.email@example.com" required></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Current City</label>
+                        <input type="text" id="regCity" placeholder="e.g. Vadodara">
+                    </div>
+                    <div class="form-group">
+                        <label>Interested In</label>
+                        <select id="regDest">
+                            <option value="">Select destination</option>
+                            <option>Canada</option>
+                            <option>UK</option>
+                            <option>USA</option>
+                            <option>Australia</option>
+                            <option>Germany</option>
+                            <option>Dubai</option>
+                            <option>Ireland / Europe</option>
+                            <option>Not sure yet</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Current Education Level</label>
+                    <select id="regEdu">
+                        <option value="">Select level</option>
+                        <option>12th / HSC</option>
+                        <option>Bachelor's Degree</option>
+                        <option>Master's Degree</option>
+                        <option>Working Professional</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <!-- Referral Source for Outside Students -->
+                <div id="referralField" class="form-group" style="display:none;">
+                    <label>How did you hear about us?</label>
+                    <select id="regReferral">
+                        <option value="">Select source</option>
+                        <option>Social Media (Instagram / Facebook)</option>
+                        <option>Google Search</option>
+                        <option>Friend or Family</option>
+                        <option>Newspaper / Advertisement</option>
+                        <option>Walk-in / Passing by</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-submit"><button type="submit" class="btn btn-orange btn-lg">Confirm Registration</button></div>
+                <p class="form-note">Free entry. Our team will send confirmation within 24 hours.</p>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- INVITATION CARD PREVIEW MODAL -->
+<div class="modal-overlay" id="inviteModal">
+    <div class="modal invite-modal-inner">
+        <div class="modal-head">
+            <h3>🎟️ Your Event Invitation</h3>
+            <button class="modal-x" onclick="closeModal('inviteModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="modal-body">
+            <div class="invite-preview-wrap">
+                <canvas id="inviteCanvas" class="invite-canvas" width="1080" height="1350"></canvas>
+            </div>
+            <div class="invite-actions">
+                <button class="btn btn-orange btn-lg" onclick="downloadInvite()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download PNG
+                </button>
+                <button class="btn btn-primary btn-lg" onclick="shareInviteWhatsApp()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Share WhatsApp
+                </button>
+            </div>
+            <p class="invite-note">📲 Download and share this beautiful invitation with friends & family!</p>
+        </div>
+    </div>
+</div>
+
+<!-- CALLBACK MODAL -->
+<div class="modal-overlay" id="callbackModal">
+    <div class="modal" style="max-width:440px;">
+        <div class="modal-head">
+            <h3>Request Callback</h3>
+            <button class="modal-x" onclick="closeModal('callbackModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--k-ink-soft); margin-bottom:20px; font-size:14px;">Our expert counsellor will reach out within 24 hours.</p>
+            <form onsubmit="event.preventDefault(); submitCB();">
+                <div class="form-group"><label>Full Name *</label><input type="text" placeholder="Your full name" required></div>
+                <div class="form-group"><label>Mobile *</label><input type="tel" placeholder="+91 XXXXX XXXXX" required></div>
+                <div class="form-group"><label>Email *</label><input type="email" placeholder="your.email@example.com" required></div>
+                <div class="form-group">
+                    <label>I'm interested in</label>
+                    <select>
+                        <option value="">Select your interest</option>
+                        <option>Study Abroad Counselling</option>
+                        <option>IELTS / PTE / TOEFL Coaching</option>
+                        <option>Canada Immigration</option>
+                        <option>Education Loan</option>
+                        <option>Event / Fair Information</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-submit"><button type="submit" class="btn btn-orange btn-lg">Request Callback</button></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+    <div class="modal" style="max-width:420px;">
+        <div class="success-body">
+            <div class="success-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00B368" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <h3 id="successTitle">Registration Successful!</h3>
+            <p id="successMsg">Thank you! Our team will contact you within 24 hours with event details.</p>
+            <div class="success-actions">
+                <button class="btn btn-primary btn-lg" onclick="closeModal('successModal')">Done</button>
+                <button class="btn btn-invite-success" id="successInviteBtn" onclick="closeModal('successModal'); openInviteFromCurrent();" style="display:none;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download Invitation Card
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FLOATING -->
+<div class="floating">
+    <button class="fab fab-up" id="fabUp" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>
+    <a class="fab fab-wa" href="https://wa.me/912652354400" target="_blank" title="Chat on WhatsApp"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+    <button class="fab fab-call" title="Request Callback" onclick="openCallback()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></button>
+</div>
+
+<script>
+// ===== FILTERS =====
+const monthTabs = document.querySelectorAll('.month-tab');
+const cards = document.querySelectorAll('.ev-card');
+const searchInput = document.getElementById('searchInput');
+const typeFilter = document.getElementById('typeFilter');
+const countEl = document.getElementById('eventCount');
+const noResults = document.getElementById('noResults');
+const grid = document.getElementById('eventsGrid');
+
+let activeMonth = 'all';
+
+monthTabs.forEach(t => {
+    t.addEventListener('click', () => {
+        monthTabs.forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        activeMonth = t.dataset.month;
+        applyFilters();
+    });
+});
+
+searchInput.addEventListener('input', applyFilters);
+typeFilter.addEventListener('change', applyFilters);
+
+function applyFilters() {
+    const q = searchInput.value.toLowerCase().trim();
+    const type = typeFilter.value;
+    let n = 0;
+    cards.forEach((c, i) => {
+        let show = true;
+        if (c.dataset.month === 'april' || c.dataset.month === 'may') { c.style.display = 'none'; return; }
+        if (activeMonth !== 'all' && c.dataset.month !== activeMonth) show = false;
+        if (type && c.dataset.type !== type) show = false;
+        if (q && !c.dataset.search.toLowerCase().includes(q)) show = false;
+        c.style.display = show ? '' : 'none';
+        if (show) { c.style.animationDelay = (n * 0.05) + 's'; n++; }
+    });
+    countEl.textContent = n;
+    noResults.style.display = n === 0 ? 'block' : 'none';
+    grid.style.display = n === 0 ? 'none' : '';
+}
+applyFilters();
+
+// ===== STUDENT TYPE SELECTOR =====
+let currentStudentType = 'kanan';
+
+function setStudentType(type, el) {
+    currentStudentType = type;
+    document.querySelectorAll('.stt-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    const idField = document.getElementById('kananIdField');
+    const refField = document.getElementById('referralField');
+    if (type === 'kanan') {
+        idField.classList.add('show');
+        refField.style.display = 'none';
+    } else {
+        idField.classList.remove('show');
+        refField.style.display = 'block';
+    }
+}
+
+// ===== MODALS =====
+let currentEvent = {};
+
+function openRegister(title, venue, date, time, invType, invCountries, invActivities) {
+    currentEvent = { title, venue, date, time, invType: invType||'visa-fair', invCountries: invCountries||'', invActivities: invActivities||'' };
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalDetails').innerHTML = `📍 ${venue}<br>📅 ${date} &nbsp;|&nbsp; ⏰ ${time}`;
+    document.getElementById('registerModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    // Reset form
+    setStudentType('kanan', document.querySelector('.stt-btn'));
+}
+function openCallback() {
+    document.getElementById('callbackModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+    document.body.style.overflow = '';
+}
+function submitReg() {
+    const name = document.getElementById('regName').value;
+    const typeLabel = currentStudentType === 'kanan' ? 'Kanan.co Student' : 'Outside Student';
+    closeModal('registerModal');
+    document.getElementById('successTitle').textContent = 'Registration Successful!';
+    document.getElementById('successMsg').innerHTML = `Thank you${name ? ', <strong>'+name+'</strong>' : ''}! You're registered as a <span style="display:inline-flex;align-items:center;gap:4px;background:${currentStudentType==='kanan'?'#E8F1FF':'#FFF0E0'};color:${currentStudentType==='kanan'?'#0052CC':'#FF6B00'};font-size:12px;font-weight:700;padding:3px 10px;border-radius:16px;">${typeLabel}</span><br><br>Our team will send you event details within 24 hours.`;
+    // Show invite download button if invite data available
+    const invBtn = document.getElementById('successInviteBtn');
+    invBtn.style.display = currentEvent.invType ? 'inline-flex' : 'none';
+    document.getElementById('successModal').classList.add('active');
+}
+function openInviteFromCurrent() {
+    if (currentEvent.invType) {
+        openInvite(currentEvent.title, currentEvent.venue, currentEvent.date, currentEvent.time, currentEvent.invType, currentEvent.invCountries, currentEvent.invActivities);
+    }
+}
+function submitCB() {
+    closeModal('callbackModal');
+    document.getElementById('successTitle').textContent = 'Callback Requested!';
+    document.getElementById('successMsg').textContent = 'Your request has been received. An expert counsellor will reach out within 24 hours.';
+    document.getElementById('successModal').classList.add('active');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+    o.addEventListener('click', e => { if (e.target === o) { o.classList.remove('active'); document.body.style.overflow = ''; } });
+});
+
+// ===== INVITATION CARD GENERATOR (Canvas) =====
+let inviteData = {};
+
+function openInvite(title, venue, date, time, type, countries, activities) {
+    inviteData = { title, venue, date, time, type, countries, activities };
+    generateInviteCard();
+    document.getElementById('inviteModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function generateInviteCard() {
+    const canvas = document.getElementById('inviteCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = 1080, H = 1350;
+    canvas.width = W; canvas.height = H;
+
+    // — Color themes by event type —
+    const themes = {
+        'visa-fair':      { g1: '#001233', g2: '#002D6B', g3: '#003D99', accent: '#FF6B00', accentAlt: '#FFB347', accentSoft: 'rgba(255,107,0,0.15)', icon: '✈️', label: 'STUDENT VISA FAIR', tagline: 'Your Gateway to Global Education' },
+        'education-expo': { g1: '#0F0025', g2: '#2D0066', g3: '#5500CC', accent: '#00D68F', accentAlt: '#7BFFC4', accentSoft: 'rgba(0,214,143,0.15)', icon: '🌍', label: 'ABROAD EDUCATION EXPO', tagline: 'Explore World-Class Universities' },
+        'ptm':            { g1: '#001A0F', g2: '#004D2E', g3: '#008F55', accent: '#2563EB', accentAlt: '#60A5FA', accentSoft: 'rgba(37,99,235,0.15)', icon: '👨‍👩‍👧', label: 'PARENT-TEACHER MEET', tagline: 'Connecting Families & Futures' },
+        'mock-test':      { g1: '#1A0F00', g2: '#663D00', g3: '#CC7A00', accent: '#E53935', accentAlt: '#FF8A80', accentSoft: 'rgba(229,57,53,0.15)', icon: '📝', label: 'MEGA MOCK TEST DRIVE', tagline: 'Practice Makes Perfect' },
+        'seminar':        { g1: '#0D1B33', g2: '#1A3A66', g3: '#2D5AA0', accent: '#FF6B00', accentAlt: '#FFB347', accentSoft: 'rgba(255,107,0,0.15)', icon: '🎓', label: 'SEMINAR', tagline: 'Learn from Industry Experts' }
+    };
+    const t = themes[inviteData.type] || themes['visa-fair'];
+
+    // ========== BACKGROUND ==========
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, t.g1);
+    bg.addColorStop(0.4, t.g2);
+    bg.addColorStop(1, t.g3);
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // — Starfield sparkle dots —
+    ctx.globalAlpha = 0.04;
+    for (let i = 0; i < 300; i++) {
+        const sx = Math.random()*W, sy = Math.random()*H;
+        const sr = Math.random()*2.5 + 0.5;
+        ctx.beginPath(); ctx.arc(sx, sy, sr, 0, Math.PI*2);
+        ctx.fillStyle = '#fff'; ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // — Large glowing orbs —
+    const drawOrb = (x, y, r, color, alpha) => {
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+        grad.addColorStop(0, color);
+        grad.addColorStop(1, 'transparent');
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+        ctx.globalAlpha = 1;
+    };
+    drawOrb(-50, 180, 400, t.accent, 0.06);
+    drawOrb(W+80, H-400, 450, t.accentAlt, 0.05);
+    drawOrb(W/2, 600, 300, '#fff', 0.03);
+
+    // — Diagonal gold accent lines —
+    ctx.globalAlpha = 0.06;
+    ctx.strokeStyle = t.accent;
+    ctx.lineWidth = 1.5;
+    for (let i = -H; i < W+H; i += 80) {
+        ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i+H, H); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    // ========== TOP HEADER BAR ==========
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    roundRect(ctx, 0, 0, W, 90, 0, true);
+
+    // Logo "K" block
+    ctx.fillStyle = t.accent;
+    roundRect(ctx, 42, 22, 46, 46, 10, true);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 28px Sora, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('K', 65, 54);
+
+    // Brand name
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 28px Sora, sans-serif';
+    ctx.fillText('Kanan', 102, 52);
+    ctx.fillStyle = t.accent;
+    ctx.fillText('.co', 102 + ctx.measureText('Kanan').width, 52);
+
+    // Tagline right
+    ctx.textAlign = 'right';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '15px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Est. 2001  ·  Study Abroad Experts', W-50, 50);
+
+    // ========== YOU'RE INVITED SECTION ==========
+    ctx.textAlign = 'center';
+
+    // Decorative line + star
+    ctx.strokeStyle = t.accent;
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.4;
+    ctx.beginPath(); ctx.moveTo(W/2 - 180, 140); ctx.lineTo(W/2 - 30, 140); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W/2 + 30, 140); ctx.lineTo(W/2 + 180, 140); ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = t.accent;
+    ctx.font = '16px serif';
+    ctx.fillText('✦', W/2, 145);
+
+    // "YOU'RE INVITED" text
+    ctx.fillStyle = t.accent;
+    ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '6px';
+    ctx.fillText("Y O U ' R E   I N V I T E D   T O", W/2, 178);
+
+    // ========== EVENT ICON + TYPE BADGE ==========
+    ctx.font = '72px serif';
+    ctx.fillText(t.icon, W/2, 268);
+
+    // Event type badge pill
+    ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
+    const badgeText = t.label;
+    const badgeW = ctx.measureText(badgeText).width + 50;
+    ctx.fillStyle = t.accent;
+    roundRect(ctx, (W-badgeW)/2, 290, badgeW, 34, 17, true);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(badgeText, W/2, 312);
+
+    // ========== EVENT TITLE ==========
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 48px Sora, sans-serif';
+    const titleLines = wrapText(ctx, inviteData.title, W/2, 380, W-140, 58);
+
+    // Tagline under title
+    const tagY = 380 + (titleLines * 58) + 8;
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = 'italic 20px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(t.tagline, W/2, tagY);
+
+    // ========== MAIN WHITE CARD ==========
+    const cardY = tagY + 40;
+    const cardH = 540;
+    const cardX = 50;
+    const cardW = W - 100;
+
+    // Card shadow
+    ctx.shadowColor = 'rgba(0,0,0,0.25)';
+    ctx.shadowBlur = 50;
+    ctx.shadowOffsetY = 15;
+    ctx.fillStyle = '#fff';
+    roundRect(ctx, cardX, cardY, cardW, cardH, 28, true);
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+    // Accent stripe at top of card
+    ctx.fillStyle = t.accent;
+    roundRect(ctx, cardX, cardY, cardW, 6, {tl:28, tr:28, bl:0, br:0}, false);
+    ctx.beginPath();
+    ctx.moveTo(cardX+28, cardY);
+    ctx.lineTo(cardX+cardW-28, cardY);
+    ctx.quadraticCurveTo(cardX+cardW, cardY, cardX+cardW, cardY+6);
+    ctx.lineTo(cardX, cardY+6);
+    ctx.quadraticCurveTo(cardX, cardY, cardX+28, cardY);
+    ctx.closePath();
+    ctx.fill();
+
+    // ===== DATE SECTION =====
+    const dateParts = inviteData.date.split(',');
+    const dateMain = dateParts[0].trim();
+    const dateDay = dateParts[1] ? dateParts[1].trim() : '';
+
+    // Date block with accent background
+    const dbX = cardX + 40, dbY = cardY + 40;
+    ctx.fillStyle = t.accent;
+    roundRect(ctx, dbX, dbY, 120, 120, 16, true);
+
+    // Date number
+    const dateNum = dateMain.replace(/[^0-9–-]/g, '').substring(0, 5);
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 42px Sora, sans-serif';
+    ctx.fillText(dateNum, dbX+60, dbY+55);
+
+    // Month abbreviation
+    ctx.font = 'bold 20px Sora, sans-serif';
+    ctx.fillText('MAR', dbX+60, dbY+82);
+
+    // Year
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = '600 14px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('2026', dbX+60, dbY+105);
+
+    // Date text right side
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#0B1223';
+    ctx.font = 'bold 26px Sora, sans-serif';
+    ctx.fillText(dateMain, dbX+140, dbY+42);
+
+    ctx.fillStyle = '#7B8599';
+    ctx.font = '18px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(dateDay, dbX+140, dbY+72);
+
+    // ===== TIME ROW (icon + text) =====
+    const tRowY = dbY + 130;
+    ctx.fillStyle = t.accentSoft.replace('0.15', '0.12');
+    roundRect(ctx, dbX, tRowY, cardW-80, 44, 10, true);
+    ctx.fillStyle = t.g2;
+    ctx.font = '600 18px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('🕐  ' + inviteData.time, dbX+16, tRowY+28);
+
+    // ===== VENUE ROW =====
+    const vRowY = tRowY + 56;
+    ctx.fillStyle = 'rgba(0,0,0,0.03)';
+    roundRect(ctx, dbX, vRowY, cardW-80, 44, 10, true);
+    ctx.fillStyle = '#0B1223';
+    ctx.font = '600 18px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('📍  ' + inviteData.venue, dbX+16, vRowY+28);
+
+    // ===== DIVIDER with diamond =====
+    const divY = vRowY + 66;
+    ctx.strokeStyle = '#E2E8F0';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(dbX, divY); ctx.lineTo(W/2-16, divY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W/2+16, divY); ctx.lineTo(cardX+cardW-40, divY); ctx.stroke();
+    // Diamond
+    ctx.fillStyle = t.accent;
+    ctx.save(); ctx.translate(W/2, divY); ctx.rotate(Math.PI/4);
+    ctx.fillRect(-5, -5, 10, 10);
+    ctx.restore();
+
+    // ===== COUNTRIES =====
+    if (inviteData.countries) {
+        const secY = divY + 28;
+        ctx.fillStyle = '#A0AEC0';
+        ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('COUNTRIES & DESTINATIONS', dbX, secY);
+        
+        const countryList = inviteData.countries.split(' • ');
+        let cx = dbX;
+        const flagColors = ['#0052CC','#FF6B00','#00B368','#7B2FF7','#E53935','#F5A623','#0EA5E9'];
+        countryList.forEach((c, i) => {
+            const col = flagColors[i % flagColors.length];
+            ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+            const tw = ctx.measureText(c).width + 26;
+            // Chip
+            ctx.globalAlpha = 0.08;
+            ctx.fillStyle = col;
+            roundRect(ctx, cx, secY+12, tw, 30, 15, true);
+            ctx.globalAlpha = 1;
+            // Text
+            ctx.fillStyle = col;
+            ctx.fillText(c, cx+13, secY+32);
+            // Dot accent
+            ctx.beginPath(); ctx.arc(cx+6, secY+27, 2.5, 0, Math.PI*2);
+            ctx.fillStyle = col; ctx.fill();
+            cx += tw + 8;
+        });
+    }
+
+    // ===== ACTIVITIES =====
+    if (inviteData.activities) {
+        const actY = divY + 82;
+        ctx.fillStyle = '#A0AEC0';
+        ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('WHAT TO EXPECT', dbX, actY);
+        
+        const actList = inviteData.activities.split(' • ');
+        const actCols = 2;
+        const colW = (cardW - 120) / actCols;
+        actList.forEach((act, i) => {
+            const col = Math.floor(i / Math.ceil(actList.length / actCols));
+            const row = i % Math.ceil(actList.length / actCols);
+            const ax = dbX + col * colW;
+            const ay = actY + 22 + row * 30;
+            // Checkmark circle
+            ctx.fillStyle = t.accent;
+            ctx.beginPath(); ctx.arc(ax+8, ay-4, 8, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('✓', ax+8, ay-1);
+            // Activity text
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#374151';
+            ctx.font = '15px "Plus Jakarta Sans", sans-serif';
+            ctx.fillText(act, ax+24, ay);
+        });
+    }
+
+    // ===== FREE ENTRY BADGE =====
+    const freeY = cardY + cardH - 60;
+    ctx.fillStyle = 'rgba(0,179,104,0.08)';
+    roundRect(ctx, cardX+cardW-220, freeY, 180, 40, 20, true);
+    ctx.strokeStyle = '#00B368';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, cardX+cardW-220, freeY, 180, 40, 20, false);
+    ctx.stroke();
+    ctx.fillStyle = '#00B368';
+    ctx.font = 'bold 18px Sora, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦ FREE ENTRY', cardX+cardW-130, freeY+26);
+
+    // ========== CTA BANNER ==========
+    const ctaY = cardY + cardH + 30;
+    
+    // Gradient CTA bar
+    const ctaGrad = ctx.createLinearGradient(60, ctaY, W-60, ctaY);
+    ctaGrad.addColorStop(0, t.accent);
+    ctaGrad.addColorStop(1, t.accentAlt);
+    ctx.fillStyle = ctaGrad;
+    roundRect(ctx, 60, ctaY, W-120, 72, 18, true);
+
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 26px Sora, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Register Now  →  kanan.co/events', W/2, ctaY+46);
+
+    // ========== CONTACT INFO ==========
+    const infoY = ctaY + 100;
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = '600 19px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('📞  +91 265 235 4400    ·    🌐  www.kanan.co', W/2, infoY);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.font = '16px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Vadodara  ·  Chennai  ·  Toronto', W/2, infoY + 36);
+
+    // ========== SCAN / QR-LIKE DECORATIVE BLOCK ==========
+    const qrY = infoY + 60;
+    const qrSize = 70;
+    const qrX = W/2 - qrSize/2;
+    ctx.fillStyle = 'rgba(255,255,255,0.08)';
+    roundRect(ctx, qrX, qrY, qrSize, qrSize, 10, true);
+    // QR-style grid pattern
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    for (let gx = 0; gx < 7; gx++) {
+        for (let gy = 0; gy < 7; gy++) {
+            if (Math.random() > 0.4) {
+                ctx.fillRect(qrX+6+gx*8.5, qrY+6+gy*8.5, 6, 6);
+            }
+        }
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Scan to Register', W/2, qrY + qrSize + 18);
+
+    // ========== STATS FOOTER BAR ==========
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    roundRect(ctx, 0, H-76, W, 76, 0, true);
+    
+    const stats = ['🎓 2,40,000+ Students', '🏫 25+ Years', '✈️ 30+ Countries', '🏆 98% Visa Success'];
+    const statW = W / stats.length;
+    stats.forEach((s, i) => {
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(s, statW*i + statW/2, H-32);
+    });
+
+    // ========== CORNER ACCENT FRAMES ==========
+    ctx.strokeStyle = t.accent;
+    ctx.lineWidth = 3;
+    ctx.globalAlpha = 0.5;
+    // Top-left
+    ctx.beginPath(); ctx.moveTo(16, 110); ctx.lineTo(16, 100); ctx.lineTo(140, 100); ctx.stroke();
+    // Top-right  
+    ctx.beginPath(); ctx.moveTo(W-16, 110); ctx.lineTo(W-16, 100); ctx.lineTo(W-140, 100); ctx.stroke();
+    // Bottom-left
+    ctx.beginPath(); ctx.moveTo(16, H-94); ctx.lineTo(16, H-84); ctx.lineTo(140, H-84); ctx.stroke();
+    // Bottom-right
+    ctx.beginPath(); ctx.moveTo(W-16, H-94); ctx.lineTo(W-16, H-84); ctx.lineTo(W-140, H-84); ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // ========== TICKET PERFORATED EDGES ==========
+    ctx.fillStyle = t.g2;
+    // Left side notches
+    for (let ny = cardY + 40; ny < cardY + cardH - 20; ny += 22) {
+        ctx.globalAlpha = 0.12;
+        ctx.beginPath(); ctx.arc(cardX - 1, ny, 4, 0, Math.PI*2); ctx.fill();
+    }
+    // Right side notches
+    for (let ny = cardY + 40; ny < cardY + cardH - 20; ny += 22) {
+        ctx.beginPath(); ctx.arc(cardX + cardW + 1, ny, 4, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+}
+
+// — Canvas helper: rounded rectangle —
+function roundRect(ctx, x, y, w, h, r, fill) {
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y);
+    ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r);
+    ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    ctx.lineTo(x+r, y+h);
+    ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r);
+    ctx.quadraticCurveTo(x, y, x+r, y);
+    ctx.closePath();
+    if (fill) ctx.fill();
+}
+
+// — Canvas helper: wrap text —
+function wrapText(ctx, text, x, y, maxW, lineH) {
+    const words = text.split(' ');
+    let line = '';
+    let lines = [];
+    words.forEach(w => {
+        const test = line + (line ? ' ' : '') + w;
+        if (ctx.measureText(test).width > maxW && line) {
+            lines.push(line);
+            line = w;
+        } else { line = test; }
+    });
+    if (line) lines.push(line);
+    lines.forEach((l, i) => ctx.fillText(l, x, y + i*lineH));
+    return lines.length;
+}
+
+// — Download invite as PNG —
+function downloadInvite() {
+    const canvas = document.getElementById('inviteCanvas');
+    const link = document.createElement('a');
+    const safeName = inviteData.title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    link.download = `kanan-invite-${safeName}.png`;
+    link.href = canvas.toDataURL('image/png', 1.0);
+    link.click();
+}
+
+// — Share on WhatsApp —
+function shareInviteWhatsApp() {
+    const text = encodeURIComponent(
+        `🎓 You're Invited!\n\n` +
+        `*${inviteData.title}*\n` +
+        `📅 ${inviteData.date}\n` +
+        `⏰ ${inviteData.time}\n` +
+        `📍 ${inviteData.venue}\n\n` +
+        `✨ FREE ENTRY — Register now!\n` +
+        `🌐 www.kanan.co/events\n` +
+        `📞 +91 265 235 4400\n\n` +
+        `Kanan International — 25+ Years of Study Abroad Excellence`
+    );
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+// ===== SCROLL TOP =====
+window.addEventListener('scroll', () => {
+    document.getElementById('fabUp').classList.toggle('visible', window.scrollY > 400);
+});
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+        const t = document.querySelector(this.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+});
+</script>
+</body>
+</html>
