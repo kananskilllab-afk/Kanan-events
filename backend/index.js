@@ -461,6 +461,18 @@ app.put('/api/events/:id', async (req, res) => {
     }
 });
 
+// DELETE ALL events
+app.delete('/api/events/all', async (req, res) => {
+    try {
+        await pool.execute('DELETE FROM events');
+        await pool.execute('ALTER TABLE events AUTO_INCREMENT = 1');
+        res.json({ success: true, message: 'All events deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting all events:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
 // DELETE event
 app.delete('/api/events/:id', async (req, res) => {
     try {

@@ -310,6 +310,23 @@ function AdminDashboard() {
         } catch (err) { console.error(err); }
     };
 
+    const deleteAllEvents = async () => {
+        const confirmFirst = window.confirm('Are you absolutely sure you want to delete ALL events?');
+        if (!confirmFirst) return;
+
+        const confirmSecond = window.confirm('This action CANNOT be undone. Click OK to proceed with wiping the database of all events.');
+        if (!confirmSecond) return;
+
+        try {
+            await axios.delete(`${API_URL}/api/events/all`);
+            fetchEvents();
+            alert('All events have been successfully deleted.');
+        } catch (err) {
+            console.error(err);
+            alert('Error deleting events.');
+        }
+    };
+
     // ── Registrations helpers ────────────────────────────
     const filteredRegs = registrations.filter(r => {
         const matchEvent = regFilter ? r.event_title === regFilter : true;
@@ -390,26 +407,34 @@ function AdminDashboard() {
                     <>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
                             <h2 style={{ color: '#0B1223', margin: 0 }}>Event Management</h2>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#0052CC', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}>
-                                ⬆ Import CSV
-                                <input type="file" accept=".csv" onChange={async (e) => {
-                                    const file = e.target.files[0];
-                                    if (!file) return;
-                                    const confirm = window.confirm('Import events from CSV?');
-                                    if (!confirm) { e.target.value = ''; return; }
-                                    const fdata = new FormData();
-                                    fdata.append('csv_file', file);
-                                    try {
-                                        const res = await axios.post(`${API_URL}/api/events/bulk`, fdata, { headers: { 'Content-Type': 'multipart/form-data' } });
-                                        alert(res.data.message || 'Events imported successfully!');
-                                        fetchEvents();
-                                    } catch (err) {
-                                        console.error(err);
-                                        alert(err.response?.data?.message || 'Error importing events');
-                                    }
-                                    e.target.value = '';
-                                }} style={{ display: 'none' }} />
-                            </label>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <button
+                                    onClick={deleteAllEvents}
+                                    style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#E53935', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}
+                                >
+                                    🗑 Delete All
+                                </button>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#0052CC', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}>
+                                    ⬆ Import CSV
+                                    <input type="file" accept=".csv" onChange={async (e) => {
+                                        const file = e.target.files[0];
+                                        if (!file) return;
+                                        const confirm = window.confirm('Import events from CSV?');
+                                        if (!confirm) { e.target.value = ''; return; }
+                                        const fdata = new FormData();
+                                        fdata.append('csv_file', file);
+                                        try {
+                                            const res = await axios.post(`${API_URL}/api/events/bulk`, fdata, { headers: { 'Content-Type': 'multipart/form-data' } });
+                                            alert(res.data.message || 'Events imported successfully!');
+                                            fetchEvents();
+                                        } catch (err) {
+                                            console.error(err);
+                                            alert(err.response?.data?.message || 'Error importing events');
+                                        }
+                                        e.target.value = '';
+                                    }} style={{ display: 'none' }} />
+                                </label>
+                            </div>
                         </div>
                         <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-start' }}>
                             {/* Form */}
