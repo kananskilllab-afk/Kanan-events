@@ -487,82 +487,104 @@ app.post('/api/events/bulk', upload.single('csv_file'), async (req, res) => {
             .on('data', (data) => results.push(data))
             .on('end', async () => {
                 let inserted = 0;
+                let errors = [];
                 for (const row of results) {
-                    console.log('--- CSV ROW ---', row);
+                    try {
+                        // Extract title — support both 'Main Event' and 'title'/'Title' headers
+                        const title = row['Main Event'] || row.title || row.Title || '';
+                        if (!title.trim()) { console.log('Skipping empty row'); continue; }
 
-                    // Extract fields from CSV row based on user's exact headings
-                    const title = row['Main Event'] || row.title || row.Title;
-                    if (!title) {
-                        console.log('Skipping due to no title');
-                        continue; // Skip empty rows or rows without title
+                        const month = (row.Month || row.month || 'march').toLowerCase();
+
+                        // Use type from CSV if present, otherwise fallback to 'seminar'
+                        const type = row.type || row.Type || row['Event Type'] || 'seminar';
+                        const ribbonColor = row.ribbonColor || row.RibbonColor || '';
+
+                        // Parse date — support multiple formats:
+                        // Direct columns: dateDayStr / dateMonthStr
+                        // Date column: "15-Mar" or "21/03/2026"
+                        let dateDayStr = '';
+                        let dateMonthStr = '';
+                        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+                        if (row.dateDayStr) {
+                            // Handle "21/03/2026" stored in dateDayStr
+                            const rawDay = String(row.dateDayStr);
+                            if (rawDay.includes('/')) {
+                                const parts = rawDay.split('/');
+                                dateDayStr = parts[0];
+                                dateMonthStr = row.dateMonthStr || monthNames[parseInt(parts[1]) - 1] || parts[1];
+                            } else {
+                                dateDayStr = rawDay;
+                                dateMonthStr = row.dateMonthStr || '';
+                            }
+                        } else if (row.Date) {
+                            const dateParts = String(row.Date).split(/[-/ ]/);
+                            dateDayStr = dateParts[0] || '';
+                            if (dateParts[1] && isNaN(dateParts[1])) {
+                                dateMonthStr = dateParts[1].substring(0, 3);
+                            } else if (dateParts[1]) {
+                                dateMonthStr = monthNames[parseInt(dateParts[1]) - 1] || dateParts[1];
+                            }
+                        } else if (row.Day) {
+                            dateDayStr = row.Day;
+                            dateMonthStr = row.DateMonth || row['Date Month'] || '';
+                        }
+
+                        // Map other fields
+                        const venue = row.Branch || row.venue || row.Venue || '';
+                        const time = row.Time || row.time || '';
+                        const activities = row.Activities || row.activities || '';
+                        const teamLead = row['Team Leader'] || row.teamLead || row['Team Lead'] || null;
+                        const subtitle = row.subtitle || row.Subtitle || '';
+                        const isOnline = 0;
+                        const activitiesLabel = 'Activities';
+                        const searchKeys = row.searchKeys || row['Search Keys'] || '';
+                        const is_active = 1;
+
+                        // Handle tags
+                        let tagsJson = '[]';
+                        const rawTags = row.tags || row.Tags || '';
+                        if (rawTags) {
+                            const tagList = rawTags.split(',').map(t => t.trim().toLowerCase());
+                            const parsedTags = [];
+                            tagList.forEach(t => {
+                                if (t === 'canada') parsedTags.push({ id: 'canada', label: 'Canada', colorClass: 't-canada' });
+                                else if (t === 'uk') parsedTags.push({ id: 'uk', label: 'UK', colorClass: 't-uk' });
+                                else if (t === 'usa') parsedTags.push({ id: 'usa', label: 'USA', colorClass: 't-usa' });
+                                else if (t === 'australia') parsedTags.push({ id: 'australia', label: 'Australia', colorClass: 't-australia' });
+                                else if (t === 'germany') parsedTags.push({ id: 'germany', label: 'Germany', colorClass: 't-germany' });
+                                else if (t === 'ireland') parsedTags.push({ id: 'ireland', label: 'Ireland', colorClass: 't-ireland' });
+                                else if (t === 'dubai') parsedTags.push({ id: 'dubai', label: 'Dubai', colorClass: 't-dubai' });
+                                else if (t === 'ielts') parsedTags.push({ id: 'ielts', label: 'IELTS', colorClass: 't-coaching' });
+                                else if (t === 'pte') parsedTags.push({ id: 'pte', label: 'PTE', colorClass: 't-coaching' });
+                                else parsedTags.push({ id: t, label: t.charAt(0).toUpperCase() + t.slice(1), colorClass: 't-other' });
+                            });
+                            tagsJson = JSON.stringify(parsedTags);
+                        }
+
+                        await pool.execute(
+                            `INSERT INTO events (month, type, ribbonColor, dateDayStr, dateMonthStr, title, subtitle, venue, time, tags, isOnline, activitiesLabel, activities, searchKeys, is_active, is_featured, teamLead) 
+                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                            [month, type, ribbonColor, dateDayStr, dateMonthStr, title, subtitle, venue, time, tagsJson, isOnline, activitiesLabel, activities, searchKeys, is_active, 0, teamLead]
+                        );
+                        inserted++;
+                    } catch (rowErr) {
+                        console.error('Error inserting CSV row:', rowErr.message, row.title || row['Main Event']);
+                        errors.push(rowErr.message);
                     }
-
-                    const month = (row.Month || row.month || 'march').toLowerCase();
-                    const type = 'seminar'; // Default, as it's not in their cols
-                    const ribbonColor = '';
-
-                    // Parse Date column (e.g. "15-Mar", "15 March", "15")
-                    let dateDayStr = row.Date || row.dateDayStr || row.Day || '';
-                    let dateMonthStr = row.Date || row.dateMonthStr || row.DateMonth || '';
-                    if (row.Date) {
-                        const dateParts = row.Date.split(/[- /\\]/);
-                        if (dateParts.length > 0) dateDayStr = dateParts[0];
-                        if (dateParts.length > 1) dateMonthStr = dateParts[1].substring(0, 3);
-                    } else if (dateDayStr.length > 2) {
-                        // If they just put a string in Day
-                        dateDayStr = dateDayStr.substring(0, 2);
-                    }
-
-                    // Map other fields
-                    const venue = row.Branch || row.venue || row.Venue || '';
-                    const time = row.Time || row.time || '';
-                    const activities = row.Activities || row.activities || '';
-                    const teamLead = row['Team Leader'] || row.teamLead || row['Team Lead'] || null;
-
-                    // Extra fields mapped to subtitle for visibility
-                    let subtitleArr = [];
-                    if (row.Department) subtitleArr.push(`Dept: ${row.Department}`);
-                    if (row['Contact Number']) subtitleArr.push(`Contact: ${row['Contact Number']}`);
-                    if (row['2nd Member']) subtitleArr.push(`Member 2: ${row['2nd Member']}`);
-                    const subtitle = subtitleArr.join(' | ');
-
-                    const isOnline = 0;
-                    const activitiesLabel = 'Activities';
-                    const searchKeys = '';
-                    const is_active = 1;
-
-                    // Handle tags
-                    let tagsJson = '[]';
-                    const rawTags = row.tags || row.Tags || '';
-                    if (rawTags) {
-                        const tagList = rawTags.split(',').map(t => t.trim().toLowerCase());
-                        const parsedTags = [];
-                        tagList.forEach(t => {
-                            if (t === 'canada') parsedTags.push({ id: 'canada', label: 'Canada', colorClass: 't-canada' });
-                            else if (t === 'uk') parsedTags.push({ id: 'uk', label: 'UK', colorClass: 't-uk' });
-                            else if (t === 'usa') parsedTags.push({ id: 'usa', label: 'USA', colorClass: 't-usa' });
-                            else if (t === 'australia') parsedTags.push({ id: 'australia', label: 'Australia', colorClass: 't-australia' });
-                            else if (t === 'germany') parsedTags.push({ id: 'germany', label: 'Germany', colorClass: 't-germany' });
-                            else if (t === 'ireland') parsedTags.push({ id: 'ireland', label: 'Ireland', colorClass: 't-ireland' });
-                            else if (t === 'dubai') parsedTags.push({ id: 'dubai', label: 'Dubai', colorClass: 't-dubai' });
-                            else if (t === 'ielts') parsedTags.push({ id: 'ielts', label: 'IELTS', colorClass: 't-coaching' });
-                            else if (t === 'pte') parsedTags.push({ id: 'pte', label: 'PTE', colorClass: 't-coaching' });
-                            else parsedTags.push({ id: t, label: t.charAt(0).toUpperCase() + t.slice(1), colorClass: 't-other' });
-                        });
-                        tagsJson = JSON.stringify(parsedTags);
-                    }
-
-                    await pool.execute(
-                        `INSERT INTO events (month, type, ribbonColor, dateDayStr, dateMonthStr, title, subtitle, venue, time, tags, isOnline, activitiesLabel, activities, searchKeys, is_active, is_featured, teamLead) 
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                        [month, type, ribbonColor, dateDayStr, dateMonthStr, title, subtitle, venue, time, tagsJson, isOnline, activitiesLabel, activities, searchKeys, is_active, 0, teamLead]
-                    );
-                    inserted++;
                 }
 
                 // Cleanup temp file
                 fs.unlink(req.file.path, () => { });
-                res.status(201).json({ success: true, message: `Successfully imported ${inserted} events!` });
+                res.status(201).json({
+                    success: true,
+                    message: `Successfully imported ${inserted} events!${errors.length ? ` (${errors.length} rows skipped due to errors)` : ''}`
+                });
+            })
+            .on('error', (err) => {
+                console.error('CSV stream error:', err);
+                res.status(500).json({ success: false, message: 'Failed to parse CSV file' });
             });
     } catch (error) {
         console.error('Error in bulk import:', error);
