@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Uploads (these are local files, not committed to git)
+uploads/
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 
-function Hero({ onOpenCallback, onOpenRegister, onOpenInvite }) {
+function Hero({ onOpenBooking, onOpenRegister, onOpenInvite }) {
     const [feat, setFeat] = useState(null);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/events/featured')
+        axios.get(`${API_URL}/api/events/featured`)
             .then(res => { if (res.data.success) setFeat(res.data.data); })
             .catch(() => { });
     }, []);
@@ -28,9 +29,9 @@ function Hero({ onOpenCallback, onOpenRegister, onOpenInvite }) {
                     <div>
                         <h1>Your <em>Study Abroad</em> Journey Starts Here</h1>
                         <p className="hero-sub">Explore our upcoming events for {feat ? `${feat.dateMonthStr} 2026` : '2026'}. Attend visa fairs, education expos, mock tests, and parent-teacher meets — in person or online.</p>
-                        <div className="hero-btns">
+                        <div className="hero-btns" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '40px' }}>
                             <a href="#events" className="btn btn-orange btn-lg">Browse All Events</a>
-                            <button className="btn btn-ghost btn-lg" onClick={onOpenCallback}>Book Free Session</button>
+                            <button className="btn btn-ghost btn-lg" onClick={onOpenBooking}>Book Free Counselling</button>
                         </div>
                         <div className="hero-stats">
                             <div><div className="h-stat-val">240K+</div><div className="h-stat-lbl">Students Served</div></div>

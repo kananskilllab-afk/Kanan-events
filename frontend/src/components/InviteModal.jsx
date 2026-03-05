@@ -68,200 +68,242 @@ export function InviteModal({ isOpen, onClose, inviteData }) {
     );
 }
 
-// Completely Revamped Premium Canvas Design
+// Premium White / Light Elegant Canvas Design
 function generateInviteCard(canvas, inviteData, logoImg) {
     const ctx = canvas.getContext('2d');
     const W = 1080, H = 1450;
     canvas.width = W; canvas.height = H;
 
-    // --- Modern Mesh Gradient Background ---
     const themes = {
-        'visa-fair': { bg: '#060B19', glow1: '#0047FF', glow2: '#FF3366', accent: '#00E5FF', label: 'VISA FAIR' },
-        'education-expo': { bg: '#050A0F', glow1: '#7000FF', glow2: '#00D68F', accent: '#00FFC2', label: 'EDUCATION EXPO' },
-        'ptm': { bg: '#0A0F0D', glow1: '#008F55', glow2: '#2563EB', accent: '#60A5FA', label: 'MEETUP' },
-        'mock-test': { bg: '#140A05', glow1: '#E53935', glow2: '#FF9800', accent: '#FFD54F', label: 'MOCK TEST' },
-        'seminar': { bg: '#050D19', glow1: '#2563EB', glow2: '#00D68F', accent: '#38BDF8', label: 'SEMINAR' }
+        'visa-fair': { accent: '#0052CC', light: '#E8F1FF', gold: '#D4A017', label: 'VISA FAIR' },
+        'education-expo': { accent: '#6200EA', light: '#F3E8FF', gold: '#C89B3C', label: 'EDUCATION EXPO' },
+        'ptm': { accent: '#00695C', light: '#E0F7F4', gold: '#B8860B', label: 'PARENT MEET' },
+        'mock-test': { accent: '#C62828', light: '#FFEBEE', gold: '#D4A017', label: 'MOCK TEST' },
+        'seminar': { accent: '#1565C0', light: '#E3EEFF', gold: '#B8860B', label: 'SEMINAR' },
     };
     const t = themes[inviteData.type] || themes['education-expo'];
 
-    // Deep Dark Base
-    ctx.fillStyle = t.bg; ctx.fillRect(0, 0, W, H);
+    // ── WHITE BASE ────────────────────────────────────────────────────────────
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, W, H);
 
-    // Glowing Ambient Orbs (Simulated Blur)
-    const drawAmbientGlow = (x, y, r, color, maxAlpha) => {
-        const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
-        grad.addColorStop(0, color); grad.addColorStop(1, 'transparent');
-        ctx.globalAlpha = maxAlpha; ctx.fillStyle = grad;
-        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.globalAlpha = 1;
-    };
-    drawAmbientGlow(W * 0.2, H * 0.2, 800, t.glow1, 0.4);
-    drawAmbientGlow(W * 0.8, H * 0.6, 900, t.glow2, 0.3);
-    drawAmbientGlow(W * 0.5, H * 1.0, 600, t.glow1, 0.2);
+    // Very subtle warm off-white tint towards bottom
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+    bgGrad.addColorStop(0, 'rgba(255,255,255,1)');
+    bgGrad.addColorStop(1, 'rgba(245,247,252,1)');
+    ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H);
 
-    // Subtle Grid Overlay Pattern
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)'; ctx.lineWidth = 1;
-    for (let i = 0; i < W; i += 60) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, H); ctx.stroke(); }
-    for (let i = 0; i < H; i += 60) { ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(W, i); ctx.stroke(); }
+    // ── TOP ACCENT BAR ────────────────────────────────────────────────────────
+    ctx.fillStyle = t.accent;
+    ctx.fillRect(0, 0, W, 14);
 
-    // --- Top Header ---
+    // Gold thin inner line
+    ctx.fillStyle = t.gold;
+    ctx.fillRect(0, 14, W, 4);
+
+    // ── HEADER AREA ──────────────────────────────────────────────────────────
+    // Logo
     if (logoImg) {
         const ratio = logoImg.width / logoImg.height;
-        const logoH = 34; const logoW = logoH * ratio;
-        ctx.globalAlpha = 1;
-        ctx.drawImage(logoImg, 60, 60, logoW, logoH);
+        const logoH = 40; const logoW = logoH * ratio;
+        ctx.drawImage(logoImg, 70, 48, logoW, logoH);
     } else {
-        ctx.fillStyle = '#fff'; ctx.font = 'bold 28px Sora, sans-serif'; ctx.textAlign = 'left'; ctx.fillText('Kanan.co', 60, 84);
+        ctx.fillStyle = t.accent;
+        ctx.font = 'bold 30px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('Kanan.co', 70, 82);
     }
 
-    // Top Right Ribbon
+    // "INVITATION" label top right
     ctx.fillStyle = t.accent;
-    ctx.beginPath(); ctx.moveTo(W - 180, 0); ctx.lineTo(W - 120, 0); ctx.lineTo(W, 120); ctx.lineTo(W, 180); ctx.closePath(); ctx.fill();
-    ctx.save(); ctx.translate(W - 85, 85); ctx.rotate(Math.PI / 4);
-    ctx.fillStyle = '#000'; ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif'; ctx.textAlign = 'center'; ctx.letterSpacing = '4px'; ctx.fillText('PREMIUM', 0, 0);
-    ctx.restore();
+    ctx.font = '700 13px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '5px';
+    ctx.textAlign = 'right';
+    ctx.fillText('INVITATION', W - 70, 72);
 
-    // --- Main Glassmorphic Panel ---
-    const panelX = 60, panelY = 160, panelW = W - 120, panelH = H - 380;
+    // Gold accent line under header
+    ctx.strokeStyle = t.gold;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(70, 108); ctx.lineTo(W - 70, 108); ctx.stroke();
 
-    // Panel Shadow & Base
-    ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 30;
-    ctx.fillStyle = 'rgba(15, 20, 35, 0.7)'; // Frosted dark glass
-    roundRect(ctx, panelX, panelY, panelW, panelH, 32, true);
-    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+    // ── MAIN CARD PANEL ───────────────────────────────────────────────────────
+    const pX = 70, pY = 130, pW = W - 140, pH = H - 290;
 
-    // Panel Inner Glow / Border
-    const panelGrad = ctx.createLinearGradient(panelX, panelY, panelX, panelY + panelH);
-    panelGrad.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
-    panelGrad.addColorStop(1, 'rgba(255, 255, 255, 0.03)');
-    ctx.strokeStyle = panelGrad; ctx.lineWidth = 1.5;
-    roundRect(ctx, panelX, panelY, panelW, panelH, 32, false); ctx.stroke();
+    // Card shadow
+    ctx.shadowColor = 'rgba(0,0,50,0.08)';
+    ctx.shadowBlur = 40;
+    ctx.shadowOffsetY = 12;
+    ctx.fillStyle = '#FFFFFF';
+    roundRect(ctx, pX, pY, pW, pH, 24, true);
+    ctx.shadowBlur = 0; ctx.shadowOffsetY = 0; ctx.shadowColor = 'transparent';
 
-    // --- Inside Panel Content ---
+    // Card border
+    ctx.strokeStyle = 'rgba(0,0,80,0.08)';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, pX, pY, pW, pH, 24, false); ctx.stroke();
 
-    // 1. "YOU'RE INVITED TO" Badge
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)'; roundRect(ctx, panelX + 50, panelY + 50, 300, 36, 18, true);
-    ctx.fillStyle = t.accent; ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif'; ctx.textAlign = 'center'; ctx.letterSpacing = '4px';
-    ctx.fillText("✦  YOU'RE INVITED TO", panelX + 200, panelY + 73);
+    // Accent colour left edge stripe
+    ctx.fillStyle = t.accent;
+    ctx.beginPath();
+    ctx.moveTo(pX, pY + 24);
+    ctx.lineTo(pX, pY + pH - 24);
+    ctx.quadraticCurveTo(pX, pY + pH, pX + 24, pY + pH);
+    ctx.lineTo(pX + 10, pY + pH);
+    ctx.quadraticCurveTo(pX, pY + pH, pX, pY + pH - 24);
+    ctx.moveTo(pX, pY + 24);
+    ctx.quadraticCurveTo(pX, pY, pX + 24, pY);
+    ctx.lineTo(pX + 10, pY);
+    ctx.quadraticCurveTo(pX, pY, pX, pY + 24);
+    ctx.fillRect(pX, pY + 24, 10, pH - 48);
 
-    // 2. Large Typography Title
+    // ── YOU'RE INVITED BADGE ──────────────────────────────────────────────────
+    const badgeW = 280, badgeH = 38;
+    const badgeX = pX + 50, badgeY = pY + 44;
+    ctx.fillStyle = t.light;
+    roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 19, true);
+    ctx.strokeStyle = t.accent;
+    ctx.lineWidth = 1.2;
+    roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 19, false); ctx.stroke();
+    ctx.fillStyle = t.accent;
+    ctx.font = '700 13px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '4px';
+    ctx.textAlign = 'center';
+    ctx.fillText("✦  YOU'RE INVITED  ✦", badgeX + badgeW / 2, badgeY + 25);
+
+    // ── EVENT TITLE ────────────────────────────────────────────────────────────
     ctx.textAlign = 'left';
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 64px Sora, sans-serif'; ctx.letterSpacing = '-1px';
-    const titleLines = wrapText(ctx, inviteData.title, panelX + 50, panelY + 160, panelW - 100, 76);
-    const contentStartY = panelY + 160 + (titleLines * 76);
+    ctx.letterSpacing = '-1px';
+    ctx.fillStyle = '#0B1223';
+    ctx.font = 'bold 62px "Plus Jakarta Sans", sans-serif';
+    const titleLines = wrapText(ctx, inviteData.title, pX + 50, pY + 148, pW - 100, 74);
+    const afterTitle = pY + 148 + (titleLines * 74);
 
-    // Divider Line
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(panelX + 50, contentStartY); ctx.lineTo(panelX + panelW - 50, contentStartY); ctx.stroke();
+    // Gold divider after title
+    ctx.strokeStyle = t.gold;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(pX + 50, afterTitle + 10); ctx.lineTo(pX + 50 + 80, afterTitle + 10); ctx.stroke();
+    ctx.strokeStyle = 'rgba(0,0,0,0.07)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pX + 50 + 90, afterTitle + 10); ctx.lineTo(pX + pW - 50, afterTitle + 10); ctx.stroke();
 
-    // 3. Event Details Grid (Date, Time, Venue)
-    const dtY = contentStartY + 40;
+    // ── DATE / TIME / VENUE ────────────────────────────────────────────────────
+    const dtY = afterTitle + 46;
 
-    // Date Parsing
-    const dateParts = inviteData.date.split(','); const dateMain = dateParts[0].trim();
-    const dateMatch = dateMain.match(/\d{1,2}/); const dateNum = dateMatch ? dateMatch[0] : '06';
-    const monthMatch = dateMain.match(/[a-zA-Z]+/); const dateMonth = monthMatch ? monthMatch[0].toUpperCase().substring(0, 3) : 'MAR';
+    // Parse date
+    const dateMain = (inviteData.date || '').split(',')[0].trim();
+    const dateNum = (dateMain.match(/\d{1,2}/) || ['06'])[0];
+    const dateMonth = ((dateMain.match(/[a-zA-Z]+/) || ['Mar'])[0]).toUpperCase().slice(0, 3);
 
-    // Left Column: Big Date Block
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)'; roundRect(ctx, panelX + 50, dtY, 140, 140, 20, true);
-    ctx.fillStyle = t.accent; ctx.textAlign = 'center'; ctx.font = 'bold 58px Sora, sans-serif'; ctx.fillText(dateNum, panelX + 120, dtY + 75);
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '4px'; ctx.fillText(dateMonth, panelX + 120, dtY + 110);
+    // Big date block
+    ctx.fillStyle = t.accent;
+    roundRect(ctx, pX + 50, dtY, 130, 130, 18, true);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 56px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '-2px';
+    ctx.fillText(dateNum, pX + 115, dtY + 80);
+    ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '5px';
+    ctx.fillText(dateMonth, pX + 115, dtY + 114);
 
-    // Right Column: Details
-    const detailX = panelX + 230;
+    // Info rows
+    const infoX = pX + 210;
     ctx.textAlign = 'left';
 
-    // Time
-    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = '600 14px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '2px'; ctx.fillText('TIME', detailX, dtY + 25);
-    ctx.fillStyle = '#fff'; ctx.font = '600 24px "Plus Jakarta Sans", sans-serif'; ctx.fillText(inviteData.time, detailX, dtY + 55);
+    // Time row
+    ctx.fillStyle = '#7B8599';
+    ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '3px';
+    ctx.fillText('TIME', infoX, dtY + 28);
+    ctx.fillStyle = '#0B1223';
+    ctx.font = '700 24px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '0px';
+    ctx.fillText(inviteData.time || '10:00 AM – 7:00 PM', infoX, dtY + 60);
 
-    // Location
-    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = '600 14px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '2px'; ctx.fillText('LOCATION', detailX, dtY + 105);
-    ctx.fillStyle = '#fff'; ctx.font = '600 24px "Plus Jakarta Sans", sans-serif';
-    const vLines = wrapText(ctx, inviteData.venue, detailX, dtY + 135, panelW - 300, 34);
+    // Venue row
+    ctx.fillStyle = '#7B8599';
+    ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '3px';
+    ctx.fillText('VENUE', infoX, dtY + 100);
+    ctx.fillStyle = '#0B1223';
+    ctx.font = '700 22px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '0px';
+    wrapText(ctx, inviteData.venue || 'All Branches', infoX, dtY + 130, pW - 280, 30);
 
-    // Divider Line 2
-    const d2Y = dtY + 180;
-    ctx.beginPath(); ctx.moveTo(panelX + 50, d2Y); ctx.lineTo(panelX + panelW - 50, d2Y); ctx.stroke();
+    // Thin separator
+    const sep1Y = dtY + 168;
+    ctx.strokeStyle = 'rgba(0,0,0,0.07)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pX + 50, sep1Y); ctx.lineTo(pX + pW - 50, sep1Y); ctx.stroke();
 
-    // 4. Countries & Features Section
-    const curY = d2Y + 40;
-
+    // ── DESTINATIONS ────────────────────────────────────────────────────────────
+    let rowY = sep1Y + 40;
     if (inviteData.countries) {
-        ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = '600 14px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '2px'; ctx.textAlign = 'left'; ctx.fillText('DESTINATIONS:', panelX + 50, curY);
-        let cx = panelX + 220;
-        const countryList = inviteData.countries.split(' • ');
-        countryList.forEach((c) => {
-            const tw = ctx.measureText(c).width + 30;
-            ctx.fillStyle = 'rgba(255,255,255,0.1)'; roundRect(ctx, cx, curY - 20, tw, 36, 18, true);
-            ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 1; roundRect(ctx, cx, curY - 20, tw, 36, 18, false); ctx.stroke();
-            ctx.fillStyle = '#fff'; ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '1px'; ctx.textAlign = 'center'; ctx.fillText(c, cx + tw / 2, curY + 4);
-            cx += tw + 12;
-            if (cx > panelX + panelW - 50) { cx = panelX + 220; } // lazy wrap prevention
+        ctx.fillStyle = '#7B8599';
+        ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
+        ctx.letterSpacing = '3px';
+        ctx.textAlign = 'left';
+        ctx.fillText('DESTINATIONS', pX + 50, rowY);
+        let cx = pX + 210;
+        inviteData.countries.split(' • ').forEach(c => {
+            ctx.font = '700 15px "Plus Jakarta Sans", sans-serif';
+            ctx.letterSpacing = '0px';
+            const tw = ctx.measureText(c).width + 28;
+            ctx.fillStyle = t.light;
+            roundRect(ctx, cx, rowY - 22, tw, 34, 17, true);
+            ctx.strokeStyle = t.accent; ctx.lineWidth = 1.2;
+            roundRect(ctx, cx, rowY - 22, tw, 34, 17, false); ctx.stroke();
+            ctx.fillStyle = t.accent;
+            ctx.textAlign = 'center';
+            ctx.fillText(c, cx + tw / 2, rowY + 1);
+            cx += tw + 10;
         });
+        rowY += 54;
     }
 
+    // ── ACTIVITIES / HIGHLIGHTS ──────────────────────────────────────────────
     if (inviteData.activities) {
-        const actY = curY + 60;
-        ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.textAlign = 'left'; ctx.fillText('HIGHLIGHTS:', panelX + 50, actY);
-        const actList = inviteData.activities.split(' • '); let row = 0; let col = 0;
-        actList.forEach((act) => {
-            const ax = panelX + 220 + (col * 320); const ay = actY - 14 + (row * 36);
-            ctx.fillStyle = t.accent; ctx.beginPath(); ctx.arc(ax, ay - 5, 8, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#000'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('✓', ax, ay - 2);
-            ctx.fillStyle = '#fff'; ctx.font = '500 16px "Plus Jakarta Sans", sans-serif'; ctx.textAlign = 'left'; ctx.fillText(act, ax + 18, ay + 1);
+        ctx.fillStyle = '#7B8599';
+        ctx.font = '600 13px "Plus Jakarta Sans", sans-serif';
+        ctx.letterSpacing = '3px';
+        ctx.textAlign = 'left';
+        ctx.fillText('HIGHLIGHTS', pX + 50, rowY);
+        const acts = inviteData.activities.split(' • ');
+        let col = 0, row = 0;
+        acts.forEach(act => {
+            const ax = pX + 210 + col * 340;
+            const ay = rowY - 14 + row * 36;
+            // Gold bullet
+            ctx.fillStyle = t.gold;
+            ctx.beginPath(); ctx.arc(ax + 8, ay - 4, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('✓', ax + 8, ay - 1);
+            // text
+            ctx.fillStyle = '#0B1223';
+            ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+            ctx.letterSpacing = '0px';
+            ctx.textAlign = 'left';
+            ctx.fillText(act, ax + 22, ay + 2);
             col++; if (col > 1) { col = 0; row++; }
         });
+        rowY += 46 + Math.ceil(acts.length / 2) * 36;
     }
 
-    // 5. Huge Event Category Watermark Graphic inside Panel Bottom Right
-    ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,255,255,0.03)';
-    ctx.font = '900 140px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '-4px';
-    ctx.fillText(t.label.split(' ')[0], panelX + panelW - 20, panelY + panelH - 30);
-
-    // Free Entry VIP Badge
-    ctx.fillStyle = 'rgba(0, 255, 170, 0.1)'; let greenGrad = ctx.createLinearGradient(0, panelY + panelH - 80, 0, panelY + panelH);
-    ctx.strokeStyle = '#00FFC2'; ctx.lineWidth = 1.5;
-    roundRect(ctx, panelX + 50, panelY + panelH - 80, 200, 44, 22, true);
-    ctx.setLineDash([8, 4]); roundRect(ctx, panelX + 50, panelY + panelH - 80, 200, 44, 22, false); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = '#00FFC2'; ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif'; ctx.textAlign = 'center'; ctx.letterSpacing = '3px';
-    ctx.fillText('✦ VIP ENTRY ✦', panelX + 150, panelY + panelH - 52);
-
-
-    // --- Bottom Footer Area (Outside the Glass Panel) ---
-    const footY = panelY + panelH + 50;
-
-    // Contact Blocks
-    const cWidth = W / 3;
-
-    // Web
+    // ── FREE ENTRY BADGE ──────────────────────────────────────────────────────
+    const badY = pY + pH - 74;
+    ctx.fillStyle = '#E8F8EF';
+    roundRect(ctx, pX + 50, badY, 220, 44, 22, true);
+    ctx.strokeStyle = '#00B368'; ctx.lineWidth = 1.5;
+    ctx.setLineDash([7, 4]);
+    roundRect(ctx, pX + 50, badY, 220, 44, 22, false); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#00875A';
+    ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '3px';
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '600 14px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '3px'; ctx.fillText('WEBSITE', cWidth * 0.5, footY);
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '2px'; ctx.fillText('www.kanan.co', cWidth * 0.5, footY + 36);
+    ctx.fillText('✦ FREE ENTRY ✦', pX + 160, badY + 28);
 
-    // Separator
-    ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fillRect(cWidth - 1, footY - 10, 2, 50);
-
-    // Phone
-    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '600 14px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '3px'; ctx.fillText('HELPLINE 24x7', cWidth * 1.5, footY);
-    ctx.fillStyle = '#fff'; ctx.font = 'bold 22px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '2px'; ctx.fillText('+91 6356 568111', cWidth * 1.5, footY + 36);
-
-    // Separator
-    ctx.fillRect(cWidth * 2 - 1, footY - 10, 2, 50);
-
-    // Scan Label
-    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '600 14px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '3px'; ctx.fillText('DIGITAL TICKET', cWidth * 2.5, footY);
-
-    // Cool QR Graphic
-    const qrSize = 60; const qrX = (cWidth * 2.5) - (qrSize / 2); const qrY = footY + 15;
-    ctx.fillStyle = 'rgba(255,255,255,0.1)'; roundRect(ctx, qrX, qrY, qrSize, qrSize, 8, true);
-    ctx.fillStyle = '#fff';
-    for (let gx = 0; gx < 6; gx++) { for (let gy = 0; gy < 6; gy++) { if (Math.random() > 0.3) { ctx.fillRect(qrX + 6 + gx * 8.5, qrY + 6 + gy * 8.5, 6, 6); } } }
-
-
-    // Very Bottom Brand Bar
-    ctx.fillStyle = '#000'; ctx.fillRect(0, H - 70, W, 70);
-    ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '600 15px "Plus Jakarta Sans", sans-serif'; ctx.letterSpacing = '2px';
-    ctx.fillText('VADODARA    ·    CHENNAI    ·    TORONTO    ·    SURAT    ·    VALLABH VIDYANAGAR', W / 2, H - 30);
 }
 
 function roundRect(ctx, x, y, w, h, r, fill) {

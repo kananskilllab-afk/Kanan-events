@@ -9,7 +9,14 @@ const fs = require('fs');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        process.env.FRONTEND_URL || 'https://kanan-events.vercel.app'
+    ],
+    credentials: true
+}));
 app.use(express.json());
 
 // Setup multer storage
@@ -214,24 +221,29 @@ app.post('/api/hods', upload.single('vcard_image'), async (req, res) => {
 
 app.put('/api/hods/:id', upload.single('vcard_image'), async (req, res) => {
     try {
+        console.log('PUT /api/hods/:id', 'Body:', req.body, 'File:', req.file);
         const { name, designation, department, phone, email, branch, initials, color } = req.body;
 
         // If a new file is uploaded, update vcard_image. Otherwise, keep existing.
         if (req.file) {
             const vcard_image = `/uploads/${req.file.filename}`;
+            console.log('Using new file:', vcard_image);
             await pool.execute(
                 'UPDATE hods SET name=?, designation=?, department=?, phone=?, email=?, branch=?, vcard_image=?, initials=?, color=? WHERE id=?',
                 [name, designation || '', department || '', phone || '', email || '', branch || '', vcard_image, initials || '', color || '#0052CC', req.params.id]
             );
         } else {
+            console.log('No new file uploaded.');
             // Check if user specifically requested to remove the image (e.g. passing empty string)
             const removeImage = req.body.vcard_image === '';
             if (removeImage) {
+                console.log('Removing image.');
                 await pool.execute(
                     'UPDATE hods SET name=?, designation=?, department=?, phone=?, email=?, branch=?, vcard_image=NULL, initials=?, color=? WHERE id=?',
                     [name, designation || '', department || '', phone || '', email || '', branch || '', initials || '', color || '#0052CC', req.params.id]
                 );
             } else {
+                console.log('Keeping existing image.');
                 await pool.execute(
                     'UPDATE hods SET name=?, designation=?, department=?, phone=?, email=?, branch=?, initials=?, color=? WHERE id=?',
                     [name, designation || '', department || '', phone || '', email || '', branch || '', initials || '', color || '#0052CC', req.params.id]
@@ -239,7 +251,10 @@ app.put('/api/hods/:id', upload.single('vcard_image'), async (req, res) => {
             }
         }
         res.json({ success: true, message: 'HOD updated' });
-    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+    } catch (e) {
+        console.error('Error on PUT /api/hods:', e);
+        res.status(500).json({ success: false, message: e.message });
+    }
 });
 
 app.delete('/api/hods/:id', async (req, res) => {
@@ -457,6 +472,101 @@ app.delete('/api/events/:id', async (req, res) => {
     } catch (error) {
         console.error('Error deleting event:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+// POST bulk import events from CSV
+const csvParser = require('csv-parser');
+app.post('/api/events/bulk', upload.single('csv_file'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ success: false, message: 'No CSV file uploaded' });
+
+        const results = [];
+        fs.createReadStream(req.file.path)
+            .pipe(csvParser())
+            .on('data', (data) => results.push(data))
+            .on('end', async () => {
+                let inserted = 0;
+                for (const row of results) {
+                    console.log('--- CSV ROW ---', row);
+
+                    // Extract fields from CSV row based on user's exact headings
+                    const title = row['Main Event'] || row.title || row.Title;
+                    if (!title) {
+                        console.log('Skipping due to no title');
+                        continue; // Skip empty rows or rows without title
+                    }
+
+                    const month = (row.Month || row.month || 'march').toLowerCase();
+                    const type = 'seminar'; // Default, as it's not in their cols
+                    const ribbonColor = '';
+
+                    // Parse Date column (e.g. "15-Mar", "15 March", "15")
+                    let dateDayStr = row.Date || row.dateDayStr || row.Day || '';
+                    let dateMonthStr = row.Date || row.dateMonthStr || row.DateMonth || '';
+                    if (row.Date) {
+                        const dateParts = row.Date.split(/[- /\\]/);
+                        if (dateParts.length > 0) dateDayStr = dateParts[0];
+                        if (dateParts.length > 1) dateMonthStr = dateParts[1].substring(0, 3);
+                    } else if (dateDayStr.length > 2) {
+                        // If they just put a string in Day
+                        dateDayStr = dateDayStr.substring(0, 2);
+                    }
+
+                    // Map other fields
+                    const venue = row.Branch || row.venue || row.Venue || '';
+                    const time = row.Time || row.time || '';
+                    const activities = row.Activities || row.activities || '';
+                    const teamLead = row['Team Leader'] || row.teamLead || row['Team Lead'] || null;
+
+                    // Extra fields mapped to subtitle for visibility
+                    let subtitleArr = [];
+                    if (row.Department) subtitleArr.push(`Dept: ${row.Department}`);
+                    if (row['Contact Number']) subtitleArr.push(`Contact: ${row['Contact Number']}`);
+                    if (row['2nd Member']) subtitleArr.push(`Member 2: ${row['2nd Member']}`);
+                    const subtitle = subtitleArr.join(' | ');
+
+                    const isOnline = 0;
+                    const activitiesLabel = 'Activities';
+                    const searchKeys = '';
+                    const is_active = 1;
+
+                    // Handle tags
+                    let tagsJson = '[]';
+                    const rawTags = row.tags || row.Tags || '';
+                    if (rawTags) {
+                        const tagList = rawTags.split(',').map(t => t.trim().toLowerCase());
+                        const parsedTags = [];
+                        tagList.forEach(t => {
+                            if (t === 'canada') parsedTags.push({ id: 'canada', label: 'Canada', colorClass: 't-canada' });
+                            else if (t === 'uk') parsedTags.push({ id: 'uk', label: 'UK', colorClass: 't-uk' });
+                            else if (t === 'usa') parsedTags.push({ id: 'usa', label: 'USA', colorClass: 't-usa' });
+                            else if (t === 'australia') parsedTags.push({ id: 'australia', label: 'Australia', colorClass: 't-australia' });
+                            else if (t === 'germany') parsedTags.push({ id: 'germany', label: 'Germany', colorClass: 't-germany' });
+                            else if (t === 'ireland') parsedTags.push({ id: 'ireland', label: 'Ireland', colorClass: 't-ireland' });
+                            else if (t === 'dubai') parsedTags.push({ id: 'dubai', label: 'Dubai', colorClass: 't-dubai' });
+                            else if (t === 'ielts') parsedTags.push({ id: 'ielts', label: 'IELTS', colorClass: 't-coaching' });
+                            else if (t === 'pte') parsedTags.push({ id: 'pte', label: 'PTE', colorClass: 't-coaching' });
+                            else parsedTags.push({ id: t, label: t.charAt(0).toUpperCase() + t.slice(1), colorClass: 't-other' });
+                        });
+                        tagsJson = JSON.stringify(parsedTags);
+                    }
+
+                    await pool.execute(
+                        `INSERT INTO events (month, type, ribbonColor, dateDayStr, dateMonthStr, title, subtitle, venue, time, tags, isOnline, activitiesLabel, activities, searchKeys, is_active, is_featured, teamLead) 
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                        [month, type, ribbonColor, dateDayStr, dateMonthStr, title, subtitle, venue, time, tagsJson, isOnline, activitiesLabel, activities, searchKeys, is_active, 0, teamLead]
+                    );
+                    inserted++;
+                }
+
+                // Cleanup temp file
+                fs.unlink(req.file.path, () => { });
+                res.status(201).json({ success: true, message: `Successfully imported ${inserted} events!` });
+            });
+    } catch (error) {
+        console.error('Error in bulk import:', error);
+        res.status(500).json({ success: false, message: 'Internal server error during import' });
     }
 });
 

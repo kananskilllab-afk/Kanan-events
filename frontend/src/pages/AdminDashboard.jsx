@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import logoImg from '../assets/logo.png';
+import API_URL from '../config/api';
 
 function AdminDashboard() {
     const [events, setEvents] = useState([]);
@@ -75,14 +76,14 @@ function AdminDashboard() {
 
     const fetchEvents = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/events');
+            const res = await axios.get(`${API_URL}/api/events`);
             if (res.data.success) setEvents(res.data.data);
         } catch (err) { console.error(err); }
     };
 
     const fetchRegistrations = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/registrations');
+            const res = await axios.get(`${API_URL}/api/registrations`);
             if (res.data.success) setRegistrations(res.data.data);
         } catch (err) { console.error(err); }
     };
@@ -90,14 +91,14 @@ function AdminDashboard() {
     const deleteRegistration = async (id) => {
         if (!window.confirm('Delete this registration? This cannot be undone.')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/registrations/${id}`);
+            await axios.delete(`${API_URL}/api/registrations/${id}`);
             fetchRegistrations();
         } catch (err) { console.error(err); alert('Error deleting registration'); }
     };
 
     const fetchCallbacks = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/callbacks');
+            const res = await axios.get(`${API_URL}/api/callbacks`);
             if (res.data.success) setCallbacks(res.data.data);
         } catch (err) { console.error(err); }
     };
@@ -105,14 +106,14 @@ function AdminDashboard() {
     const deleteCallback = async (id) => {
         if (!window.confirm('Delete this callback request?')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/callbacks/${id}`);
+            await axios.delete(`${API_URL}/api/callbacks/${id}`);
             fetchCallbacks();
         } catch (err) { console.error(err); }
     };
 
     const fetchInterests = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/interests');
+            const res = await axios.get(`${API_URL}/api/interests`);
             if (res.data.success) setInterests(res.data.data);
         } catch (err) { console.error(err); }
     };
@@ -120,7 +121,7 @@ function AdminDashboard() {
     const addInterest = async () => {
         if (!newInterest.trim()) return;
         try {
-            await axios.post('http://localhost:5000/api/interests', { label: newInterest.trim() });
+            await axios.post(`${API_URL}/api/interests`, { label: newInterest.trim() });
             setNewInterest('');
             fetchInterests();
         } catch (err) { console.error(err); }
@@ -129,7 +130,7 @@ function AdminDashboard() {
     const deleteInterest = async (id) => {
         if (!window.confirm('Remove this interest option?')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/interests/${id}`);
+            await axios.delete(`${API_URL}/api/interests/${id}`);
             fetchInterests();
         } catch (err) { console.error(err); }
     };
@@ -137,7 +138,7 @@ function AdminDashboard() {
     // ── HOD CRUD ─────────────────────────────────────────
     const fetchHods = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/hods');
+            const res = await axios.get(`${API_URL}/api/hods`);
             if (res.data.success) setHods(res.data.data);
         } catch (err) { console.error(err); }
     };
@@ -165,9 +166,9 @@ function AdminDashboard() {
             }
 
             if (hodForm.id) {
-                await axios.put(`http://localhost:5000/api/hods/${hodForm.id}`, formDataMulti, { headers: { 'Content-Type': 'multipart/form-data' } });
+                await axios.put(`${API_URL}/api/hods/${hodForm.id}`, formDataMulti, { headers: { 'Content-Type': 'multipart/form-data' } });
             } else {
-                await axios.post('http://localhost:5000/api/hods', formDataMulti, { headers: { 'Content-Type': 'multipart/form-data' } });
+                await axios.post(`${API_URL}/api/hods`, formDataMulti, { headers: { 'Content-Type': 'multipart/form-data' } });
             }
             resetHodForm(); setEditingHod(false); fetchHods();
         } catch (err) { console.error(err); alert('Error saving HOD'); }
@@ -176,7 +177,7 @@ function AdminDashboard() {
     const deleteHod = async (id) => {
         if (!window.confirm('Delete this HOD? This cannot be undone.')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/hods/${id}`);
+            await axios.delete(`${API_URL}/api/hods/${id}`);
             fetchHods();
         } catch (err) { console.error(err); }
     };
@@ -190,7 +191,7 @@ function AdminDashboard() {
     // ── Counselling CRUD ──────────────────────────────────
     const fetchCounsellings = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/counsellings');
+            const res = await axios.get(`${API_URL}/api/counsellings`);
             if (res.data.success) setCounsellings(res.data.data);
         } catch (err) { console.error(err); }
     };
@@ -203,9 +204,9 @@ function AdminDashboard() {
         e.preventDefault();
         try {
             if (counsellingForm.id) {
-                await axios.put(`http://localhost:5000/api/counsellings/${counsellingForm.id}`, counsellingForm);
+                await axios.put(`${API_URL}/api/counsellings/${counsellingForm.id}`, counsellingForm);
             } else {
-                await axios.post('http://localhost:5000/api/counsellings', counsellingForm);
+                await axios.post(`${API_URL}/api/counsellings`, counsellingForm);
             }
             resetCounsellingForm(); setEditingCounselling(false); fetchCounsellings();
         } catch (err) { console.error(err); alert('Error saving counselling record'); }
@@ -214,7 +215,7 @@ function AdminDashboard() {
     const deleteCounselling = async (id) => {
         if (!window.confirm('Delete this counselling record? This cannot be undone.')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/counsellings/${id}`);
+            await axios.delete(`${API_URL}/api/counsellings/${id}`);
             fetchCounsellings();
         } catch (err) { console.error(err); }
     };
@@ -270,9 +271,9 @@ function AdminDashboard() {
             const payload = { ...formData };
             if (payload.type === 'other') payload.type = payload.customType;
             if (isEditing) {
-                await axios.put(`http://localhost:5000/api/events/${formData.id}`, payload);
+                await axios.put(`${API_URL}/api/events/${formData.id}`, payload);
             } else {
-                await axios.post('http://localhost:5000/api/events', payload);
+                await axios.post(`${API_URL}/api/events`, payload);
             }
             resetForm();
             fetchEvents();
@@ -296,7 +297,7 @@ function AdminDashboard() {
 
     const toggleActive = async (ev) => {
         try {
-            await axios.put(`http://localhost:5000/api/events/${ev.id}`, { ...ev, is_active: !ev.is_active });
+            await axios.put(`${API_URL}/api/events/${ev.id}`, { ...ev, is_active: !ev.is_active });
             fetchEvents();
         } catch (err) { console.error(err); }
     };
@@ -304,7 +305,7 @@ function AdminDashboard() {
     const deleteEvent = async (id) => {
         if (!window.confirm('Are you sure you want to delete this event?')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/events/${id}`);
+            await axios.delete(`${API_URL}/api/events/${id}`);
             fetchEvents();
         } catch (err) { console.error(err); }
     };
@@ -321,7 +322,7 @@ function AdminDashboard() {
     const exportCSV = () => {
         const params = new URLSearchParams();
         if (regFilter) params.set('event', regFilter);
-        window.open(`http://localhost:5000/api/registrations/export?${params}`, '_blank');
+        window.open(`${API_URL}/api/registrations/export?${params}`, '_blank');
     };
 
     const kananCount = filteredRegs.filter(r => r.student_type === 'kanan').length;
@@ -364,10 +365,7 @@ function AdminDashboard() {
                         👥 Registrations
                         {registrations.length > 0 && <span style={{ marginLeft: '8px', background: '#FF6B00', borderRadius: '50px', padding: '1px 8px', fontSize: '11px' }}>{registrations.length}</span>}
                     </button>
-                    <button onClick={() => setActiveTab('callbacks')} style={{ padding: '11px 14px', background: activeTab === 'callbacks' ? 'rgba(255,255,255,0.12)' : 'transparent', borderRadius: '8px', border: 'none', color: '#fff', fontWeight: '600', fontSize: '13.5px', cursor: 'pointer', textAlign: 'left', borderLeft: activeTab === 'callbacks' ? '3px solid #00B368' : '3px solid transparent' }}>
-                        📞 Callbacks
-                        {callbacks.length > 0 && <span style={{ marginLeft: '8px', background: '#00B368', borderRadius: '50px', padding: '1px 8px', fontSize: '11px' }}>{callbacks.length}</span>}
-                    </button>
+
                     <button onClick={() => { setActiveTab('hods'); fetchHods(); }} style={{ padding: '11px 14px', background: activeTab === 'hods' ? 'rgba(255,255,255,0.12)' : 'transparent', borderRadius: '8px', border: 'none', color: '#fff', fontWeight: '600', fontSize: '13.5px', cursor: 'pointer', textAlign: 'left', borderLeft: activeTab === 'hods' ? '3px solid #7B2FF7' : '3px solid transparent' }}>
                         👤 Manage HODs
                     </button>
@@ -390,7 +388,29 @@ function AdminDashboard() {
                 {/* ═══ EVENTS TAB ═══ */}
                 {activeTab === 'events' && (
                     <>
-                        <h2 style={{ marginBottom: '28px', color: '#0B1223' }}>Event Management</h2>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+                            <h2 style={{ color: '#0B1223', margin: 0 }}>Event Management</h2>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', background: '#0052CC', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}>
+                                ⬆ Import CSV
+                                <input type="file" accept=".csv" onChange={async (e) => {
+                                    const file = e.target.files[0];
+                                    if (!file) return;
+                                    const confirm = window.confirm('Import events from CSV?');
+                                    if (!confirm) { e.target.value = ''; return; }
+                                    const fdata = new FormData();
+                                    fdata.append('csv_file', file);
+                                    try {
+                                        const res = await axios.post(`${API_URL}/api/events/bulk`, fdata, { headers: { 'Content-Type': 'multipart/form-data' } });
+                                        alert(res.data.message || 'Events imported successfully!');
+                                        fetchEvents();
+                                    } catch (err) {
+                                        console.error(err);
+                                        alert(err.response?.data?.message || 'Error importing events');
+                                    }
+                                    e.target.value = '';
+                                }} style={{ display: 'none' }} />
+                            </label>
+                        </div>
                         <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-start' }}>
                             {/* Form */}
                             <div style={{ width: '360px', flexShrink: 0, backgroundColor: '#fff', padding: '24px', borderRadius: '12px', border: '1px solid #E2E8F0', boxShadow: '0 2px 10px rgba(11,18,35,0.04)', position: 'sticky', top: '36px' }}>
@@ -589,80 +609,7 @@ function AdminDashboard() {
                     </>
                 )}
 
-                {/* ═══ CALLBACKS TAB ═══ */}
 
-                {activeTab === 'callbacks' && (
-                    <>
-                        <h2 style={{ color: '#0B1223', marginBottom: '24px' }}>📞 Callback Requests</h2>
-                        <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-
-                            {/* Interests Manager */}
-                            <div style={{ width: '300px', flexShrink: 0, background: '#fff', borderRadius: '12px', border: '1px solid #E2E8F0', padding: '22px', boxShadow: '0 2px 10px rgba(11,18,35,0.04)' }}>
-                                <h4 style={{ margin: '0 0 6px', color: '#0B1223', fontSize: '14px', fontWeight: '800' }}>⚙️ "I'm Interested In" Options</h4>
-                                <p style={{ fontSize: '12px', color: '#7B8599', marginBottom: '16px' }}>These appear in the callback form dropdown on the public site.</p>
-                                <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-                                    <input value={newInterest} onChange={e => setNewInterest(e.target.value)} onKeyDown={e => e.key === 'Enter' && addInterest()} placeholder="New option..." style={{ ...inputStyle, flex: 1 }} />
-                                    <button onClick={addInterest} style={{ padding: '10px 16px', background: '#0052CC', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', fontSize: '18px' }}>+</button>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                    {interests.map((opt, i) => (
-                                        <div key={opt.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '9px 12px', background: '#F4F6FA', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                                            <span style={{ fontSize: '13px', color: '#0B1223' }}><span style={{ color: '#7B8599', marginRight: '8px', fontSize: '11px' }}>{i + 1}.</span>{opt.label}</span>
-                                            <button onClick={() => deleteInterest(opt.id)} style={{ background: 'none', border: 'none', color: '#E53935', cursor: 'pointer', fontSize: '18px', lineHeight: 1 }}>×</button>
-                                        </div>
-                                    ))}
-                                    {interests.length === 0 && <p style={{ fontSize: '13px', color: '#7B8599', textAlign: 'center', padding: '12px' }}>No options yet.</p>}
-                                </div>
-                            </div>
-
-                            {/* Callbacks Table */}
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                                    <div style={{ background: '#E8F1FF', padding: '14px 20px', borderRadius: '10px' }}>
-                                        <div style={{ fontSize: '24px', fontWeight: '800', color: '#0052CC' }}>{callbacks.length}</div>
-                                        <div style={{ fontSize: '11px', color: '#0052CC', fontWeight: '600' }}>Total Requests</div>
-                                    </div>
-                                    <button onClick={() => {
-                                        const csv = ['ID,Name,Mobile,Email,Interest,Date', ...callbacks.map(c => `${c.id},"${c.name}",${c.mobile},${c.email},"${c.interest || ''}",${new Date(c.created_at).toLocaleDateString('en-IN')}`)].join('\n');
-                                        const blob = new Blob([csv], { type: 'text/csv' });
-                                        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'callbacks.csv'; a.click();
-                                    }} style={{ padding: '10px 18px', background: '#00B368', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}>⬇ Export CSV</button>
-                                </div>
-                                <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
-                                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13.5px' }}>
-                                        <thead>
-                                            <tr style={{ background: '#F4F6FA', borderBottom: '1px solid #E2E8F0' }}>
-                                                {['#', 'Name', 'Mobile', 'Email', 'Interested In', 'Date', ''].map(h => (
-                                                    <th key={h} style={{ padding: '12px 14px', textAlign: 'left', fontSize: '11px', fontWeight: '800', color: '#7B8599', textTransform: 'uppercase', letterSpacing: '0.5px', whiteSpace: 'nowrap' }}>{h}</th>
-                                                ))}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {callbacks.map((c, i) => (
-                                                <tr key={c.id} style={{ borderBottom: '1px solid #F4F6FA', background: i % 2 === 0 ? '#fff' : '#FAFBFC' }}>
-                                                    <td style={tdStyle}>{c.id}</td>
-                                                    <td style={{ ...tdStyle, fontWeight: '600' }}>{c.name}</td>
-                                                    <td style={tdStyle}>{c.mobile}</td>
-                                                    <td style={{ ...tdStyle, color: '#0052CC' }}>{c.email}</td>
-                                                    <td style={tdStyle}>{c.interest ? <span style={{ background: '#E8F1FF', color: '#0052CC', padding: '3px 10px', borderRadius: '50px', fontSize: '11px', fontWeight: '600' }}>{c.interest}</span> : '—'}</td>
-                                                    <td style={{ ...tdStyle, color: '#7B8599', whiteSpace: 'nowrap' }}>{new Date(c.created_at).toLocaleDateString('en-IN')}</td>
-                                                    <td style={tdStyle}><button onClick={() => deleteCallback(c.id)} style={{ padding: '4px 10px', fontSize: '11px', borderRadius: '5px', border: '1px solid #E53935', color: '#E53935', background: '#fff', cursor: 'pointer', fontWeight: '700' }}>Delete</button></td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    {callbacks.length === 0 && (
-                                        <div style={{ textAlign: 'center', padding: '60px 20px', color: '#7B8599' }}>
-                                            <div style={{ fontSize: '32px', marginBottom: '10px' }}>📞</div>
-                                            <h3>No callback requests yet</h3>
-                                            <p style={{ fontSize: '13px' }}>Requests from "Book Free Session" will appear here.</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                )}
 
                 {/* ─── HODs TAB ─────────────────────────────── */}
                 {activeTab === 'hods' && (
@@ -723,9 +670,13 @@ function AdminDashboard() {
                                     <div>
                                         <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#7B8599', marginBottom: '5px' }}>Custom Visiting Card Image (Overrides Auto-gen)</label>
                                         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                            <input type="file" accept="image/*" onChange={e => setHodForm(f => ({ ...f, vcard_image: e.target.files[0] }))} style={{ ...inputStyle, padding: '8px 14px' }} />
+                                            <input id="vcard_upload_input" type="file" accept="image/*" onChange={e => setHodForm(f => ({ ...f, vcard_image: e.target.files[0] }))} style={{ ...inputStyle, padding: '8px 14px' }} />
                                             {(hodForm.vcard_image || hodForm.existing_image) && (
-                                                <button type="button" onClick={() => setHodForm(f => ({ ...f, vcard_image: null, existing_image: null }))} style={{ padding: '8px', background: '#ffebee', color: '#d32f2f', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', flexShrink: 0 }}>Remove</button>
+                                                <button type="button" onClick={() => {
+                                                    setHodForm(f => ({ ...f, vcard_image: null, existing_image: null }));
+                                                    const fileInput = document.getElementById('vcard_upload_input');
+                                                    if (fileInput) fileInput.value = '';
+                                                }} style={{ padding: '8px', background: '#ffebee', color: '#d32f2f', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', flexShrink: 0 }}>Remove</button>
                                             )}
                                         </div>
                                         {(hodForm.existing_image && !hodForm.vcard_image) && (
@@ -821,10 +772,10 @@ function AdminDashboard() {
                                     <div>
                                         <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#7B8599', marginBottom: '5px' }}>Status</label>
                                         <select value={counsellingForm.status} onChange={e => setCounsellingForm(f => ({ ...f, status: e.target.value }))} style={inputStyle}>
-                                            <option value="Pending">Pending</option>
-                                            <option value="In Progress">In Progress</option>
-                                            <option value="Completed">Completed</option>
-                                            <option value="Closed">Closed</option>
+                                            <option value="Pending">🕐 Pending</option>
+                                            <option value="Counselling Done">✅ Counselling Done</option>
+                                            <option value="Reschedule">🔄 Reschedule</option>
+                                            <option value="Cancelled">❌ Cancelled</option>
                                         </select>
                                     </div>
                                 </div>
@@ -854,8 +805,9 @@ function AdminDashboard() {
                             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13.5px' }}>
                                 <thead>
                                     <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', color: '#7B8599', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                                        <th style={{ padding: '14px' }}>Date</th>
+                                        <th style={{ padding: '14px' }}>Registered On</th>
                                         <th style={{ padding: '14px' }}>Student</th>
+                                        <th style={{ padding: '14px' }}>Timing / Date</th>
                                         <th style={{ padding: '14px' }}>Country</th>
                                         <th style={{ padding: '14px' }}>Counselor</th>
                                         <th style={{ padding: '14px' }}>Status</th>
@@ -863,33 +815,60 @@ function AdminDashboard() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredCounsellings.map(c => (
-                                        <tr key={c.id} style={{ borderBottom: '1px solid #F0F3F8' }}>
-                                            <td style={tdStyle}>{new Date(c.created_at).toLocaleDateString()}</td>
-                                            <td style={tdStyle}>
-                                                <div style={{ fontWeight: '600', color: '#0B1223' }}>{c.name}</div>
-                                                <div style={{ fontSize: '12px', color: '#7B8599' }}>{c.mobile}</div>
-                                            </td>
-                                            <td style={tdStyle}>{c.preferred_country || '-'}</td>
-                                            <td style={tdStyle}>{c.assigned_counselor || '-'}</td>
-                                            <td style={tdStyle}>
-                                                <span style={{
-                                                    padding: '4px 10px', borderRadius: '50px', fontSize: '11px', fontWeight: '700',
-                                                    background: c.status === 'Completed' ? '#E0FFF0' : c.status === 'In Progress' ? '#FFF0E0' : c.status === 'Closed' ? '#F4F6FA' : '#E8F1FF',
-                                                    color: c.status === 'Completed' ? '#00B368' : c.status === 'In Progress' ? '#FF6B00' : c.status === 'Closed' ? '#7B8599' : '#0052CC'
-                                                }}>
-                                                    {c.status}
-                                                </span>
-                                            </td>
-                                            <td style={{ ...tdStyle, textAlign: 'right' }}>
-                                                <button onClick={() => { startEditCounselling(c); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ padding: '5px 10px', marginRight: '6px', fontSize: '12px', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#fff', color: '#3D4A63', cursor: 'pointer' }}>Edit</button>
-                                                <button onClick={() => deleteCounselling(c.id)} style={{ padding: '5px 10px', fontSize: '12px', borderRadius: '6px', border: '1px solid #FEE2E2', background: '#FEF2F2', color: '#E53935', cursor: 'pointer' }}>Delete</button>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {filteredCounsellings.map(c => {
+                                        // Extract timing info from notes (saved by booking modal)
+                                        const timingMatch = c.notes ? c.notes.match(/📅\s*([^·]+)·\s*🕐\s*([^·]+)/) : null;
+                                        const sessionDate = timingMatch ? timingMatch[1].trim() : null;
+                                        const sessionTime = timingMatch ? timingMatch[2].trim() : null;
+                                        const statusColors = {
+                                            'Counselling Done': { bg: '#E0FFF0', color: '#00B368' },
+                                            'Reschedule': { bg: '#FFF0E0', color: '#FF6B00' },
+                                            'Cancelled': { bg: '#FEF2F2', color: '#E53935' },
+                                            'Pending': { bg: '#E8F1FF', color: '#0052CC' }
+                                        };
+                                        const sc = statusColors[c.status] || { bg: '#F4F6FA', color: '#7B8599' };
+                                        return (
+                                            <tr key={c.id} style={{ borderBottom: '1px solid #F0F3F8' }}>
+                                                <td style={tdStyle}>{new Date(c.created_at).toLocaleDateString()}</td>
+                                                <td style={tdStyle}>
+                                                    <div style={{ fontWeight: '600', color: '#0B1223' }}>{c.name}</div>
+                                                    <div style={{ fontSize: '12px', color: '#7B8599' }}>{c.mobile}</div>
+                                                </td>
+                                                <td style={tdStyle}>
+                                                    {sessionDate ? (
+                                                        <div>
+                                                            <div style={{ fontWeight: '600', color: '#0B1223', fontSize: '13px' }}>{sessionDate}</div>
+                                                            <div style={{ fontSize: '12px', color: '#7B8599' }}>🕐 {sessionTime}</div>
+                                                        </div>
+                                                    ) : <span style={{ color: '#B0BAC9' }}>—</span>}
+                                                </td>
+                                                <td style={tdStyle}>{c.preferred_country || '-'}</td>
+                                                <td style={tdStyle}>{c.assigned_counselor || '-'}</td>
+                                                <td style={tdStyle}>
+                                                    <select
+                                                        value={c.status}
+                                                        onChange={async e => {
+                                                            await fetch(`${API_URL}/api/counsellings/${c.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...c, status: e.target.value }) });
+                                                            fetchCounsellings();
+                                                        }}
+                                                        style={{ padding: '4px 10px', borderRadius: '50px', fontSize: '11px', fontWeight: '700', border: 'none', cursor: 'pointer', background: sc.bg, color: sc.color, appearance: 'auto' }}
+                                                    >
+                                                        <option value="Pending">🕐 Pending</option>
+                                                        <option value="Counselling Done">✅ Counselling Done</option>
+                                                        <option value="Reschedule">🔄 Reschedule</option>
+                                                        <option value="Cancelled">❌ Cancelled</option>
+                                                    </select>
+                                                </td>
+                                                <td style={{ ...tdStyle, textAlign: 'right' }}>
+                                                    <button onClick={() => { startEditCounselling(c); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ padding: '5px 10px', marginRight: '6px', fontSize: '12px', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#fff', color: '#3D4A63', cursor: 'pointer' }}>Edit</button>
+                                                    <button onClick={() => deleteCounselling(c.id)} style={{ padding: '5px 10px', fontSize: '12px', borderRadius: '6px', border: '1px solid #FEE2E2', background: '#FEF2F2', color: '#E53935', cursor: 'pointer' }}>Delete</button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                     {filteredCounsellings.length === 0 && (
                                         <tr>
-                                            <td colSpan="6" style={{ textAlign: 'center', padding: '40px 20px', color: '#7B8599' }}>No counselling records found.</td>
+                                            <td colSpan="7" style={{ textAlign: 'center', padding: '40px 20px', color: '#7B8599' }}>No counselling records found.</td>
                                         </tr>
                                     )}
                                 </tbody>

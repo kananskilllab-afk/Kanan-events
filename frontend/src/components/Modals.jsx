@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = `${API_URL}/api`;
 
 export function RegisterModal({ isOpen, onClose, eventDetails, onSuccess }) {
   const [studentType, setStudentType] = useState('kanan');

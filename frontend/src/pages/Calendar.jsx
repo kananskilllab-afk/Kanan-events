@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import EventCard from '../components/EventCard';
@@ -33,7 +34,7 @@ function Calendar() {
     const [bookingOpen, setBookingOpen] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/events?activeOnly=true')
+        axios.get(`${API_URL}/api/events?activeOnly=true`)
             .then(res => { if (res.data.success) setEventsData(res.data.data); })
             .catch(err => console.error('Error fetching events:', err));
     }, []);
@@ -66,7 +67,7 @@ function Calendar() {
             <Navbar onOpenCallback={() => setCallbackOpen(true)} onOpenBooking={() => setBookingOpen(true)} />
 
             {/* HERO */}
-            <Hero onOpenRegister={setRegisterEvent} />
+            <Hero onOpenBooking={() => setBookingOpen(true)} onOpenRegister={setRegisterEvent} onOpenInvite={setInviteData} />
 
             {/* MONTH/TYPE FILTER NAV */}
             <div className="month-nav">

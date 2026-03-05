@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { counsellors } from '../data/teamData';
+import React, { useState, useEffect } from 'react';
+import API_URL from '../config/api';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const morningTimes = ['09:00 AM', '09:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'];
@@ -37,6 +37,28 @@ export function BookingModal({ isOpen, onClose }) {
     const [emailTab, setEmailTab] = useState('student');
     const [form, setForm] = useState({ name: '', phone: '', email: '', dest: '', edu: '', notes: '' });
 
+    const [counsellors, setCounsellors] = useState([]);
+
+    useEffect(() => {
+        fetch(`${API_URL}/api/hods`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    // Map HOD fields to the shape expected by the counsellor card UI
+                    const mapped = data.data.map(h => ({
+                        name: h.name,
+                        dept: h.department || h.designation || '',
+                        designation: h.designation || '',
+                        initials: h.initials || h.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase(),
+                        color: h.color || '#0052CC',
+                        email: h.email || ''
+                    }));
+                    setCounsellors(mapped);
+                }
+            })
+            .catch(err => console.error('Failed to load counsellors:', err));
+    }, []);
+
     const reset = () => { setStep(1); setMode('inperson'); setSelDate(null); setDateLabel(''); setSelTime(null); setSelCounsellor(null); setConfirmed(false); setBooking(null); setEmailTab('student'); setForm({ name: '', phone: '', email: '', dest: '', edu: '', notes: '' }); };
 
     if (!isOpen) return null;
@@ -68,14 +90,35 @@ export function BookingModal({ isOpen, onClose }) {
         );
     });
 
-    const confirmBooking = (e) => {
+    const confirmBooking = async (e) => {
         e.preventDefault();
         const bookRef = 'KN-' + Date.now().toString(36).toUpperCase().slice(-6);
-        setBooking({
+        const bookingData = {
             ...form, bookRef, counsellor: selCounsellor, mode, dateLabel, time: selTime,
             icsContent: generateICS(selDate, selTime, form.name, selCounsellor, mode)
-        });
+        };
+
+        // Save booking to Admin Counselling database
+        try {
+            await fetch(`${API_URL}/api/counsellings`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: form.name,
+                    mobile: form.phone,
+                    preferred_country: form.dest || '',
+                    assigned_counselor: selCounsellor?.name || '',
+                    status: 'Pending',
+                    notes: `📅 ${dateLabel} · 🕐 ${selTime} · ${mode === 'inperson' ? 'In-Person' : 'Online'} · Ref: ${bookRef}${form.notes ? ' · ' + form.notes : ''}`
+                })
+            });
+        } catch (err) {
+            console.error('Could not save booking to counselling records:', err);
+        }
+
+        setBooking(bookingData);
         setConfirmed(true);
+
     };
 
     const downloadICS = () => {
@@ -146,10 +189,7 @@ export function BookingModal({ isOpen, onClose }) {
                         </div>
                     </div>
 
-                    <div className="confirm-actions-grid">
-                        <button className="confirm-action-btn" onClick={downloadICS}><div className="ca-icon" style={{ background: '#E8F1FF', color: '#0052CC' }}>📅</div><span className="ca-title">Add to Calendar</span><span className="ca-desc">Download .ics</span></button>
-                        <button className="confirm-action-btn" onClick={googleCal}><div className="ca-icon" style={{ background: '#FFF0E0', color: '#FF6B00' }}>📆</div><span className="ca-title">Google Calendar</span><span className="ca-desc">Add directly</span></button>
-                    </div>
+                    <button className="confirm-action-btn" onClick={googleCal} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 20px', border: '1.5px solid #E2E8F0', borderRadius: '12px', background: '#fff', cursor: 'pointer', textAlign: 'left' }}><div className="ca-icon" style={{ background: '#E8F4FF', color: '#1a73e8', flexShrink: 0 }}>📆</div><span className="ca-title" style={{ fontWeight: '700', fontSize: '15px', color: '#0B1223' }}>Add to Google Calendar</span><span className="ca-desc" style={{ fontSize: '12px', color: '#00B368', fontWeight: '600', marginLeft: 'auto' }}>Add directly →</span></button>
                     <button className="btn btn-primary btn-lg" style={{ width: '100%', justifyContent: 'center', marginTop: '10px' }} onClick={() => { onClose(); reset(); }}>Done — Close</button>
                 </div>
             </div>

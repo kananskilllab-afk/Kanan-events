@@ -19,54 +19,6 @@ function Footer() {
                 </div>
             </section>
 
-            {/* FOOTER */}
-            <footer className="footer">
-                <div className="container">
-                    <div className="footer-grid">
-                        <div>
-                            <div style={{ marginBottom: '16px' }}>
-                                <img src={logoUrl} alt="Kanan.co" style={{ height: '40px', objectFit: 'contain', background: '#fff', borderRadius: '10px', padding: '4px 10px' }} />
-                            </div>
-                            <p>Kanan International — your trusted partner for study abroad, test preparation, and immigration services since 2001.</p>
-                        </div>
-                        <div>
-                            <h4>Services</h4>
-                            <ul>
-                                <li><a href="#">Study Abroad</a></li>
-                                <li><a href="#">IELTS Coaching</a></li>
-                                <li><a href="#">PTE Preparation</a></li>
-                                <li><a href="#">Education Loans</a></li>
-                                <li><a href="#">Immigration</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4>Destinations</h4>
-                            <ul>
-                                <li><a href="#">Canada</a></li>
-                                <li><a href="#">UK</a></li>
-                                <li><a href="#">USA</a></li>
-                                <li><a href="#">Australia</a></li>
-                                <li><a href="#">Germany</a></li>
-                                <li><a href="#">Europe</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4>Contact</h4>
-                            <ul>
-                                <li>📞 +91 265 235 4400</li>
-                                <li style={{ color: '#7BFFC4', fontWeight: '700' }}>📱 24×7: +91 6356 568111</li>
-                                <li>✉️ info@kanan.co</li>
-                                <li>🌐 www.kanan.co</li>
-                                <li>📍 Vadodara • Chennai • Toronto</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="footer-bottom">
-                        <span>© 2026 Kanan International. All rights reserved.</span>
-                        <span>Est. 2001 &nbsp;•&nbsp; 26+ Branches Across India</span>
-                    </div>
-                </div>
-            </footer>
 
             {/* FLOATING BUTTONS */}
             <FloatingButtons />

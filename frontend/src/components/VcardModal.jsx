@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import API_URL from '../config/api';
 
 function shadeColor(hex, percent) {
     hex = hex.replace('#', '');
@@ -27,10 +28,33 @@ function rr(ctx, x, y, w, h, r, fill) {
 }
 
 function drawVcard(canvas, L) {
-    const ctx = canvas.getContext('2d');
     const W = 600, H = 960;
+
+    // If a custom image is provided, draw that instead
+    if (L.vcard_image) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous'; // Important for CORS if needed
+        img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+        };
+        img.onerror = () => {
+            console.error('Failed to load custom vcard image, falling back to auto-gen');
+            drawAutoGenVcard(canvas, L, W, H);
+        };
+        img.src = `${API_URL}${L.vcard_image}`;
+        return;
+    }
+
+    drawAutoGenVcard(canvas, L, W, H);
+}
+
+function drawAutoGenVcard(canvas, L, W, H) {
+    const ctx = canvas.getContext('2d');
     canvas.width = W; canvas.height = H;
-    const accent = L.color;
+    const accent = L.color || '#0052CC';
 
     ctx.fillStyle = '#F8FAFC'; ctx.fillRect(0, 0, W, H);
 
@@ -75,13 +99,13 @@ function drawVcard(canvas, L) {
 
     // Designation badge
     ctx.font = 'bold 14px "Plus Jakarta Sans",sans-serif';
-    const desigText = L.designation.toUpperCase();
+    const desigText = (L.designation || '').toUpperCase();
     const desigW = ctx.measureText(desigText).width + 40;
     ctx.fillStyle = accent; rr(ctx, (W - desigW) / 2, 312, desigW, 32, 16, true);
     ctx.fillStyle = '#fff'; ctx.fillText(desigText, W / 2, 333);
 
     // Department
-    ctx.fillStyle = '#7B8599'; ctx.font = '15px "Plus Jakarta Sans",sans-serif'; ctx.fillText(L.department, W / 2, 370);
+    ctx.fillStyle = '#7B8599'; ctx.font = '15px "Plus Jakarta Sans",sans-serif'; ctx.fillText(L.department || '', W / 2, 370);
 
     // Divider
     ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = 1.5;
@@ -90,11 +114,10 @@ function drawVcard(canvas, L) {
     // Contact rows
     const iconX = 60, textX = 108;
     const rows = [
-        { icon: '📞', label: 'PHONE', value: L.phone },
-        { icon: '📱', label: '24×7 HELPLINE', value: '+91 6356 568111' },
-        { icon: '✉️', label: 'EMAIL', value: L.email },
+        { icon: '📞', label: 'PHONE', value: L.phone || '' },
+        { icon: '✉️', label: 'EMAIL', value: L.email || '' },
         { icon: '🌐', label: 'WEBSITE', value: 'Kanan.co' },
-        { icon: '📍', label: 'OFFICE', value: L.branch }
+        { icon: '📍', label: 'OFFICE', value: L.branch || '' }
     ];
     rows.forEach((r, i) => {
         const ry = 430 + i * 58;
@@ -119,8 +142,7 @@ function drawVcard(canvas, L) {
     ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = 'bold 16px Sora,sans-serif'; ctx.fillText('Connect with us', 56, bannerY + 34);
     ctx.fillStyle = 'rgba(255,255,255,.7)'; ctx.font = '12px "Plus Jakarta Sans",sans-serif';
     ctx.fillText('📞 +91 265 235 4400', 56, bannerY + 54);
-    ctx.fillText('📱 24×7: +91 6356 568111', 56, bannerY + 72);
-    ctx.fillText('🌐 www.kanan.co', 56, bannerY + 90);
+    ctx.fillText('🌐 www.kanan.co', 56, bannerY + 72);
 
     // Footer stats
     ctx.fillStyle = '#A0AEC0'; ctx.font = '11px "Plus Jakarta Sans",sans-serif'; ctx.textAlign = 'center';
@@ -135,7 +157,7 @@ export function VcardModal({ isOpen, onClose, leaderName }) {
     useEffect(() => {
         if (isOpen && leaderName) {
             setLoading(true);
-            axios.get('http://localhost:5000/api/hods')
+            axios.get(`${API_URL}/api/hods`)
                 .then(res => {
                     if (res.data.success) {
                         // Find by exact name or closest partial match
@@ -184,7 +206,7 @@ export function VcardModal({ isOpen, onClose, leaderName }) {
     const download = async () => {
         if (leader.vcard_image) {
             try {
-                const response = await fetch(`http://localhost:5000${leader.vcard_image}`);
+                const response = await fetch(`${API_URL}${leader.vcard_image}`);
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
@@ -217,7 +239,7 @@ export function VcardModal({ isOpen, onClose, leaderName }) {
                     <div className="vcard-preview-wrap" style={{ display: 'flex', justifyContent: 'center' }}>
                         {leader.vcard_image ? (
                             <img
-                                src={`http://localhost:5000${leader.vcard_image}`}
+                                src={`${API_URL}${leader.vcard_image}`}
                                 alt={`${leader.name} Visiting Card`}
                                 style={{ width: '100%', maxWidth: '100%', display: 'block', borderRadius: '14px', objectFit: 'contain' }}
                             />
@@ -225,12 +247,7 @@ export function VcardModal({ isOpen, onClose, leaderName }) {
                             <canvas ref={canvasRef} className="vcard-canvas" style={{ width: '100%', display: 'block', borderRadius: '14px' }} />
                         )}
                     </div>
-                    <div className="vcard-quick-contact">
-                        <a className="vcard-qc-btn call" href={`tel:${phoneClean}`}>📞 Call Direct</a>
-                        <a className="vcard-qc-btn wa" href="https://wa.me/916356568111" target="_blank" rel="noreferrer">💬 WhatsApp 24×7</a>
-                        <a className="vcard-qc-btn email" href={`mailto:${leader.email}`}>✉️ Email</a>
-                        <a className="vcard-qc-btn call" href="tel:+916356568111" style={{ borderColor: '#00B368', color: '#00B368' }}>📱 24×7 Helpline</a>
-                    </div>
+
                     <div style={{ marginTop: '12px' }}>
                         <button className="btn btn-primary btn-lg" style={{ width: '100%', justifyContent: 'center' }} onClick={download}>⬇ Save Card</button>
                     </div>

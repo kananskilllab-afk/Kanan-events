@@ -1,7 +1,7 @@
 import React from 'react';
 import logoUrl from '../assets/logo.png';
 
-function Navbar({ onOpenCallback, onOpenBooking }) {
+function Navbar({ onOpenBooking }) {
     return (
         <>
             {/* TOPBAR */}
@@ -20,8 +20,7 @@ function Navbar({ onOpenCallback, onOpenBooking }) {
                     </a>
                     <div className="nav-actions">
                         <a href="tel:+916356568111" className="btn btn-helpline">📱 24×7: 6356 568111</a>
-                        <button className="btn btn-outline" onClick={onOpenCallback}>Request Callback</button>
-                        <button className="btn btn-primary" onClick={onOpenBooking}>Free Counselling</button>
+                        <button className="btn btn-primary" onClick={onOpenBooking}>Book Free Counselling</button>
                     </div>
                 </div>
             </nav>
