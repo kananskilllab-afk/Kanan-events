@@ -10,27 +10,25 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:5174',
-        process.env.FRONTEND_URL || 'https://kanan-events.vercel.app'
-    ],
+    origin: function (origin, callback) {
+        // Allow requests with no origin (e.g. mobile apps, curl)
+        if (!origin) return callback(null, true);
+        // Allow localhost and any vercel.app subdomain
+        if (
+            origin.startsWith('http://localhost') ||
+            origin.endsWith('.vercel.app') ||
+            (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL)
+        ) {
+            return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true
 }));
 app.use(express.json());
 
-// Setup multer storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const dir = path.join(__dirname, 'uploads');
-        if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-        cb(null, dir);
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname.replace(/[^a-zA-Z0-9.-]/g, ''));
-    }
-});
-const upload = multer({ storage: storage });
+// Use memory storage for multer (safer on Railway's ephemeral filesystem)
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -482,7 +480,8 @@ app.post('/api/events/bulk', upload.single('csv_file'), async (req, res) => {
         if (!req.file) return res.status(400).json({ success: false, message: 'No CSV file uploaded' });
 
         const results = [];
-        fs.createReadStream(req.file.path)
+        const { Readable } = require('stream');
+        Readable.from(req.file.buffer)
             .pipe(csvParser())
             .on('data', (data) => results.push(data))
             .on('end', async () => {
@@ -575,8 +574,7 @@ app.post('/api/events/bulk', upload.single('csv_file'), async (req, res) => {
                     }
                 }
 
-                // Cleanup temp file
-                fs.unlink(req.file.path, () => { });
+                // No temp file to clean up (using memory storage)
                 res.status(201).json({
                     success: true,
                     message: `Successfully imported ${inserted} events!${errors.length ? ` (${errors.length} rows skipped due to errors)` : ''}`
