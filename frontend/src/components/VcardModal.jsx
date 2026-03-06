@@ -30,10 +30,10 @@ function rr(ctx, x, y, w, h, r, fill) {
 function drawVcard(canvas, L) {
     const W = 600, H = 960;
 
-    // If a custom image is provided, draw that instead
-    if (L.vcard_image) {
+    // Only use a custom image if it's a valid base64 data URL
+    // (old DB records may have broken /uploads/... paths — ignore those)
+    if (L.vcard_image && L.vcard_image.startsWith('data:')) {
         const img = new Image();
-        img.crossOrigin = 'anonymous'; // Important for CORS if needed
         img.onload = () => {
             canvas.width = img.width;
             canvas.height = img.height;
@@ -44,7 +44,7 @@ function drawVcard(canvas, L) {
             console.error('Failed to load custom vcard image, falling back to auto-gen');
             drawAutoGenVcard(canvas, L, W, H);
         };
-        img.src = `${API_URL}${L.vcard_image}`;
+        img.src = L.vcard_image;
         return;
     }
 
@@ -206,18 +206,25 @@ export function VcardModal({ isOpen, onClose, leaderName }) {
     const download = async () => {
         if (leader.vcard_image) {
             try {
-                const response = await fetch(`${API_URL}${leader.vcard_image}`);
-                const blob = await response.blob();
+                let blob;
+                if (leader.vcard_image.startsWith('data:')) {
+                    // Base64 data URL — convert to blob directly
+                    const res = await fetch(leader.vcard_image);
+                    blob = await res.blob();
+                } else {
+                    // Legacy path — fetch from API
+                    const res = await fetch(`${API_URL}${leader.vcard_image}`);
+                    blob = await res.blob();
+                }
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = `kanan-${leader.name.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}-card`;
-                document.body.appendChild(link);
-                link.click();
+                document.body.appendChild(link); link.click();
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(url);
             } catch (error) {
-                console.error('Error downloading custom vcard image', error);
+                console.error('Error downloading vcard image', error);
                 alert('Could not download image.');
             }
         } else {
@@ -237,9 +244,9 @@ export function VcardModal({ isOpen, onClose, leaderName }) {
                 </div>
                 <div className="modal-body">
                     <div className="vcard-preview-wrap" style={{ display: 'flex', justifyContent: 'center' }}>
-                        {leader.vcard_image ? (
+                        {(leader.vcard_image && leader.vcard_image.startsWith('data:')) ? (
                             <img
-                                src={`${API_URL}${leader.vcard_image}`}
+                                src={leader.vcard_image}
                                 alt={`${leader.name} Visiting Card`}
                                 style={{ width: '100%', maxWidth: '100%', display: 'block', borderRadius: '14px', objectFit: 'contain' }}
                             />

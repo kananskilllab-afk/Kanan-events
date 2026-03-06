@@ -27,33 +27,29 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Use memory storage for multer (safer on Railway's ephemeral filesystem)
+// Use memory storage - disk doesn't persist on Railway's ephemeral filesystem.
+// vcard images are stored as base64 in the DB instead.
 const upload = multer({ storage: multer.memoryStorage() });
+// Separate memory-storage instance for CSV bulk import
+const uploadMemory = multer({ storage: multer.memoryStorage() });
 
-// Serve uploaded files statically
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve uploaded files statically (for local dev if ever needed)
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+app.use('/uploads', express.static(uploadsDir));
 
 // Database Connection
 let pool;
 
 async function initDB() {
     try {
-        // First connect without database to create it if it doesn't exist
-        const connection = await mysql.createConnection({
-            host: process.env.DB_HOST || 'localhost',
-            user: process.env.DB_USER || 'root',
-            password: process.env.DB_PASSWORD || '',
-        });
-
-        await connection.query('CREATE DATABASE IF NOT EXISTS kanan_events;');
-        await connection.end();
-
-        // Now create the pool with the database selected
+        // Connect directly to the configured database (Railway already has it)
         pool = mysql.createPool({
             host: process.env.DB_HOST || 'localhost',
-            user: process.env.DB_USER || 'root',
-            password: process.env.DB_PASSWORD || '',
-            database: process.env.DB_NAME || 'kanan_events',
+            port: parseInt(process.env.DB_PORT || process.env.MYSQLPORT || '3306'),
+            user: process.env.DB_USER || process.env.MYSQLUSER || 'root',
+            password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || '',
+            database: process.env.DB_NAME || process.env.MYSQLDATABASE || 'kanan_events',
             waitForConnections: true,
             connectionLimit: 10,
             queueLimit: 0
@@ -129,6 +125,10 @@ async function initDB() {
 
         // Ensure is_featured column exists
         await pool.query(`ALTER TABLE events ADD COLUMN IF NOT EXISTS is_featured TINYINT(1) DEFAULT 0`).catch(() => { });
+
+        // Ensure vcard_image column is wide enough for base64 data URLs
+        await pool.query(`ALTER TABLE hods MODIFY COLUMN vcard_image MEDIUMTEXT`).catch(() => { });
+
 
         // Seed default interests if table is empty
         const [existing] = await pool.query('SELECT COUNT(*) as cnt FROM callback_interests');
@@ -206,7 +206,12 @@ app.get('/api/hods/:id', async (req, res) => {
 app.post('/api/hods', upload.single('vcard_image'), async (req, res) => {
     try {
         const { name, designation, department, phone, email, branch, initials, color } = req.body;
-        const vcard_image = req.file ? `/uploads/${req.file.filename}` : null;
+        // Store image as base64 data URL so it works on any host (no filesystem needed)
+        let vcard_image = null;
+        if (req.file) {
+            const mime = req.file.mimetype || 'image/png';
+            vcard_image = `data:${mime};base64,${req.file.buffer.toString('base64')}`;
+        }
 
         if (!name) return res.status(400).json({ success: false, message: 'Name is required' });
         const [result] = await pool.execute(
@@ -217,31 +222,28 @@ app.post('/api/hods', upload.single('vcard_image'), async (req, res) => {
     } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
 
+
 app.put('/api/hods/:id', upload.single('vcard_image'), async (req, res) => {
     try {
-        console.log('PUT /api/hods/:id', 'Body:', req.body, 'File:', req.file);
         const { name, designation, department, phone, email, branch, initials, color } = req.body;
 
-        // If a new file is uploaded, update vcard_image. Otherwise, keep existing.
         if (req.file) {
-            const vcard_image = `/uploads/${req.file.filename}`;
-            console.log('Using new file:', vcard_image);
+            // New file uploaded — convert to base64 data URL and save
+            const mime = req.file.mimetype || 'image/png';
+            const vcard_image = `data:${mime};base64,${req.file.buffer.toString('base64')}`;
             await pool.execute(
                 'UPDATE hods SET name=?, designation=?, department=?, phone=?, email=?, branch=?, vcard_image=?, initials=?, color=? WHERE id=?',
                 [name, designation || '', department || '', phone || '', email || '', branch || '', vcard_image, initials || '', color || '#0052CC', req.params.id]
             );
         } else {
-            console.log('No new file uploaded.');
-            // Check if user specifically requested to remove the image (e.g. passing empty string)
             const removeImage = req.body.vcard_image === '';
             if (removeImage) {
-                console.log('Removing image.');
                 await pool.execute(
                     'UPDATE hods SET name=?, designation=?, department=?, phone=?, email=?, branch=?, vcard_image=NULL, initials=?, color=? WHERE id=?',
                     [name, designation || '', department || '', phone || '', email || '', branch || '', initials || '', color || '#0052CC', req.params.id]
                 );
             } else {
-                console.log('Keeping existing image.');
+                // No new file — keep existing image unchanged
                 await pool.execute(
                     'UPDATE hods SET name=?, designation=?, department=?, phone=?, email=?, branch=?, initials=?, color=? WHERE id=?',
                     [name, designation || '', department || '', phone || '', email || '', branch || '', initials || '', color || '#0052CC', req.params.id]
@@ -254,6 +256,7 @@ app.put('/api/hods/:id', upload.single('vcard_image'), async (req, res) => {
         res.status(500).json({ success: false, message: e.message });
     }
 });
+
 
 app.delete('/api/hods/:id', async (req, res) => {
     try {
@@ -487,7 +490,7 @@ app.delete('/api/events/:id', async (req, res) => {
 
 // POST bulk import events from CSV
 const csvParser = require('csv-parser');
-app.post('/api/events/bulk', upload.single('csv_file'), async (req, res) => {
+app.post('/api/events/bulk', uploadMemory.single('csv_file'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ success: false, message: 'No CSV file uploaded' });
 
